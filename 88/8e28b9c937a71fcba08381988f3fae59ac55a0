@@ -1,0 +1,59 @@
+Quicknote/Context/BrowserURLReader.swift
+  s_ad65a60407dcd0::t_684ab7b07b67c3 1-76
+Quicknote/Context/FrontmostContext.swift
+  s_ad65a60407dcd0::t_612aefee04d4a0 14-17
+Quicknote/Context/FrontmostTracker.swift
+  s_ad65a60407dcd0::t_7c334c42a551aa 1-52
+Quicknote/Edge/EdgeActions.swift
+  s_ad65a60407dcd0::t_550f9b9949364b 1-36
+Quicknote/Edge/EdgeCardViews.swift
+  s_ad65a60407dcd0::t_2e83fc47be283e 1-137
+Quicknote/Edge/EdgeController.swift
+  s_ad65a60407dcd0::t_326ae206f544cd 1-84
+Quicknote/Edge/EdgeFeature.swift
+  s_ad65a60407dcd0::t_bde260ecb459a1 3-6
+Quicknote/Edge/EdgeModel.swift
+  s_ad65a60407dcd0::t_57cdf50034e0f6 1-57
+Quicknote/Edge/EdgeTabsView.swift
+  s_ad65a60407dcd0::t_2fc57bce127787 1-118
+Quicknote/Edge/EdgeWindow.swift
+  s_ad65a60407dcd0::t_adc3a64a0de9c0 1-57
+Quicknote/Reminders/ReminderScheduler.swift
+  s_ad65a60407dcd0::t_8ebeaa1e8e95e0 1-108
+QuicknoteKit/Sources/QuicknoteKit/Context/BrowserContext.swift
+  s_ad65a60407dcd0::t_118258a9ede020 1-54
+QuicknoteKit/Sources/QuicknoteKit/Edge/EdgeLayout.swift
+  s_ad65a60407dcd0::t_c2e0cad443b9c6 1-39
+QuicknoteKit/Sources/QuicknoteKit/Notes/NoteChanges.swift
+  s_ad65a60407dcd0::t_1f6f09881faecd 1-16
+QuicknoteKit/Sources/QuicknoteKit/Reminders/ReminderAction.swift
+  s_ad65a60407dcd0::t_a31510e2862305 1-18
+QuicknoteKit/Tests/QuicknoteKitTests/BrowserContextTests.swift
+  s_ad65a60407dcd0::t_370da76b0d5e26 1-67
+QuicknoteKit/Tests/QuicknoteKitTests/EdgeLayoutTests.swift
+  s_ad65a60407dcd0::t_e6a5b02f88d835 1-58
+QuicknoteKit/Tests/QuicknoteKitTests/NoteChangesTests.swift
+  s_ad65a60407dcd0::t_f7a59f0a737386 1-20
+QuicknoteKit/Tests/QuicknoteKitTests/ReminderActionTests.swift
+  s_ad65a60407dcd0::t_ed5104ceaa75b7 1-38
+QuicknoteTests/EdgeModelTests.swift
+  s_ad65a60407dcd0::t_56749516478c5a 1-78
+docs/features/edge-and-context.md
+  s_ad65a60407dcd0::t_3d89882fb2896c 1-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "888e28b9c937a71fcba08381988f3fae59ac55a0",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
