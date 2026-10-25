@@ -93,7 +93,7 @@ public enum SlackMarkdown {
         _ line: String, _ style: StyleSpan.Style, _ pattern: some RegexComponent<(Substring, Substring)>,
         offset: Int
     ) -> [StyleSpan] {
-        line.matches(of: pattern).flatMap { match -> [StyleSpan] in
+        line.matches(of: pattern).filter { standsAlone($0.range, in: line) }.flatMap { match -> [StyleSpan] in
             let range = shifted(NSRange(match.range, in: line), offset)
             return [
                 StyleSpan(range: range, style: style),
@@ -101,6 +101,14 @@ public enum SlackMarkdown {
                 StyleSpan(range: NSRange(location: range.upperBound - 1, length: 1), style: .marker),
             ]
         }
+    }
+
+    /// Like Slack, marks touching a letter or digit outside them (`snake_case`, `2*3*4`) are plain text.
+    private static func standsAlone(_ range: Range<String.Index>, in line: String) -> Bool {
+        let before = range.lowerBound > line.startIndex ? line[line.index(before: range.lowerBound)] : nil
+        let after = range.upperBound < line.endIndex ? line[range.upperBound] : nil
+        return !(before?.isLetter ?? false) && !(before?.isNumber ?? false)
+            && !(after?.isLetter ?? false) && !(after?.isNumber ?? false)
     }
 
     private static func shifted(_ range: NSRange, _ offset: Int) -> NSRange {

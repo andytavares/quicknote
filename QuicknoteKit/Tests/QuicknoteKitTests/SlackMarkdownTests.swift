@@ -22,7 +22,13 @@ struct SlackMarkdownTests {
     @Test func spaceInsideMarksIsNotStyled() {
         #expect(styled("2 * 3 * 4", .bold).isEmpty)
         #expect(styled("*bold *", .bold).isEmpty)
-        #expect(styled("snake_case_name", .italic) == ["_case_"])
+    }
+
+    @Test func marksInsideWordsAreNotStyled() {
+        #expect(styled("rename snake_case_name now", .italic).isEmpty)
+        #expect(styled("2*3*4 is 24", .bold).isEmpty)
+        #expect(styled("(see _this_) and *that*.", .italic) == ["_this_"])
+        #expect(styled("(see _this_) and *that*.", .bold) == ["*that*"])
     }
 
     @Test func styleDoesNotSpanLines() {

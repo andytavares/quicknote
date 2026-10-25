@@ -37,7 +37,7 @@ Edge filter: a note shows when `onEdge`, not completed, and not snoozed past `no
 - Link titles match a note's first non-empty line, case-insensitively. Unknown titles create no link. A note never links to itself. If two notes share a title, both are linked.
 - Links are rebuilt only when the linking note is saved. Renaming a note does not update links from other notes, and a note created later is not linked from earlier notes until they are saved again.
 - `[[ ]]`, `[[]]`, an unclosed `[[`, and a link split across lines are ignored.
-- `*bold*` and `_italic_` need a non-space character after the opening and before the closing mark, and stay on one line. `snake_case_name` therefore italicises `_case_`. Formatting inside a `[[link]]` is not applied.
+- `*bold*` and `_italic_` need a non-space character after the opening and before the closing mark, and stay on one line. Like Slack, a mark touching a letter or digit outside it is plain text, so `snake_case_name` and `2*3*4` are not styled. Formatting inside a `[[link]]` is not applied.
 - Checkboxes count only at line start (optionally after `- `). `togglingCheckbox` leaves text unchanged for a line without a checkbox or a line number out of range.
 - `[[` suggestions and link rebuilding read every note into memory (SQLite `LIKE` is ASCII-only). Fine for a personal library; revisit past roughly 10,000 notes.
 - `contextGroups()` includes completed notes.
