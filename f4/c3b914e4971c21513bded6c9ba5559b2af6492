@@ -1,0 +1,25 @@
+QuicknoteKit/Tests/QuicknoteKitTests/CanvasHistoryTests.swift
+  s_ad65a60407dcd0::t_7a9a732708df0d 19-27
+QuicknoteTests/CardTests.swift
+  s_ad65a60407dcd0::t_4effd17923eef6 180-188
+QuicknoteKit/Sources/QuicknoteKit/Canvas/CanvasHistory.swift
+  s_ad65a60407dcd0::t_a24adaaf3a4e2e 17-23
+Quicknote/Cards/CardEditorModel.swift
+  s_ad65a60407dcd0::t_15b1f1709b1714 50-51,203-204,213-219,346-350,363,370
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f4c3b914e4971c21513bded6c9ba5559b2af6492",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
