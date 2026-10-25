@@ -1,0 +1,53 @@
+Quicknote/Meetings/MeetingAudioMixer.swift
+  s_ad65a60407dcd0::t_f170ca6af0fd9a 1-28
+Quicknote/Meetings/MeetingExport.swift
+  s_ad65a60407dcd0::t_ea193181d8a44f 1-51
+Quicknote/Meetings/MeetingModel.swift
+  s_ad65a60407dcd0::t_1219f6770d221d 1-139
+Quicknote/Meetings/MeetingRecorder.swift
+  s_ad65a60407dcd0::t_d6509cd0eb214c 1-237
+Quicknote/Meetings/MeetingSummarizer.swift
+  s_ad65a60407dcd0::t_82ee7b025c2516 1-34
+Quicknote/Meetings/MeetingView.swift
+  s_ad65a60407dcd0::t_960d70b9756d4b 1-236
+Quicknote/Meetings/MeetingWindow.swift
+  s_ad65a60407dcd0::t_46d48be6b0b6d7 1-37
+Quicknote/Meetings/MeetingsFeature.swift
+  s_ad65a60407dcd0::t_a0f1608c88e3c0 1-3,6-22,24-49
+Quicknote/Meetings/RecorderPill.swift
+  s_ad65a60407dcd0::t_cb9df16cd3d120 1-179
+Quicknote/Meetings/RecorderTimeline.swift
+  s_ad65a60407dcd0::t_5993d311f467db 1-56
+Quicknote/Meetings/RecordingSource.swift
+  s_ad65a60407dcd0::t_47bebea7b524e5 1-64
+Quicknote/Meetings/SilenceDetector.swift
+  s_ad65a60407dcd0::t_c35ad47a797682 1-38
+Quicknote/Meetings/StartMeetingView.swift
+  s_ad65a60407dcd0::t_ec33b6874920c3 1-36
+Quicknote/Meetings/SummaryChunker.swift
+  s_ad65a60407dcd0::t_9fc06356516823 1-20
+Quicknote/Meetings/SystemAudioTap.swift
+  s_ad65a60407dcd0::t_2f5cb138590eec 1-116
+Quicknote/Meetings/TranscriptNavigator.swift
+  s_ad65a60407dcd0::t_23e0f82596e5cf 1-18
+QuicknoteTests/MeetingRecorderTests.swift
+  s_ad65a60407dcd0::t_265b614841467f 1-169
+docs/features/meetings.md
+  s_ad65a60407dcd0::t_0ff3a2d0875556 3,87-181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b1932127c30010c7f56b49ac5f3029ccb1fd3eea",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
