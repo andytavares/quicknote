@@ -10,7 +10,7 @@ struct MenuBarMenu: View {
             .globalKeyboardShortcut(.holdToTalk)
         Button("Snap") { SnapFeature.start() }
             .globalKeyboardShortcut(.snap)
-        Button("New card") { CardsFeature.newCard(fromNoteId: nil) }
+        Button("New card") { CardsFeature.newCard(fromNoteId: LibraryFeature.openNoteId) }
             .globalKeyboardShortcut(.newCard)
         Button("Search") { SearchFeature.showPanel() }
             .globalKeyboardShortcut(.search)

@@ -32,7 +32,7 @@ enum Shortcuts {
         KeyboardShortcuts.onKeyDown(for: .holdToTalk) { VoiceFeature.startHoldToTalk() }
         KeyboardShortcuts.onKeyUp(for: .holdToTalk) { VoiceFeature.stopHoldToTalk() }
         KeyboardShortcuts.onKeyUp(for: .snap) { SnapFeature.start() }
-        KeyboardShortcuts.onKeyUp(for: .newCard) { CardsFeature.newCard(fromNoteId: nil) }
+        KeyboardShortcuts.onKeyUp(for: .newCard) { CardsFeature.newCard(fromNoteId: LibraryFeature.openNoteId) }
         KeyboardShortcuts.onKeyUp(for: .search) { SearchFeature.showPanel() }
         KeyboardShortcuts.onKeyUp(for: .saveContext) { CaptureFeature.showSaveContext() }
         KeyboardShortcuts.onKeyUp(for: .bookmarkMeeting) { MeetingsFeature.bookmark() }

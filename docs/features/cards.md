@@ -4,9 +4,8 @@ Turn a note, or nothing, into a picture to share: the Card editor (S21) and the 
 
 ## Making a card
 
-- Menu bar "New card" or `⌃⌥C`: a blank sticky card.
+- Menu bar "New card" or `⌃⌥C`: a card from the note open in the Library (when its window is on screen), otherwise a blank sticky card.
 - "Make a card" in the note editor: a sticky card with the note's text (first 240 characters) as a text element. The card is saved as a new note; the original note is not changed.
-- `⌃⌥C` always starts blank: the shortcut does not know which note is open in the Library.
 - Gallery: open a card to edit it again (`CardsFeature.edit(noteId:)`).
 
 ## Styles
@@ -65,7 +64,7 @@ Save PNG renders the card at its size with `CanvasRenderer` and writes a normal 
 
 ## Manual test checklist
 
-- [ ] `⌃⌥C` and "New card" open a blank sticky card; "Make a card" in a note carries its text.
+- [ ] With a note open in the Library, `⌃⌥C` and "New card" carry its text; with the Library closed they open a blank sticky card. "Make a card" in a note carries its text.
 - [ ] Each of the six styles looks right at all three sizes.
 - [ ] Add an emoji, a sticker, a photo, tape, text and an extra note; move, resize and rotate each; `⌫` deletes.
 - [ ] Sign draws; Sign again returns to selecting.

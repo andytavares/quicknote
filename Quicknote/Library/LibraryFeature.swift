@@ -14,6 +14,11 @@ enum LibraryFeature {
         NSApp.activate()
     }
 
+    /// The note open in the Library while its window is on screen, so ⌃⌥C can turn it into a card.
+    static var openNoteId: Int64? {
+        window?.isVisible == true ? model.openNoteId : nil
+    }
+
     /// Opens the Library with one note selected.
     static func open(noteId: Int64) {
         model.open(noteId: noteId)

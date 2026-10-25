@@ -127,4 +127,14 @@ struct LibraryTests {
         slack.appName = "Slack"
         #expect(grouper.detail(for: slack) == "Task · Slack")
     }
+
+    @Test func theOpenNoteIsTheOneSelectedNote() throws {
+        let paths = AppPaths(root: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
+        let model = LibraryModel(database: try AppDatabase.inMemory(), paths: paths)
+        #expect(model.openNoteId == nil)
+        model.selection = [7]
+        #expect(model.openNoteId == 7)
+        model.selection = [7, 8]
+        #expect(model.openNoteId == nil)
+    }
 }

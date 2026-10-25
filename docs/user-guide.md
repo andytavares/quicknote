@@ -78,7 +78,7 @@ Snap needs Screen Recording. Details: [snap](features/snap.md), [tool keys](shor
 
 ## Make a card
 
-Press `⌃⌥C`, or press **Make a card** in a note's toolbar. Pick a style (sticky, postcard, polaroid, lined, minimal, kraft), add emoji, stickers, photos, washi tape, extra notes and text, and export a square, story or wallpaper-size PNG. Cards are saved with the note, so you can edit them later. Details: [cards](features/cards.md), [canvas](features/canvas.md).
+Press `⌃⌥C` (it uses the note open in the Library, or starts blank), or press **Make a card** in a note's toolbar. Pick a style (sticky, postcard, polaroid, lined, minimal, kraft), add emoji, stickers, photos, washi tape, extra notes and text, and export a square, story or wallpaper-size PNG. Cards are saved with the note, so you can edit them later. Details: [cards](features/cards.md), [canvas](features/canvas.md).
 
 ## Organise: types, projects, links, formatting
 

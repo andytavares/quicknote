@@ -30,6 +30,9 @@ final class LibraryModel {
         reload()
     }
 
+    /// The note in the editor pane: the selection when exactly one note is selected.
+    var openNoteId: Int64? { selection.count == 1 ? selection.first : nil }
+
     var notes: NoteRepository { NoteRepository(database: database) }
     var projectRepository: ProjectRepository { ProjectRepository(database: database) }
 
