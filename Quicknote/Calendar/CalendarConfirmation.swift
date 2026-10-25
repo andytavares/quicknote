@@ -22,7 +22,8 @@ enum CalendarConfirmation {
         guard let draft = EventDraft(note: note, duration: CalendarBridge.defaultDuration),
             let first = CalendarBridge.shared.preferredCalendar() ?? calendars.first
         else { return }
-        let model = ConfirmationModel(note: note, draft: draft, calendars: calendars, selected: first)
+        let choice = CalendarChoice(calendars: calendars, selected: first)
+        let model = ConfirmationModel(note: note, draft: draft, choice: choice)
         model.onFinish = { close() }
         let newPanel = NSPanel(
             contentRect: NSRect(x: 0, y: 0, width: 380, height: 220),
@@ -58,11 +59,11 @@ final class ConfirmationModel {
     var errorMessage: String?
     private let draft: EventDraft
 
-    init(note: Note, draft: EventDraft, calendars: [EKCalendar], selected: EKCalendar) {
+    init(note: Note, draft: EventDraft, choice: CalendarChoice) {
         self.note = note
         self.draft = draft
-        self.calendars = calendars
-        self.selected = selected
+        self.calendars = choice.calendars
+        self.selected = choice.selected
         title = draft.title
         start = draft.start
     }
@@ -122,4 +123,10 @@ struct CalendarConfirmationView: View {
         .padding(18)
         .frame(width: 380)
     }
+}
+
+/// The calendars the event can go into, and the one picked first.
+struct CalendarChoice {
+    let calendars: [EKCalendar]
+    let selected: EKCalendar
 }

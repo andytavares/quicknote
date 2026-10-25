@@ -10,9 +10,10 @@ struct BriefView: View {
             VStack(alignment: .leading, spacing: 14) {
                 header
                 if !model.brief.events.isEmpty { eventsSection }
-                itemSection("Due today", model.brief.dueToday, checkable: true)
-                itemSection("Overdue", model.brief.overdue, checkable: true, isWarning: true)
-                itemSection("Coming back today", model.brief.comingBack, checkable: false)
+                itemSection(BriefList(title: "Due today", items: model.brief.dueToday, checkable: true))
+                itemSection(
+                    BriefList(title: "Overdue", items: model.brief.overdue, checkable: true, isWarning: true))
+                itemSection(BriefList(title: "Coming back today", items: model.brief.comingBack, checkable: false))
             }
             .padding(.horizontal, 22).padding(.vertical, 18)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -61,14 +62,12 @@ struct BriefView: View {
     }
 
     @ViewBuilder
-    private func itemSection(_ title: String, _ items: [BriefItem], checkable: Bool, isWarning: Bool = false)
-        -> some View
-    {
-        if !items.isEmpty {
+    private func itemSection(_ list: BriefList) -> some View {
+        if !list.items.isEmpty {
             VStack(alignment: .leading, spacing: 6) {
-                sectionTitle(title, isWarning: isWarning)
-                ForEach(Array(items.enumerated()), id: \.offset) { _, item in
-                    BriefItemRow(item: item, checkable: checkable, model: model)
+                sectionTitle(list.title, isWarning: list.isWarning)
+                ForEach(Array(list.items.enumerated()), id: \.offset) { _, item in
+                    BriefItemRow(item: item, checkable: list.checkable, model: model)
                 }
             }
         }
@@ -113,4 +112,12 @@ struct BriefItemRow: View {
             .accessibilityLabel("Open \(item.title) in the Library")
         }
     }
+}
+
+/// One list in the Brief: its heading, rows, whether rows can be ticked, and whether it is a warning (overdue).
+struct BriefList {
+    let title: String
+    let items: [BriefItem]
+    let checkable: Bool
+    var isWarning = false
 }
