@@ -1,0 +1,35 @@
+Quicknote/Capture/StopView.swift
+  s_ad65a60407dcd0::t_0c9cf09c5ad920 22
+Quicknote/Meetings/MeetingView.swift
+  s_ad65a60407dcd0::t_514d75e2cf216e 185-188
+Quicknote/Capture/CaptureView.swift
+  s_ad65a60407dcd0::t_0c9cf09c5ad920 46
+Quicknote/Library/LibraryView.swift
+  s_ad65a60407dcd0::t_0c9cf09c5ad920 55
+QuicknoteTests/ShortcutsTests.swift
+  s_ad65a60407dcd0::t_73ae04cb63f8cd 11-20
+Quicknote/Meetings/RecorderPill.swift
+  s_ad65a60407dcd0::t_0c9cf09c5ad920 162
+Quicknote/Search/SearchView.swift
+  s_ad65a60407dcd0::t_0c9cf09c5ad920 40
+Quicknote/Snap/SnapEditor.swift
+  s_ad65a60407dcd0::t_514d75e2cf216e 181-182
+Quicknote/App/Shortcuts.swift
+  s_ad65a60407dcd0::t_0c9cf09c5ad920 25-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cc89505082a2d03834de2366c0dfb891dc75a942",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
