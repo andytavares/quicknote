@@ -97,9 +97,9 @@ struct CardEditorView: View {
     /// Saves the note and renders the card at its export size.
     private func payload() async -> SharePayload? {
         do {
-            let noteId = try model.save()
-            guard let image = model.renderedImage() else { return nil }
-            return SharePayload(image: image, caption: "", noteId: noteId)
+            let saved = try model.save()
+            guard let image = saved.image else { return nil }
+            return SharePayload(image: image, caption: "", noteId: saved.noteId)
         } catch {
             errorMessage = error.localizedDescription
             return nil

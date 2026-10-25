@@ -43,21 +43,28 @@ struct CardSaver {
         return CGImageSourceCreateImageAtIndex(source, 0, nil)
     }
 
-    func resources(noteId: Int64) -> CanvasResources {
-        CanvasResources(
-            image: { image(attachmentId: $0, noteId: noteId) }, paintBackground: CardBackgroundPainter.paint)
-    }
-
     /// Returns the note id. The preview replaces the previous `preview.png`.
-    func save(_ document: CanvasDocument, noteId: Int64?, now: Date) throws -> Int64 {
+    func save(_ card: RenderedCard, noteId: Int64?, now: Date) throws -> Int64 {
         let id = try ensureNote(noteId, now: now)
         var note = try repository.note(id: id) ?? Note(body: "", now: now)
-        note.body = Self.body(of: document, at: note.createdAt)
-        note.canvas = document
+        note.body = Self.body(of: card.document, at: note.createdAt)
+        note.canvas = card.document
         try repository.save(&note, now: now)
-        if let preview = CanvasRenderer.render(document, resources: resources(noteId: note.id!)) {
+        if let preview = card.image {
             try SnapSaver(repository: repository, attachments: attachments).replacePreview(preview, noteId: note.id!)
         }
         return note.id!
     }
+}
+
+/// A card and the image rendered from it, saved together so the card is drawn once.
+struct RenderedCard {
+    let document: CanvasDocument
+    let image: CGImage?
+}
+
+/// What a save produced: the card's note and its image at export size.
+struct SavedCard {
+    let noteId: Int64
+    let image: CGImage?
 }

@@ -232,14 +232,12 @@ final class CardEditorModel {
 
     // MARK: Save
 
-    func save() throws -> Int64 {
-        let id = try saver.save(document, noteId: noteId, now: Date())
+    /// Renders once from the photos already in memory; the same image becomes the preview and the export.
+    func save() throws -> SavedCard {
+        let image = CanvasRenderer.render(document, resources: resources)
+        let id = try saver.save(RenderedCard(document: document, image: image), noteId: noteId, now: Date())
         noteId = id
-        return id
-    }
-
-    func renderedImage() -> CGImage? {
-        CanvasRenderer.render(document, resources: resources)
+        return SavedCard(noteId: id, image: image)
     }
 
     // MARK: Pointer

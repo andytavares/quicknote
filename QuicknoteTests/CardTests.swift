@@ -149,7 +149,7 @@ struct CardTests {
         let model = CardEditorModel(document: CardEditorModel.startingDocument(text: "Hi"), noteId: nil, saver: saver)
         #expect(model.document.showsMadeWithMark == false)
         model.setShowsMadeWithMark(true)
-        let id = try model.save()
+        let id = try model.save().noteId
         #expect(try saver.repository.note(id: id)?.canvas?.showsMadeWithMark == true)
         let attachments = try saver.attachments.attachments(of: id)
         #expect(attachments.map(\.fileName) == ["preview.png"])
@@ -159,9 +159,9 @@ struct CardTests {
     @Test func savingACardWhoseNoteWasDeletedReturnsTheNewNote() throws {
         let saver = try makeSaver()
         let model = CardEditorModel(document: CardEditorModel.startingDocument(text: "Hi"), noteId: nil, saver: saver)
-        let first = try model.save()
+        let first = try model.save().noteId
         try saver.repository.delete(noteId: first)
-        let second = try model.save()
+        let second = try model.save().noteId
         #expect(second != first)
         #expect(try saver.repository.note(id: second)?.canvas == model.document)
     }
@@ -185,5 +185,12 @@ struct CardTests {
         for typed in ["L", "La", "Lak", "Lake"] { model.setText(typed) }
         model.undo()
         #expect(model.document == added)
+    }
+
+    @Test func savingReturnsTheCardImageAtItsExportSize() throws {
+        let model = CardEditorModel(
+            document: CardEditorModel.startingDocument(text: "Hi"), noteId: nil, saver: try makeSaver())
+        let image = try #require(try model.save().image)
+        #expect(CGSize(width: image.width, height: image.height) == CardSize.square.pixelSize)
     }
 }
