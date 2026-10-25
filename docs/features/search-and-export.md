@@ -21,6 +21,10 @@ Only what Quicknote itself stores. Nothing outside the app is indexed.
 - `limitPerGroup` caps each group separately.
 - Snippets wrap matched words in `SearchIndex.markStart` and `SearchIndex.markEnd` (`«` and `»`) and cut with `…`.
 
+## Cleaning up after deletes
+
+Deleting a note removes its database rows at once. Its folder `Attachments/<noteId>/`, and `Attachments/meetings/<meetingId>/` for a deleted meeting, is removed at the next launch by `AttachmentStore.removeOrphanedFiles()` (`QuicknoteKit/Sources/QuicknoteKit/Attachments/AttachmentStore+Orphans.swift`). Only numbered folders whose note or meeting no longer exists are touched.
+
 ## Export on disk
 
 `MarkdownExporter.export` writes `<slug>.md` and, when the note has attachments, a `<slug>/` folder beside it. The slug is the lowercased title with every run of other characters turned into `-` (60 characters at most, `note` if nothing is left). If `<slug>.md` or `<slug>/` exists, `-2`, `-3` and so on are added. Front matter lines with no value are left out. Text values are JSON-quoted, which is valid YAML. `recurrenceJSON` is the stored JSON string as is. `[[links]]` stay in the body.

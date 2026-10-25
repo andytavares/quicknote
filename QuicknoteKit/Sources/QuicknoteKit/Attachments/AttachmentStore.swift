@@ -3,8 +3,8 @@ import GRDB
 
 /// Copies files into `AppPaths.attachments/<noteId>/` and keeps the `attachment` rows in step.
 public struct AttachmentStore: Sendable {
-    private let paths: AppPaths
-    private let database: AppDatabase
+    let paths: AppPaths
+    let database: AppDatabase
 
     public init(paths: AppPaths, database: AppDatabase) {
         self.paths = paths

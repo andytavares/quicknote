@@ -11,11 +11,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             showLaunchFailure(error)
             return
         }
+        removeOrphanedAttachments()
         Shortcuts.register()
         EdgeFeature.start()
         CalendarBridge.shared.resumeSyncingIfAllowed()
         UpdatesFeature.start()
         WelcomeFeature.showIfFirstLaunch()
+    }
+
+    /// Deleting a note removes its rows; its files are cleared here, once per launch, for every delete path.
+    private func removeOrphanedAttachments() {
+        let store = AttachmentStore(paths: AppEnvironment.current.paths, database: AppEnvironment.current.database)
+        Task.detached(priority: .utility) { _ = try? store.removeOrphanedFiles() }
     }
 
     private func showLaunchFailure(_ error: any Error) {

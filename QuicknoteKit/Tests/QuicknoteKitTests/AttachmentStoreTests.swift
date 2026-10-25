@@ -15,6 +15,29 @@ struct AttachmentStoreTests {
         return (AttachmentStore(paths: temporary.paths, database: database), database, temporary, noteId)
     }
 
+    @Test func removingOrphansDeletesOnlyFoldersOfDeletedNotesAndMeetings() throws {
+        let (store, database, temporary, liveNoteId) = try makeStore()
+        defer { temporary.remove() }
+        let liveMeetingId = try database.writer.write { db -> Int64 in
+            var meeting = Meeting(noteId: liveNoteId, title: "Weekly sync")
+            try meeting.insert(db)
+            return meeting.id!
+        }
+        let folders = ["\(liveNoteId)", "999", "meetings/\(liveMeetingId)", "meetings/888"]
+        for folder in folders {
+            let url = temporary.paths.attachments.appending(path: folder)
+            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            try "audio".write(to: url.appending(path: "file"), atomically: true, encoding: .utf8)
+        }
+
+        #expect(try store.removeOrphanedFiles() == 2)
+
+        let exists = folders.map {
+            FileManager.default.fileExists(atPath: temporary.paths.attachments.appending(path: $0).path)
+        }
+        #expect(exists == [true, false, true, false])
+    }
+
     @Test func attachCopiesFileUnderNoteFolderAndInsertsRow() throws {
         let (store, _, temporary, noteId) = try makeStore()
         defer { temporary.remove() }

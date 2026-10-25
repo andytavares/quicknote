@@ -65,7 +65,7 @@ Arrow keys move in the sidebar and lists; Shift-arrow and Cmd-click multi-select
 - Counts run one query per section on every note change.
 - `open(noteId:)` puts a plain note, to-do list or context note in Inbox, and a canvas note in Inbox too (the gallery has no editor pane). A context note is not listed in Inbox, so it opens with nothing highlighted.
 - Selecting a note that disappears from the current list (completed, deleted elsewhere) clears the selection.
-- Deleting a note does not remove its attachment files.
+- Deleting a note removes its rows at once; its attachment files (and a meeting's audio) are removed at the next launch by `AttachmentStore.removeOrphanedFiles`, called from `AppDelegate`.
 
 ## Manual test checklist
 
