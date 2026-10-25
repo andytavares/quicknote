@@ -13,6 +13,29 @@ struct TranscriptExporterTests {
         TranscriptSegment(meetingId: 1, line: SpokenLine(span: 3_725_000..<3_730_000, speaker: .me, text: "Agreed.")),
     ]
 
+    private let expectedMarkdown = """
+        # Design sync
+
+        2026-10-20 · 1:02:05
+
+        ## Summary
+
+        Agreed to ship.
+
+        ## Bookmarks
+
+        - [01:01] Pricing
+
+        ## Action items
+
+        - [ ] Send the estimate. ([18:32])
+
+        ## Transcript
+
+        [18:32] Others: Ship it.
+        [1:02:05] Me: Agreed.
+        """
+
     @Test func plainTextLabelsSpeakersAndTimes() {
         let text = TranscriptExporter.plainText(meeting: meeting, segments: segments)
         #expect(text == "[18:32] Others: Ship it.\n[1:02:05] Me: Agreed.")
@@ -26,29 +49,7 @@ struct TranscriptExporterTests {
             segments: segments,
             bookmarks: [MeetingBookmark(meetingId: 1, atMs: 61_000, label: "Pricing")],
             actionItems: [ActionItem(text: "Send the estimate.", atMs: 1_112_000, due: nil)])
-        let expected = """
-            # Design sync
-
-            2026-10-20 · 1:02:05
-
-            ## Summary
-
-            Agreed to ship.
-
-            ## Bookmarks
-
-            - [01:01] Pricing
-
-            ## Action items
-
-            - [ ] Send the estimate. ([18:32])
-
-            ## Transcript
-
-            [18:32] Others: Ship it.
-            [1:02:05] Me: Agreed.
-            """
-        #expect(TranscriptExporter.markdown(meeting: finished, transcript: transcript) == expected)
+        #expect(TranscriptExporter.markdown(meeting: finished, transcript: transcript) == expectedMarkdown)
     }
 
     @Test func markdownOmitsEmptySections() {

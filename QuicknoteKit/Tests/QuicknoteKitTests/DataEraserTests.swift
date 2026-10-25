@@ -5,10 +5,8 @@ import Testing
 @testable import QuicknoteKit
 
 struct DataEraserTests {
-    @Test func eraseEverythingEmptiesTablesIndexesAndAttachmentFiles() throws {
-        let temporary = try TemporaryPaths()
-        defer { temporary.remove() }
-        let database = try AppDatabase.inMemory()
+    /// One row in every table plus an attachment file.
+    private func fillEveryTable(_ database: AppDatabase, _ temporary: TemporaryPaths) throws {
         let noteId = try database.writer.write { db -> Int64 in
             var project = Project(name: "Home")
             try project.insert(db)
@@ -25,6 +23,13 @@ struct DataEraserTests {
         }
         _ = try AttachmentStore(paths: temporary.paths, database: database)
             .attach(fileAt: try temporary.makeFile(named: "a.txt"), to: noteId, kind: .file)
+    }
+
+    @Test func eraseEverythingEmptiesTablesIndexesAndAttachmentFiles() throws {
+        let temporary = try TemporaryPaths()
+        defer { temporary.remove() }
+        let database = try AppDatabase.inMemory()
+        try fillEveryTable(database, temporary)
 
         try DataEraser(paths: temporary.paths, database: database).eraseEverything()
 
