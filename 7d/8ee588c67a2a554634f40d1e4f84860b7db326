@@ -1,0 +1,57 @@
+Quicknote/Editor/CalendarEditPolicy.swift
+  s_ad65a60407dcd0::t_22dcea10669761 1-23
+Quicknote/Editor/DuePopover.swift
+  s_ad65a60407dcd0::t_5e08d1c17ed240 1-50
+Quicknote/Editor/EditorFont.swift
+  s_ad65a60407dcd0::t_9160dc1bc41ea4 1-31
+Quicknote/Editor/EditorFooter.swift
+  s_ad65a60407dcd0::t_32ce41d7acefee 1-51
+Quicknote/Editor/EditorPalette.swift
+  s_ad65a60407dcd0::t_f39df6269186c7 1-29
+Quicknote/Editor/EditorTextView.swift
+  s_ad65a60407dcd0::t_3c14ac990df072 1-136
+Quicknote/Editor/EditorToolbar.swift
+  s_ad65a60407dcd0::t_a3293c8647e65e 1-127
+Quicknote/Editor/LinkSuggestionList.swift
+  s_ad65a60407dcd0::t_924c762702906c 1-37
+Quicknote/Editor/LinkTrigger.swift
+  s_ad65a60407dcd0::t_7d75bd29e07cb5 1-30
+Quicknote/Editor/NoteEditorModel.swift
+  s_ad65a60407dcd0::t_690cf40e27007c 1-194
+Quicknote/Editor/NoteEditorView.swift
+  s_ad65a60407dcd0::t_eaa579a46cde5c 1,4,9-75
+Quicknote/Editor/NoteTextView.swift
+  s_ad65a60407dcd0::t_af42e01ae62f00 1-73
+Quicknote/Editor/RepeatPopover.swift
+  s_ad65a60407dcd0::t_6d9278cf58b88f 1-55
+Quicknote/Editor/RepeatPreset.swift
+  s_ad65a60407dcd0::t_182bd178063404 1-51
+Quicknote/Editor/SaveDebouncer.swift
+  s_ad65a60407dcd0::t_6f38b099139c49 1-31
+Quicknote/Editor/ShareMenu.swift
+  s_ad65a60407dcd0::t_53efae9a851b71 1-49
+Quicknote/Editor/StylePopover.swift
+  s_ad65a60407dcd0::t_7c49ed2ace3eb0 1-61
+Quicknote/Settings/AppSettings.swift
+  s_ad65a60407dcd0::t_5f8cf33e74cffc 49
+QuicknoteTests/EditorTests.swift
+  s_ad65a60407dcd0::t_89e347b29f3562 1-164
+docs/features/editor.md
+  s_ad65a60407dcd0::t_718e3031154b56 1-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d8ee588c67a2a554634f40d1e4f84860b7db326",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
