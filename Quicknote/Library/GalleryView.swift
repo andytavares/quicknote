@@ -63,7 +63,7 @@ struct GalleryView: View {
     @ViewBuilder private func menu(for note: Note) -> some View {
         let noteId = note.id ?? 0
         Button("Open") { edit(note) }
-        Button("Copy Image") { copyImage(of: note) }.disabled(previewImage(for: note) == nil)
+        Button("Copy Image") { copyPreview(of: note) }.disabled(previewImage(for: note) == nil)
         Button("Show in Finder") { showInFinder(note) }.disabled(model.previewURLs[noteId] == nil)
         Divider()
         Button("Delete…", role: .destructive) {
@@ -75,7 +75,7 @@ struct GalleryView: View {
         note.id.flatMap { model.previewURLs[$0] }.flatMap { NSImage(contentsOf: $0) }
     }
 
-    private func copyImage(of note: Note) {
+    private func copyPreview(of note: Note) {
         guard let noteId = note.id,
             let image = previewImage(for: note)?.cgImage(forProposedRect: nil, context: nil, hints: nil)
         else { return }
