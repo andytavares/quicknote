@@ -1,0 +1,39 @@
+QuicknoteKit/Sources/QuicknoteKit/Sorting/DateTimeReader.swift
+  s_ad65a60407dcd0::t_8e17bb9978d26a 1-96
+QuicknoteKit/Sources/QuicknoteKit/Sorting/EntryClassifier.swift
+  s_ad65a60407dcd0::t_239c3b16700522 1-104
+QuicknoteKit/Sources/QuicknoteKit/Sorting/RecurrenceParser.swift
+  s_ad65a60407dcd0::t_bc7d36ad4bd532 1-95
+QuicknoteKit/Sources/QuicknoteKit/Sorting/RecurrenceRule.swift
+  s_ad65a60407dcd0::t_7b4763ae34640a 1-73
+QuicknoteKit/Sources/QuicknoteKit/Sorting/RegexSearch.swift
+  s_ad65a60407dcd0::t_c282ae96ba2ff6 1-8
+QuicknoteKit/Tests/QuicknoteKitTests/EntryClassifierTests.swift
+  s_ad65a60407dcd0::t_3fa93f25b9935d 1-125
+QuicknoteKit/Tests/QuicknoteKitTests/NoteCompletionTests.swift
+  s_ad65a60407dcd0::t_4f7ac58c42ec53 1-45
+QuicknoteKit/Tests/QuicknoteKitTests/RecurrenceParserTests.swift
+  s_ad65a60407dcd0::t_9436acbec821b1 1-57
+QuicknoteKit/Tests/QuicknoteKitTests/RecurrenceRuleTests.swift
+  s_ad65a60407dcd0::t_d0693ca40f762f 1-58
+QuicknoteKit/Tests/QuicknoteKitTests/SortingFixtures.swift
+  s_ad65a60407dcd0::t_a1e65db834ef61 1-14
+docs/features/sorting-and-repeats.md
+  s_ad65a60407dcd0::t_7e6676c62a4c6a 1-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eb03c2b696a4c371dea17a1acffa29d4cec83932",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
