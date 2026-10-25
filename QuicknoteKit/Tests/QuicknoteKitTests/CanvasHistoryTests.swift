@@ -16,6 +16,15 @@ struct CanvasHistoryTests {
         #expect(history.undo() == nil)
     }
 
+    @Test func replacingTheLatestStateKeepsOneUndoStep() {
+        var history = CanvasHistory()
+        history.record(document(caption: "a"))
+        history.record(document(caption: "b"))
+        history.replaceLatest(with: document(caption: "bc"))
+        #expect(history.undo()?.caption == "a")
+        #expect(history.redo()?.caption == "bc")
+    }
+
     @Test func redoReplaysUndoneStates() {
         var history = CanvasHistory()
         history.record(document(caption: "a"))

@@ -47,6 +47,8 @@ final class CardEditorModel {
 
     private let saver: CardSaver
     private var history = CanvasHistory()
+    /// The text element being typed into; its keystrokes amend one undo step.
+    private var typingElementID: UUID?
     private var drag: Drag?
     private var recorded: CanvasDocument
     private let initial: CanvasDocument
@@ -198,7 +200,8 @@ final class CardEditorModel {
     }
 
     func setText(_ text: String) {
-        edit { element in
+        let typingContinues = typingElementID != nil && typingElementID == selectedID
+        changeSelection { element in
             switch element.kind {
             case .text:
                 element.kind = .text(text)
@@ -206,6 +209,13 @@ final class CardEditorModel {
             case .extraNote(_, let colorHex): element.kind = .extraNote(text: text, colorHex: colorHex)
             default: break
             }
+        }
+        if typingContinues {
+            history.replaceLatest(with: document)
+            recorded = document
+        } else {
+            recordIfChanged()
+            typingElementID = selectedID
         }
     }
 
@@ -333,9 +343,13 @@ final class CardEditorModel {
     }
 
     private func edit(_ change: (inout CanvasElement) -> Void) {
+        changeSelection(change)
+        recordIfChanged()
+    }
+
+    private func changeSelection(_ change: (inout CanvasElement) -> Void) {
         guard let index = document.elements.firstIndex(where: { $0.id == selectedID }) else { return }
         change(&document.elements[index])
-        recordIfChanged()
     }
 
     private func loadPhotos() {
@@ -346,12 +360,14 @@ final class CardEditorModel {
     }
 
     private func restore(_ restored: CanvasDocument) {
+        typingElementID = nil
         document = restored
         recorded = restored
         if selectedElement == nil { selectedID = nil }
     }
 
     private func recordIfChanged() {
+        typingElementID = nil
         guard document != recorded else { return }
         history.record(document)
         recorded = document

@@ -177,4 +177,13 @@ struct CardTests {
         #expect(model.document.elements.isEmpty)
         #expect(model.isEdited)
     }
+
+    @Test func typingIntoOneTextIsOneUndoStep() throws {
+        let model = try makeModel()
+        model.addText()
+        let added = model.document
+        for typed in ["L", "La", "Lak", "Lake"] { model.setText(typed) }
+        model.undo()
+        #expect(model.document == added)
+    }
 }

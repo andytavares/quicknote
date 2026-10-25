@@ -14,6 +14,13 @@ public struct CanvasHistory: Sendable {
         current = states.count - 1
     }
 
+    /// Updates the newest state instead of adding one, so a run of keystrokes is a single undo step.
+    public mutating func replaceLatest(with document: CanvasDocument) {
+        guard states.indices.contains(current) else { return record(document) }
+        states.removeSubrange((current + 1)...)
+        states[current] = document
+    }
+
     public mutating func undo() -> CanvasDocument? {
         guard current > 0 else { return nil }
         current -= 1
