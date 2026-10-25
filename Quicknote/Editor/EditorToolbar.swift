@@ -44,7 +44,7 @@ struct EditorToolbar: View {
                 .toggleStyle(.button)
                 .accessibilityLabel("Pin to \(place)")
             }
-            ShareMenu(model: model)
+            NoteShareMenu(model: model)
             Button("Make a card", systemImage: "rectangle.on.rectangle") {
                 CardsFeature.newCard(fromNoteId: model.noteId)
             }

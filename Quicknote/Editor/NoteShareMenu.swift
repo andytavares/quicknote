@@ -3,7 +3,7 @@ import QuicknoteKit
 import SwiftUI
 
 /// Share the text with any system service, or save the note as a Markdown file.
-struct ShareMenu: View {
+struct NoteShareMenu: View {
     let model: NoteEditorModel
 
     var body: some View {
