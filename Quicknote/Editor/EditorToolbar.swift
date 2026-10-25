@@ -70,21 +70,7 @@ struct EditorToolbar: View {
 }
 
 extension NoteKind {
-    /// Wording in the Type menu (S12).
-    var editorTitle: String {
-        switch self {
-        case .note: "Note"
-        case .todoList: "To-do list"
-        case .task: "Task"
-        case .reminder: "Reminder"
-        case .event: "Event"
-        case .idea: "Idea"
-        case .bookmark: "Bookmark"
-        case .bug: "Bug"
-        case .context: "Context"
-        }
-    }
-
+    /// Types offered in the Type menu (S12); "Where I stopped" notes come only from ⌃⌥S.
     static let editableKinds = allCases.filter { $0 != .context }
 }
 
@@ -92,11 +78,11 @@ struct TypeMenu: View {
     let model: NoteEditorModel
 
     var body: some View {
-        Menu("\(model.note?.kind.editorTitle ?? "Note") ▾") {
+        Menu("\(model.note?.kind.title ?? "Note") ▾") {
             Section("Turn into") {
                 ForEach(NoteKind.editableKinds, id: \.self) { kind in
                     Toggle(
-                        kind.editorTitle,
+                        kind.title,
                         isOn: Binding(get: { model.note?.kind == kind }, set: { _ in model.changeKind(to: kind) }))
                 }
             }

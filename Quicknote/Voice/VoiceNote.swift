@@ -19,23 +19,9 @@ enum VoiceNote {
 
     /// "Reminder · Today, 18:00", or just the type when there is no due date.
     static func chip(for note: Note, now: Date, calendar: Calendar) -> String {
-        guard let due = note.dueAt else { return label(of: note.kind) }
+        guard let due = note.dueAt else { return note.kind.title }
         return
-            "\(label(of: note.kind)) · \(dueDescription(due, hasTime: note.dueHasTime, now: now, calendar: calendar))"
-    }
-
-    private static func label(of kind: NoteKind) -> String {
-        switch kind {
-        case .note: "Note"
-        case .todoList: "To-do list"
-        case .task: "Task"
-        case .reminder: "Reminder"
-        case .event: "Event"
-        case .idea: "Idea"
-        case .bookmark: "Bookmark"
-        case .bug: "Bug"
-        case .context: "Context"
-        }
+            "\(note.kind.title) · \(dueDescription(due, hasTime: note.dueHasTime, now: now, calendar: calendar))"
     }
 
     private static func dueDescription(_ due: Date, hasTime: Bool, now: Date, calendar: Calendar) -> String {
