@@ -137,4 +137,20 @@ struct LibraryTests {
         model.selection = [7, 8]
         #expect(model.openNoteId == nil)
     }
+
+    @Test func aSelectedSnapStaysSelectedAcrossReloads() async throws {
+        let paths = AppPaths(root: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
+        let database = try AppDatabase.inMemory()
+        var snap = Note(body: "Snap · 7:38 PM")
+        snap.canvas = CanvasDocument(background: .image(attachmentId: 1, size: CGSize(width: 10, height: 10)))
+        try NoteRepository(database: database).save(&snap, now: now)
+        let model = LibraryModel(database: database, paths: paths)
+        let observing = Task { await model.observe() }
+        defer { observing.cancel() }
+        model.section = .snaps
+        while model.galleryNotes.isEmpty { await Task.yield() }
+        model.selection = [snap.id!]
+        model.reload()
+        #expect(model.selection == [snap.id!])
+    }
 }
