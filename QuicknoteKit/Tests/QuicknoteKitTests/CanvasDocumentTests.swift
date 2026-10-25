@@ -98,4 +98,18 @@ struct CanvasDocumentTests {
         note.canvasJSON = "{not json"
         #expect(note.canvas == nil)
     }
+
+    @Test func keepingElementsInsideMovesThemOnToTheCanvasAndShrinksOversizedOnes() {
+        var document = CanvasDocument(background: .card(style: .sticky, size: .square))
+        document.add(CanvasElement(kind: .box, frame: CGRect(x: 100, y: 1_500, width: 200, height: 100)))
+        document.add(CanvasElement(kind: .box, frame: CGRect(x: -50, y: 10, width: 1_500, height: 80)))
+        document.add(CanvasElement(kind: .box, frame: CGRect(x: 10, y: 10, width: 50, height: 50)))
+        document.keepElementsInside(CGSize(width: 1_080, height: 1_080))
+        #expect(
+            document.elements.map(\.frame) == [
+                CGRect(x: 100, y: 980, width: 200, height: 100),
+                CGRect(x: 0, y: 10, width: 1_080, height: 80),
+                CGRect(x: 10, y: 10, width: 50, height: 50),
+            ])
+    }
 }

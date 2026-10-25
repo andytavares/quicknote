@@ -49,3 +49,17 @@ extension CanvasDocument {
         change(&elements[index])
     }
 }
+
+extension CanvasDocument {
+    /// After the canvas size changes: moves each element fully onto the canvas, shrinking any larger than it.
+    public mutating func keepElementsInside(_ size: CGSize) {
+        for index in elements.indices {
+            var frame = elements[index].frame
+            frame.size.width = min(frame.width, size.width)
+            frame.size.height = min(frame.height, size.height)
+            frame.origin.x = min(max(frame.minX, 0), size.width - frame.width)
+            frame.origin.y = min(max(frame.minY, 0), size.height - frame.height)
+            elements[index].frame = frame
+        }
+    }
+}

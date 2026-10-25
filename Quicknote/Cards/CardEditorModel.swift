@@ -147,6 +147,7 @@ final class CardEditorModel {
                 .wallpaper(width: Int(screenPixelSize.width), height: Int(screenPixelSize.height))
             }
         document.background = .card(style: cardStyle, size: size)
+        document.keepElementsInside(size.pixelSize)
         recordIfChanged()
     }
 
