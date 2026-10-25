@@ -87,7 +87,7 @@ Agreed to ship.
 
 ## Recording a meeting (S17)
 
-1. Menu bar › Record meeting (or the shortcut for it). A small sheet asks for a title and two switches: **Record my microphone** and **Record Mac audio (other people on the call)**.
+1. Menu bar › **Start meeting recording** (there is no global shortcut for starting; ⌃⌥B bookmarks while recording). A small sheet asks for a title and two switches: **Record my microphone** and **Record Mac audio (other people on the call)**.
 2. **Record** starts. A pill floats at the top of the screen: red dot, title, elapsed time, a live level for each source, **Bookmark ⌃⌥B**, **Pause / Resume**, **Stop**. It never takes focus, so the call stays in front. VoiceOver announces Recording, Paused, Saving and Saved.
 3. `⌃⌥B` from any app adds a bookmark at the current second and a "Bookmarked at 12:04" toast shows for 4 seconds. When no meeting is recording it does nothing. Labels are edited in the meeting window.
 4. **Pause** stops audio, transcript and the clock together; the time you paused is not in the recording. **Stop** saves.
@@ -166,7 +166,7 @@ Export opens a save panel named from the title and date (`MeetingExport.fileName
 
 Not run by the build, needs a Mac with a microphone and a call or video playing.
 
-- [ ] Record meeting: sheet shows title and both switches; Record is disabled with both off.
+- [ ] Start meeting recording: sheet shows title and both switches; Record is disabled with both off.
 - [ ] First run: Microphone, Speech Recognition and the Mac audio prompt appear.
 - [ ] Pill floats, does not take focus from the call, levels move for both sources.
 - [ ] `⌃⌥B` from another app shows the toast; with no recording nothing happens.

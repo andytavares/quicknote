@@ -16,7 +16,7 @@ Menu › Settings… (⌘,). Four tabs; the last one used is remembered (`settin
 | Show edge tabs on all displays | Edge tabs on every display or only the main one; calls `EdgeFeature.refresh()` | `showsEdgeOnAllDisplays` |
 | Pop up app and site notes | Notes pinned to an app or site slide out when it is in front | `popsUpContextNotes` |
 | Default note colour | Colour of new notes: Yellow, Pink, Green, Blue, Lilac, Orange | `defaultNoteColor` (hex) |
-| Default font | System, Serif or Mono | `defaultFont` (`system`, `serif`, `mono`) |
+| Default font | The six editor fonts: Handwritten, System, Rounded, Serif, Marker, Mono | `defaultFont` (ids from `EditorFont.choices`, `Quicknote/Editor/EditorFont.swift`) |
 | Voice | English, on this Mac. Fixed, not a control | none |
 | Updates: check automatically | Sparkle's automatic checks | `SUEnableAutomaticChecks`, the key Sparkle reads |
 
