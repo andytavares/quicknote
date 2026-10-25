@@ -1,0 +1,33 @@
+Quicknote/Brief/BriefFeature.swift
+  s_ad65a60407dcd0::t_376ec3fbc65b26 1-4,6-27
+Quicknote/Brief/BriefModel.swift
+  s_ad65a60407dcd0::t_440615c7940d44 1-59
+Quicknote/Brief/BriefView.swift
+  s_ad65a60407dcd0::t_aedb3c00c99167 1-125
+Quicknote/Calendar/CalendarBridge.swift
+  s_ad65a60407dcd0::t_4e04f8412061d1 1-105
+Quicknote/Calendar/CalendarConfirmation.swift
+  s_ad65a60407dcd0::t_29091979a6d7dd 1-6,8-9,11-124
+Quicknote/Calendar/EventDraft.swift
+  s_ad65a60407dcd0::t_78f24ceef4bc97 1-94
+QuicknoteTests/CalendarMappingTests.swift
+  s_ad65a60407dcd0::t_00d798f96ee2d6 1-95
+docs/features/calendar-and-brief.md
+  s_ad65a60407dcd0::t_43fa00d3144470 1-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "183889d773a78d48f2d9e014e3bb6ec42243fce0",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
