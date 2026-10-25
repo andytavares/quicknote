@@ -1,5 +1,4 @@
 import AppKit
-import KeyboardShortcuts
 import QuicknoteKit
 import SwiftUI
 
@@ -160,7 +159,7 @@ struct RecorderPillView: View {
     }
 
     private var shortcutName: String {
-        KeyboardShortcuts.getShortcut(for: .bookmarkMeeting)?.description ?? "⌃⌥B"
+        Shortcuts.label(for: .bookmarkMeeting)
     }
 }
 

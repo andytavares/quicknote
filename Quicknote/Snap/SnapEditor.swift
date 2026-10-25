@@ -178,7 +178,8 @@ struct SnapEditorView: View {
     private var captionRow: some View {
         HStack(spacing: 10) {
             Image(systemName: "mic").foregroundStyle(.secondary).accessibilityHidden(true)
-            Text("Hold ⌃⌥K to add a caption by voice").font(.callout).foregroundStyle(.secondary)
+            Text("Hold \(Shortcuts.label(for: .holdToTalk)) to add a caption by voice").font(.callout).foregroundStyle(
+                .secondary)
             TextField("Caption", text: $model.caption)
                 .textFieldStyle(.roundedBorder)
                 .accessibilityLabel("Caption")

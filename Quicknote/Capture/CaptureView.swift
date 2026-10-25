@@ -43,7 +43,7 @@ struct CaptureView: View {
         HStack {
             if let context = model.draft.context { ContextChip(context: context) }
             Spacer()
-            Text("⌃⌥N").font(.caption).foregroundStyle(.secondary)
+            Text(Shortcuts.label(for: .newNote)).font(.caption).foregroundStyle(.secondary)
         }
     }
 

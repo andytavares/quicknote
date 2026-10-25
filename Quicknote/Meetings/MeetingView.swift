@@ -182,7 +182,10 @@ private struct BookmarkList: View {
             }
         }
         .overlay {
-            if model.bookmarks.isEmpty { Text("No bookmarks. Press ⌃⌥B while recording.").foregroundStyle(.secondary) }
+            if model.bookmarks.isEmpty {
+                Text("No bookmarks. Press \(Shortcuts.label(for: .bookmarkMeeting)) while recording.").foregroundStyle(
+                    .secondary)
+            }
         }
     }
 

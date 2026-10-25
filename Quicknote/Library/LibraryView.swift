@@ -52,7 +52,7 @@ struct LibraryView: View {
                 .help("Delete the selected notes")
             Button("Search", systemImage: "magnifyingglass") { SearchFeature.showPanel() }
                 .keyboardShortcut("f", modifiers: .command)
-                .help("Search (⌃⌥F)")
+                .help("Search (\(Shortcuts.label(for: .search)))")
         }
     }
 

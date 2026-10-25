@@ -37,7 +37,7 @@ struct SearchView: View {
                 }
                 .onKeyPress(.return, phases: .down) { press in handleReturn(press) }
                 .accessibilityLabel("Search notes, meetings and files")
-            Text("⌃⌥F").font(.caption).foregroundStyle(.secondary).accessibilityHidden(true)
+            Text(Shortcuts.label(for: .search)).font(.caption).foregroundStyle(.secondary).accessibilityHidden(true)
         }
         .padding(14)
         .onChange(of: model.focusRequest) { selectAllText() }

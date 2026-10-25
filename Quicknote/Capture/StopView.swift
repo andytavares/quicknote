@@ -19,7 +19,7 @@ struct StopView: View {
             lastStop
             Divider()
             HStack {
-                Text("⌃⌥S  Esc").font(.caption).foregroundStyle(.secondary)
+                Text("\(Shortcuts.label(for: .saveContext))  Esc").font(.caption).foregroundStyle(.secondary)
                 Spacer()
                 Button("Save") { model.save() }
                     .keyboardShortcut(.defaultAction)

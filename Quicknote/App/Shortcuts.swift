@@ -22,6 +22,11 @@ enum Shortcuts {
         (.bookmarkMeeting, "Bookmark meeting moment"),
     ]
 
+    /// The keys currently set for a shortcut, such as "⌃⌥F"; empty when the user cleared it.
+    static func label(for name: KeyboardShortcuts.Name) -> String {
+        KeyboardShortcuts.getShortcut(for: name)?.description ?? ""
+    }
+
     static func register() {
         KeyboardShortcuts.onKeyUp(for: .newNote) { CaptureFeature.showPanel() }
         KeyboardShortcuts.onKeyDown(for: .holdToTalk) { VoiceFeature.startHoldToTalk() }
