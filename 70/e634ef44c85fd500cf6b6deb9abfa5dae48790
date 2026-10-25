@@ -1,0 +1,21 @@
+.github/workflows/test.yml
+  s_ad65a60407dcd0::t_ce140420269724 2,8
+probe/ocr.swift
+  s_ad65a60407dcd0::t_6236cc012c19b8 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "70e634ef44c85fd500cf6b6deb9abfa5dae48790",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
