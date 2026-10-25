@@ -10,9 +10,7 @@ final class SnapEditorModel {
 
     private enum Drag {
         case creating(UUID, start: CGPoint)
-        case moving(UUID, last: CGPoint)
-        case resizing(UUID, ResizeHandle)
-        case rotating(UUID)
+        case element(ElementDrag)
     }
 
     private(set) var document: CanvasDocument
@@ -65,26 +63,16 @@ final class SnapEditorModel {
     }
 
     private func beginSelectDrag(at point: CGPoint, zoom: CGFloat) {
-        if let selected = selectedElement, let target = ElementHandles.target(at: point, of: selected, zoom: zoom) {
-            drag =
-                switch target {
-                case .resize(let handle): .resizing(selected.id, handle)
-                case .rotate: .rotating(selected.id)
-                }
-            return
-        }
-        selectedID = document.elementID(at: point)
-        drag = selectedID.map { .moving($0, last: point) }
+        let press = CanvasPointerEvent(phase: .began, point: point, zoom: zoom)
+        let start = ElementDrag.begin(at: press, in: document, selected: selectedElement)
+        selectedID = start.selectedID
+        drag = start.drag.map { .element($0) }
     }
 
     private func pointerMoved(to point: CGPoint) {
         switch drag {
         case .creating(let id, let start): reshapeCreated(id, from: start, to: point)
-        case .moving(let id, let last):
-            document.moveElement(id: id, by: CGSize(width: point.x - last.x, height: point.y - last.y))
-            drag = .moving(id, last: point)
-        case .resizing(let id, let handle): document.resizeElement(id: id, handle: handle, to: point)
-        case .rotating(let id): rotate(id, toward: point)
+        case .element(let elementDrag): drag = .element(elementDrag.follow(point, in: &document))
         case nil: break
         }
     }
@@ -119,12 +107,6 @@ final class SnapEditorModel {
                 selectedID = nil
             }
         }
-    }
-
-    private func rotate(_ id: UUID, toward point: CGPoint) {
-        guard let element = document.elements.first(where: { $0.id == id }) else { return }
-        let angle = atan2(point.y - element.frame.midY, point.x - element.frame.midX) + .pi / 2
-        document.rotateElement(id: id, to: angle)
     }
 
     // MARK: Text
