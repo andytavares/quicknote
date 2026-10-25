@@ -1,6 +1,33 @@
-/// Library window and note editor (S10–S13, S16, S24). Owned by the Library unit.
+import AppKit
+import SwiftUI
+
+/// Library window and note editor (S10–S13, S16, S24).
 enum LibraryFeature {
-    static func show() {}
+    private static var window: NSWindow?
+    private static let model = LibraryModel(
+        database: AppEnvironment.current.database, paths: AppEnvironment.current.paths)
+
+    static func show() {
+        let window = window ?? makeWindow()
+        Self.window = window
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate()
+    }
+
     /// Opens the Library with one note selected.
-    static func open(noteId: Int64) {}
+    static func open(noteId: Int64) {
+        model.open(noteId: noteId)
+        show()
+    }
+
+    private static func makeWindow() -> NSWindow {
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 1_100, height: 680),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
+        window.title = "Quicknote"
+        window.isReleasedWhenClosed = false
+        window.contentView = NSHostingView(rootView: LibraryView(model: model))
+        window.center()
+        return window
+    }
 }
