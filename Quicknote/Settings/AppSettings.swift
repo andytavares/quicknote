@@ -46,5 +46,5 @@ enum AppSettings {
         ("Orange", "#F9D3AC"),
     ]
 
-    static let fontChoices: [(id: String, name: String)] = [("system", "System"), ("serif", "Serif"), ("mono", "Mono")]
+    static let fontChoices: [(id: String, name: String)] = EditorFont.choices.map { ($0.id, $0.name) }
 }
