@@ -101,7 +101,7 @@ struct RecorderPillView: View {
             Button {
                 recorder.bookmark()
             } label: {
-                Text("Bookmark ") + Text(shortcutName).foregroundStyle(.secondary)
+                Text("Bookmark \(Text(shortcutName).foregroundStyle(.secondary))")
             }
             .disabled(!recorder.timeline.canBookmark)
             .accessibilityLabel("Bookmark this moment")

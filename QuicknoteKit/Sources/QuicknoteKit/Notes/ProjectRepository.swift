@@ -15,7 +15,7 @@ public struct ProjectRepository: Sendable {
     }
 
     public func rename(projectId: Int64, to name: String) throws {
-        try database.writer.write { db in
+        _ = try database.writer.write { db in
             try Project.filter(key: projectId).updateAll(db, Column("name").set(to: name))
         }
     }
