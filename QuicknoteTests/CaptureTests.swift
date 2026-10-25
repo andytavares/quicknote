@@ -117,6 +117,21 @@ struct ImageTextReaderTests {
         #expect(text.localizedCaseInsensitiveContains("pricing"))
     }
 
+    @Test func fallsBackToFastWhenAccurateThrows() async {
+        struct NoNeuralEngine: Error {}
+        let lines = await ImageTextReader.lines { level in
+            if level == .accurate { throw NoNeuralEngine() }
+            return ["Invoice number 4821"]
+        }
+        #expect(lines == ["Invoice number 4821"])
+    }
+
+    @Test func noTextWhenEveryLevelThrows() async {
+        struct NoNeuralEngine: Error {}
+        let lines = await ImageTextReader.lines { _ in throw NoNeuralEngine() }
+        #expect(lines.isEmpty)
+    }
+
     @Test func importerStoresImageTextForSearch() async throws {
         let root = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         let database = try AppDatabase.inMemory()

@@ -43,7 +43,7 @@ Save where you stopped also shows, collapsed, the last stop saved for the same a
 - `Quicknote/Capture/CaptureModel.swift:28` `save`.
 - `Quicknote/App/KeyPanel.swift` the shared non-activating key panel; `Quicknote/Capture/CaptureView.swift` the layout.
 - `Quicknote/Capture/StopNote.swift:19` `body` format; `StopModel.swift:12` last stop lookup; `StopView.swift`.
-- `Quicknote/Attachments/AttachmentImporter.swift:7` `importFiles(_:toNoteId:)`; `ImageTextReader.swift:7` `text(inImageAt:)`.
+- `Quicknote/Attachments/AttachmentImporter.swift:7` `importFiles(_:toNoteId:)`; `ImageTextReader.swift:7` `text(inImageAt:)` (accurate, then fast where accurate throws, as on virtual Macs).
 - Tests: `QuicknoteTests/CaptureTests.swift`.
 
 ## Limits
