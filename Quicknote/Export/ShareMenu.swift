@@ -62,10 +62,10 @@ enum ShareActions {
         return true
     }
 
-    static func savePNG(_ payload: SharePayload) throws {
+    static func savePNG(_ payload: SharePayload, fileName: String = "Snap.png") throws {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.png]
-        panel.nameFieldStringValue = "Snap.png"
+        panel.nameFieldStringValue = fileName
         guard panel.runModal() == .OK, let url = panel.url, let data = payload.image.pngData else { return }
         try data.write(to: url)
     }
