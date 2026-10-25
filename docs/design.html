@@ -1,0 +1,1410 @@
+<title>Quicknote Design</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Caveat:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky contents rail on the left, one reading column; tables and diagrams scroll in their own boxes. */
+:root {
+  --paper: #f6f7f9;
+  --sheet: #ffffff;
+  --ink: #1c2230;
+  --muted: #5b6475;
+  --rule: #dfe3ea;
+  --note: #f2c14e;
+  --note-ink: #7a5300;
+  --note-wash: #fdf3d6;
+  --ok: #2f7d4f;
+  --warn: #9a5b00;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12151c; --sheet: #191d26; --ink: #e6e9ef; --muted: #9aa3b4; --rule: #2b313d;
+    --note: #f2c14e; --note-ink: #f5d07a; --note-wash: #2c2615; --ok: #6cc08f; --warn: #e3a54a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12151c; --sheet: #191d26; --ink: #e6e9ef; --muted: #9aa3b4; --rule: #2b313d;
+  --note: #f2c14e; --note-ink: #f5d07a; --note-wash: #2c2615; --ok: #6cc08f; --warn: #e3a54a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink); font-family: var(--body);
+  font-size: 15.5px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 80px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 48px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 13.5px; }
+nav.toc p { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--ink); }
+main { min-width: 0; max-width: 920px; }
+header { display: grid; gap: 10px; padding-bottom: 28px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1 { font-family: var(--display); font-size: clamp(30px, 5vw, 44px); line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--display); font-size: 25px; line-height: 1.2; margin: 0 0 12px; text-wrap: balance; }
+h3 { font-size: 16.5px; margin: 22px 0 6px; }
+section { padding-block: 32px 8px; scroll-margin-top: 16px; }
+p, li { max-width: 68ch; }
+p { margin: 0 0 12px; }
+ul, ol { margin: 0 0 12px; padding-left: 22px; }
+li { margin-bottom: 4px; }
+a { color: var(--note-ink); text-underline-offset: 2px; }
+a:focus-visible, nav.toc a:focus-visible { outline: 2px solid var(--note); outline-offset: 2px; border-radius: 2px; }
+code { font-family: var(--mono); font-size: .86em; background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
+kbd { font-family: var(--mono); font-size: 12px; white-space: nowrap; background: var(--sheet); border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); }
+.change { background: var(--note-wash); border-left: 4px solid var(--note); padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 14px 0; }
+.change p:last-child { margin: 0; }
+.tbl { overflow-x: auto; margin: 12px 0 18px; border: 1px solid var(--rule); border-radius: 8px; background: var(--sheet); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+th { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; background: var(--paper); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+.wide td:first-child { white-space: normal; min-width: 130px; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid currentColor; }
+.tag.ok { color: var(--ok); }
+.tag.warn { color: var(--warn); }
+.options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 12px 0 8px; }
+.opt { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; font-size: 14px; min-width: 0; }
+.opt.pick { border-color: var(--note); box-shadow: 0 0 0 1px var(--note); }
+.opt h3 { margin: 0 0 6px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.opt ul { padding-left: 18px; margin: 0; }
+pre.code, pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; margin: 12px 0 18px; }
+pre.mermaid { text-align: center; }
+.cmd { display: grid; gap: 10px; }
+.cmd div { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; min-width: 0; }
+.cmd code { background: none; border: 0; padding: 0; display: block; white-space: pre-wrap; }
+.cmd span { font-size: 13px; color: var(--muted); }
+.src { font-size: 12.5px; color: var(--muted); }
+/* Screens: mock macOS UI. Tokens follow macOS light and dark; note and card paper colours stay fixed in both. */
+:root {
+  --m-bg: #ffffff; --m-bar: #f3f4f7; --m-side: #eef0f4; --m-line: #d9dce3; --m-fg: #1d1f24; --m-dim: #6c7280;
+  --m-chip: #eceef2; --m-hud: rgba(251,251,253,.97); --m-acc: #2f6fed; --m-acc-wash: #e3ecfd; --m-acc-ink: #1d4fc4;
+  --m-red: #d93d42; --m-red-wash: #fde7e7; --m-green: #2e8b57; --m-shadow: rgba(20,24,40,.22);
+  --desk1: #a9bedc; --desk2: #dccbe8; --dim-screen: rgba(10,12,20,.45);
+  --n-y: #fbe38e; --n-p: #f8c9d4; --n-g: #cdebc6; --n-b: #c8ddf6; --n-l: #ddd2f4; --n-o: #f9d3ac; --n-ink: #2b2618;
+  --kraft: #c9a57a; --card-paper: #fffdf8; --washi: #f4a7b9; --rule-blue: #b9cdea;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --m-bg: #23262d; --m-bar: #2b2f37; --m-side: #1f2228; --m-line: #3a3f4a; --m-fg: #eceef2; --m-dim: #9aa1ae;
+    --m-chip: #343944; --m-hud: rgba(40,43,51,.97); --m-acc: #3d7bf2; --m-acc-wash: #1f2f50; --m-acc-ink: #a8c4ff;
+    --m-red: #ff6b6f; --m-red-wash: #4a2226; --m-green: #5fc58c; --m-shadow: rgba(0,0,0,.5);
+    --desk1: #26314a; --desk2: #3b2d4d; --dim-screen: rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"] {
+  --m-bg: #23262d; --m-bar: #2b2f37; --m-side: #1f2228; --m-line: #3a3f4a; --m-fg: #eceef2; --m-dim: #9aa1ae;
+  --m-chip: #343944; --m-hud: rgba(40,43,51,.97); --m-acc: #3d7bf2; --m-acc-wash: #1f2f50; --m-acc-ink: #a8c4ff;
+  --m-red: #ff6b6f; --m-red-wash: #4a2226; --m-green: #5fc58c; --m-shadow: rgba(0,0,0,.5);
+  --desk1: #26314a; --desk2: #3b2d4d; --dim-screen: rgba(0,0,0,.55);
+}
+.screen-index { columns: 3 200px; column-gap: 24px; font-size: 13.5px; margin: 8px 0 24px; padding: 0; list-style: none; }
+.screen-index li { break-inside: avoid; margin-bottom: 3px; }
+.screen-index span { font-family: var(--mono); font-size: 11px; color: var(--note-ink); margin-right: 6px; }
+.screens { display: grid; gap: 44px; }
+.shot { margin: 0; display: grid; gap: 10px; min-width: 0; scroll-margin-top: 16px; }
+.shot h3 { margin: 0; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.shot h3 .no { font-family: var(--mono); font-size: 11px; color: var(--note-ink); letter-spacing: .06em; font-weight: 500; }
+.shot figcaption { font-size: 13.5px; color: var(--muted); max-width: 72ch; }
+.shot figcaption b { color: var(--ink); font-weight: 600; }
+.stage { overflow-x: auto; border-radius: 12px; background: linear-gradient(135deg, var(--desk1), var(--desk2)); border: 1px solid var(--rule); }
+.m { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif; font-size: 13px; line-height: 1.4; color: var(--m-fg);
+  padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: safe center; align-items: flex-start; }
+.m * { box-sizing: border-box; }
+.m p { margin: 0; max-width: none; }
+.m.full { padding: 0; display: block; }
+.win { background: var(--m-bg); border: 1px solid var(--m-line); border-radius: 11px; box-shadow: 0 20px 50px var(--m-shadow); overflow: hidden; flex: none; }
+.tb { display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 0 14px; background: var(--m-bar); border-bottom: 1px solid var(--m-line); font-weight: 600; }
+.sp { flex: 1; }
+.lights { display: flex; gap: 8px; }
+.lights i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; display: block; }
+.lights i:nth-child(2) { background: #febc2e; }
+.lights i:nth-child(3) { background: #28c840; }
+.hud { background: var(--m-hud); border: 1px solid var(--m-line); border-radius: 14px; box-shadow: 0 20px 50px var(--m-shadow); flex: none; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 99px; font-size: 11.5px; background: var(--m-chip); white-space: nowrap; }
+.chip.acc { background: var(--m-acc-wash); color: var(--m-acc-ink); font-weight: 600; }
+.chip.red { background: var(--m-red-wash); color: var(--m-red); font-weight: 600; }
+.mb { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 6px; border: 1px solid var(--m-line); background: var(--m-bg); font-size: 12.5px; white-space: nowrap; }
+.mb.pri { background: var(--m-acc); border-color: var(--m-acc); color: #fff; }
+.mb.danger { background: var(--m-red); border-color: var(--m-red); color: #fff; }
+.k { font-size: 11px; padding: 0 5px; border: 1px solid var(--m-line); border-radius: 4px; background: var(--m-bar); color: var(--m-dim); white-space: nowrap; }
+.dim { color: var(--m-dim); }
+.small { font-size: 11.5px; }
+.row { display: flex; align-items: center; gap: 8px; }
+.stack { display: grid; gap: 8px; align-content: start; }
+.pad { padding: 14px 16px; }
+.sep { height: 1px; background: var(--m-line); margin: 4px 0; }
+.menu { padding: 5px; width: 270px; }
+.menu .it { display: flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 5px; }
+.menu .it .k { margin-left: auto; border: 0; background: none; }
+.menu .it.on { background: var(--m-acc); color: #fff; }
+.menu .it.on .k, .menu .it.on .dim { color: #fff; }
+.menu .lbl { font-size: 11px; font-weight: 600; color: var(--m-dim); padding: 6px 10px 2px; }
+.side { background: var(--m-side); border-right: 1px solid var(--m-line); padding: 10px 8px; display: grid; align-content: start; gap: 1px; font-size: 12.5px; }
+.side .h { font-size: 10.5px; font-weight: 600; color: var(--m-dim); padding: 10px 8px 3px; text-transform: uppercase; letter-spacing: .04em; }
+.side .it { display: flex; gap: 7px; align-items: center; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+.side .it b { margin-left: auto; font-weight: 400; color: var(--m-dim); font-size: 11.5px; }
+.side .it.on { background: var(--m-acc-wash); color: var(--m-acc-ink); font-weight: 600; }
+.ico { width: 14px; height: 14px; border-radius: 4px; display: inline-block; flex: none; background: var(--m-dim); opacity: .5; }
+.app { width: 18px; height: 18px; border-radius: 5px; display: inline-grid; place-items: center; flex: none; font-size: 10px; font-weight: 700; color: #fff; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+.cb { width: 14px; height: 14px; border: 1.5px solid var(--m-dim); border-radius: 4px; display: inline-block; flex: none; position: relative; }
+.cb.x { background: var(--m-acc); border-color: var(--m-acc); }
+.cb.x::after { content: ""; position: absolute; left: 3.5px; top: .5px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.done { text-decoration: line-through; color: var(--m-dim); }
+.field { border: 1px solid var(--m-line); border-radius: 6px; padding: 5px 9px; background: var(--m-bg); }
+.field.focus { border-color: var(--m-acc); box-shadow: 0 0 0 3px var(--m-acc-wash); }
+.caret { display: inline-block; width: 1.5px; height: 1.1em; background: var(--m-acc); vertical-align: -2px; margin-left: 1px; }
+.paper { color: var(--n-ink); border-radius: 4px; box-shadow: 0 8px 22px var(--m-shadow); }
+.bar { height: 8px; border-radius: 4px; background: var(--m-chip); display: block; }
+.seg { display: inline-flex; border: 1px solid var(--m-line); border-radius: 7px; overflow: hidden; flex: none; }
+.seg span { padding: 3px 10px; font-size: 12px; border-right: 1px solid var(--m-line); white-space: nowrap; }
+.seg span:last-child { border-right: 0; }
+.seg .on { background: var(--m-acc); color: #fff; }
+.toggle { width: 30px; height: 18px; border-radius: 99px; background: var(--m-chip); position: relative; flex: none; border: 1px solid var(--m-line); }
+.toggle::after { content: ""; position: absolute; top: 1px; left: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--m-bg); box-shadow: 0 1px 2px var(--m-shadow); }
+.toggle.on { background: var(--m-acc); border-color: var(--m-acc); }
+.toggle.on::after { left: 13px; background: #fff; }
+.hit { background: var(--n-y); color: var(--n-ink); padding: 0 2px; border-radius: 2px; }
+.hand { font-family: "Caveat", "Bradley Hand", "Segoe Script", cursive; }
+.desk { position: relative; height: 420px; min-width: 820px; overflow: hidden; }
+.menubar { height: 26px; background: var(--m-hud); display: flex; align-items: center; gap: 18px; padding: 0 14px; font-size: 12.5px; border-bottom: 1px solid var(--m-line); }
+/* Logo: line-art note with a folded corner, drawn in the text colour like a macOS template image */
+.qn { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 2.5h11v7l-4 4h-7z'/%3E%3Cpath d='M13.5 9.5h-4v4'/%3E%3Cpath d='M5 6h6M5 8.5h3'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 2.5h11v7l-4 4h-7z'/%3E%3Cpath d='M13.5 9.5h-4v4'/%3E%3Cpath d='M5 6h6M5 8.5h3'/%3E%3C/svg%3E") center / contain no-repeat; }
+.menubar .on { background: var(--m-chip); border-radius: 4px; padding: 2px 5px; }
+.edge { position: absolute; right: 0; display: grid; gap: 6px; }
+.edge .tab { width: 22px; height: 44px; border-radius: 7px 0 0 7px; box-shadow: -2px 2px 8px var(--m-shadow); position: relative; }
+.edge .tab.out { width: 30px; }
+.edge .tab b { position: absolute; top: -5px; left: -6px; background: var(--m-red); color: #fff; font-size: 9.5px; border-radius: 99px; padding: 0 4px; line-height: 14px; }
+.wave { display: flex; gap: 3px; align-items: center; height: 30px; }
+.wave i { width: 3px; border-radius: 2px; background: var(--m-acc); display: block; }
+.rec { width: 10px; height: 10px; border-radius: 50%; background: var(--m-red); display: inline-block; box-shadow: 0 0 0 4px var(--m-red-wash); }
+.ts { font-family: var(--mono); font-size: 11.5px; color: var(--m-acc-ink); white-space: nowrap; }
+.tools { display: flex; gap: 2px; padding: 6px 10px; border-bottom: 1px solid var(--m-line); background: var(--m-bar); align-items: center; flex-wrap: nowrap; }
+.tools span { padding: 4px 7px; border-radius: 6px; font-size: 11.5px; white-space: nowrap; display: inline-flex; gap: 4px; align-items: center; }
+.tools span.on { background: var(--m-acc-wash); color: var(--m-acc-ink); font-weight: 600; }
+.tools i { font-style: normal; font-size: 13px; }
+.swatches { display: grid; grid-template-columns: repeat(10, 16px); gap: 5px; }
+.swatches i { width: 16px; height: 16px; border-radius: 50%; display: block; border: 1px solid rgba(0,0,0,.08); }
+.swatches i.on { outline: 2px solid var(--m-acc); outline-offset: 2px; }
+.thumb { width: 64px; height: 64px; border-radius: 4px; box-shadow: 0 3px 10px var(--m-shadow); position: relative; color: var(--n-ink); overflow: hidden; }
+.lined { background-color: var(--card-paper); background-image: repeating-linear-gradient(to bottom, transparent 0 15px, var(--rule-blue) 15px 16px); }
+.mshot { position: relative; background: var(--m-bg); border: 1px solid var(--m-line); }
+@media (prefers-reduced-motion: no-preference) {
+  .wave i { animation: wv 1.1s ease-in-out infinite alternate; }
+  .wave i:nth-child(3n) { animation-delay: -.4s; }
+  .wave i:nth-child(3n+1) { animation-delay: -.8s; }
+  @keyframes wv { from { transform: scaleY(.55); } to { transform: scaleY(1); } }
+}
+
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  nav.toc { position: static; }
+  nav.toc ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .options { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <p>Contents</p>
+  <ol>
+    <li><a href="#context">Context</a></li>
+    <li><a href="#goals">Goals</a></li>
+    <li><a href="#current">Current state</a></li>
+    <li><a href="#options">Options</a></li>
+    <li><a href="#decision">Decision</a></li>
+    <li><a href="#features">Feature map</a></li>
+    <li><a href="#screens">Screens</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#data">Data</a></li>
+    <li><a href="#flows">Key flows</a></li>
+    <li><a href="#layout">Repo layout</a></li>
+    <li><a href="#sequence">Build order</a></li>
+    <li><a href="#testing">Testing</a></li>
+    <li><a href="#risks">Risks</a></li>
+    <li><a href="#questions">Open questions</a></li>
+    <li><a href="#rejected">Rejected</a></li>
+  </ol>
+</nav>
+
+<main>
+<header>
+  <p class="eyebrow">Design document · repo <code>quicknote</code> · 25 Oct 2026</p>
+  <h1>Quicknote: a free Kippy-style capture app for macOS</h1>
+  <div class="meta">
+    <span>Reference: <a href="https://heykippy.app/#features">heykippy.app</a> and <a href="https://heykippy.app/changelog">its v1.0 changelog</a></span>
+    <span>Price: free (no licensing)</span>
+  </div>
+</header>
+
+<section id="context">
+  <h2>Context and problem</h2>
+  <p>Kippy is an unreleased, macOS-only capture app. A small tab on the right edge of the screen and a set of <kbd>⌃⌥</kbd> shortcuts capture typed notes, voice, screenshots and meetings over any app. It sorts each entry into a task, reminder or event, then brings it back at the due time or when you switch to the app or site it belongs to. Everything runs on the Mac: no account, no cloud, no cloud AI. The goal here is to build an app with the same feature set and give it away for free. <code>quicknote</code> is the working name until branding is settled.</p>
+</section>
+
+<section id="goals">
+  <h2>Goals and non-goals</h2>
+  <h3>Goals</h3>
+  <ul>
+    <li>Match every feature listed on Kippy's site and v1.0 changelog (the <a href="#features">feature map</a> lists each one).</li>
+    <li>Fully offline and on-device: no server, no account, no analytics. Capture, search and reminders work with Wi-Fi off.</li>
+    <li>Match Kippy's macOS 14 Sonoma minimum, on Apple silicon and Intel.</li>
+    <li>Your data stays yours: export any note as Markdown, keep attachments as plain files, and delete everything with one button.</li>
+  </ul>
+  <h3>Non-goals</h3>
+  <ul>
+    <li>Payments, licensing, trial and device limits. This is freeware.</li>
+    <li>iOS, Windows, web, or cloud sync. Kippy has none of these.</li>
+    <li>Languages other than English for voice and read-aloud in v1, same as Kippy. Typed notes work in any language.</li>
+    <li>Copying Kippy's name, brand, artwork or marketing copy. Features are fair game; the identity must be our own.</li>
+    <li>A marketing site and waitlist. One static page can come later.</li>
+  </ul>
+</section>
+
+<section id="current">
+  <h2>Current state</h2>
+  <p>The repo is empty. <code>git log</code> returns <code>fatal: your current branch 'main' does not have any commits yet</code> and <code>ls -la</code> shows only <code>.git/</code>. Every path in this document is new.</p>
+</section>
+
+<section id="options">
+  <h2>Options considered</h2>
+  <p>Almost every feature depends on a macOS system API: global hotkeys, floating non-activating panels, Accessibility, ScreenCaptureKit, Core Audio, Speech, EventKit and notifications. The main question is how directly the stack reaches them.</p>
+  <div class="options">
+    <div class="opt pick">
+      <h3>A. Native Swift <span class="tag ok">chosen</span></h3>
+      <ul>
+        <li>SwiftUI for views, AppKit for panels, the edge window and the text editor.</li>
+        <li>Every system API is called directly with no bridge.</li>
+        <li>Low memory use, which matters for an app that is always running.</li>
+        <li>Costs: macOS only, and AppKit gaps need hand-written code (rich text editing, overlay windows).</li>
+      </ul>
+    </div>
+    <div class="opt">
+      <h3>B. Tauri 2</h3>
+      <ul>
+        <li>Rust core with a web UI, so the UI could later be reused on Windows.</li>
+        <li>Each OS feature still needs a Swift or Objective-C plugin, so you write native code plus a bridge.</li>
+        <li>Floating panels over fullscreen apps and a click-through edge window are hard to build in a webview.</li>
+      </ul>
+    </div>
+    <div class="opt">
+      <h3>C. Electron</h3>
+      <ul>
+        <li>Fastest path for web developers, with the largest ecosystem.</li>
+        <li>Same native-module problem as Tauri, plus a full Chromium running in the background all day.</li>
+        <li>Out of step with a "small Mac app" that runs offline.</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Sub-decisions inside option A</h3>
+  <div class="tbl"><table class="wide">
+    <thead><tr><th>Concern</th><th>Chosen</th><th>Alternative</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Speech to text</td><td>Apple Speech: <code>SpeechAnalyzer</code> on macOS 26+, <code>SFSpeechRecognizer</code> with <code>requiresOnDeviceRecognition</code> on 14–25</td><td>WhisperKit (Argmax)</td><td>The system manages the model, so we bundle no weights. Apple's 2019 WWDC session says on-device recognition works on all Macs, which covers Intel (<a href="https://developer.apple.com/videos/play/wwdc2019/256/">WWDC19 #256</a>). WhisperKit needs a model download; one model listed in its README is 626 MB (<a href="https://github.com/argmaxinc/argmax-oss-swift">argmax-oss-swift</a>).</td></tr>
+      <tr><td>Storage and search</td><td>SQLite via GRDB, with FTS5 tables kept in sync with their content tables</td><td>SwiftData</td><td>GRDB's <code>synchronize(withTable:)</code> keeps the full-text index updated on every insert, update and delete (<a href="https://github.com/groue/grdb.swift/blob/master/Documentation/FullTextSearch.md">GRDB FullTextSearch</a>). It also gives explicit migrations and a single file you can inspect.</td></tr>
+      <tr><td>Sorting entries</td><td>Rules: <code>NSDataDetector</code> for dates and <code>NLTagger</code> for the leading verb</td><td>Apple Foundation Models (macOS 26+)</td><td>Rules work on macOS 14, are deterministic and unit-testable. Foundation Models needs an Apple Intelligence device and has a 4K-token context (<a href="https://createwithswift.com/exploring-the-foundation-models-framework/">overview</a>). It can be added later behind the same function.</td></tr>
+      <tr><td>Global shortcuts</td><td>sindresorhus/KeyboardShortcuts</td><td>Carbon <code>RegisterEventHotKey</code> by hand</td><td>It has user-recordable shortcuts, conflict warnings, and both <code>onKeyDown</code> and <code>onKeyUp</code>, which hold-to-talk needs (<a href="https://github.com/sindresorhus/keyboardshortcuts">readme</a>).</td></tr>
+      <tr><td>Distribution</td><td>Developer ID with notarization, a DMG, and Sparkle 2 updates</td><td>Mac App Store</td><td>Apple DTS says Accessibility APIs are unsupported in sandboxed apps, and the App Store requires the sandbox (<a href="https://developer.apple.com/forums/thread/810677">forum thread</a>). App notes depend on Accessibility.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="decision">
+  <h2>Decision</h2>
+  <p>Build a native Swift app with a SwiftUI and AppKit hybrid, targeting macOS 14+. Use GRDB with FTS5 for storage, Apple Speech for transcription, ScreenCaptureKit for Snap, Core Audio taps for meeting audio, EventKit for Calendar, and <code>UNUserNotificationCenter</code> for reminders. Sparkle handles updates. The only third-party packages are GRDB, KeyboardShortcuts and Sparkle.</p>
+  <p>Kippy is Mac-only and almost every feature is an OS integration, so a cross-platform UI layer adds a bridge without adding reach.</p>
+  <div class="change"><p><strong>Changed from the original brief:</strong> licensing, the 7-day trial, pricing and the 3-Mac limit are removed because the app is free. Sparkle stays, since a free app still needs updates.</p></div>
+</section>
+
+<section id="features">
+  <h2>Feature map</h2>
+  <p>Every Kippy feature from the site and changelog, and how Quicknote builds it. "Unverified" marks an API behavior not yet tested on a real Mac.</p>
+  <div class="tbl"><table class="wide">
+    <thead><tr><th>Feature</th><th>Behavior to match</th><th>How we build it</th></tr></thead>
+    <tbody>
+      <tr><td>Quick capture <kbd>⌃⌥N</kbd></td><td>Small panel over any app: type, paste a link, drop a file</td><td>Non-activating <code>NSPanel</code> (<code>.nonactivatingPanel</code>, <code>.floating</code>, <code>canJoinAllSpaces</code> and <code>fullScreenAuxiliary</code>) that hosts SwiftUI. Dropped files are copied into <code>Attachments/</code>.</td></tr>
+      <tr><td>Auto-sort</td><td>"Call Mira tomorrow at 10" becomes an event; "Buy milk" becomes a task; "remind me at 6" becomes a reminder</td><td><code>EntryClassifier.classify(text:now:)</code>, a pure function. The detected type shows as a chip in the panel and can be changed with one key.</td></tr>
+      <tr><td>Context capture</td><td>Remembers the app and site you were in</td><td>The app comes from <code>NSWorkspace.frontmostApplication</code>, which needs no permission. The URL comes from the browser's Accessibility tree (AXWebArea's AXURL). <span class="tag warn">unverified</span> If AX fails, fall back to Apple Events (the per-browser Automation prompt).</td></tr>
+      <tr><td>Edge tabs</td><td>Notes wait as tabs on the right edge</td><td>One borderless panel per <code>NSScreen</code>, docked right. Only the tabs accept clicks.</td></tr>
+      <tr><td>App and site notes</td><td>Pin to Slack, Figma or a website; the note pops up there and hides elsewhere</td><td>Watch <code>NSWorkspace.didActivateApplicationNotification</code> and poll the URL, then filter the edge by <code>app_bundle_id</code> or <code>site_host</code>. An "All sites" view groups notes by host.</td></tr>
+      <tr><td>Reminders and snooze</td><td>Return at the due time with a gentle nudge</td><td>Local <code>UNNotificationRequest</code>, plus an in-app timer that slides the note back onto the edge.</td></tr>
+      <tr><td>Repeats</td><td>Every day, every 2 weeks, every year, or a custom rule like "every tue and thu"</td><td><code>RecurrenceParser</code> produces a <code>RecurrenceRule</code>. Only the next occurrence is scheduled; the one after is scheduled when it fires or the task is completed.</td></tr>
+      <tr><td>Save where you stopped <kbd>⌃⌥S</kbd></td><td>Done / blocked / next, shown when you return</td><td>A note of kind <code>context</code> with three fields, shown when the Mac wakes or unlocks and at app launch (see <a href="#questions">Q4</a>).</td></tr>
+      <tr><td>Daily Brief</td><td>Today's events and tasks, overdue items and returning notes, with read-aloud</td><td>EventKit read (needs full access) plus queries on <code>note</code>. Read-aloud uses <code>AVSpeechSynthesizer</code>.</td></tr>
+      <tr><td>Calendar</td><td>Events go into Apple Calendar after you confirm</td><td><code>EKEventStore</code>. Write-only access returns no events when read (<a href="https://developer.apple.com/documentation/technotes/tn3152-migrating-to-the-latest-calendar-access-levels">TN3152</a>), so the Daily Brief needs full access.</td></tr>
+      <tr><td>Hold to talk <kbd>⌃⌥K</kbd></td><td>Hold, speak, release. The speech becomes a note, task, reminder or event.</td><td><code>onKeyDown</code> starts <code>AVAudioEngine</code> and the transcriber. <code>onKeyUp</code> stops them and runs the transcript through <code>EntryClassifier</code>.</td></tr>
+      <tr><td>Meetings</td><td>Record and transcribe on the Mac; bookmark with <kbd>⌃⌥B</kbd>; action items become tasks linked to the exact second; export summary, transcript or Markdown</td><td>Microphone through <code>AVAudioEngine</code> plus system audio through a Core Audio process tap in a private aggregate device (macOS 14.2+, <code>NSAudioCaptureUsageDescription</code>; <a href="https://github.com/insidegui/AudioCap">AudioCap</a>). Segments are saved with start and end times. Action items come from phrase rules plus bookmarks.</td></tr>
+      <tr><td>Snap <kbd>⌃⌥4</kbd></td><td>Drag to capture; arrows, lines, boxes, diamonds, circles, triangles, text, numbered steps, highlights and blur; move, resize and rotate; voice caption; share or export PNG or Markdown</td><td>An overlay window for selection, then <code>SCScreenshotManager.captureImage</code> (macOS 14+, <a href="https://developer.apple.com/documentation/screencapturekit/scscreenshotmanager">docs</a>) on the display, cropped to the selection. Editing uses the shared <code>Canvas</code>. Blur uses <code>CIGaussianBlur</code>.</td></tr>
+      <tr><td>Cards <kbd>⌃⌥C</kbd></td><td>6 styles: sticky, postcard, polaroid, lined, minimal, kraft. Emoji, stickers, photos, washi tape and extra text; signature; square, story or wallpaper size; optional "made with" mark</td><td>The same <code>Canvas</code> with a <code>CardStyle</code> background, rendered to PNG with SwiftUI <code>ImageRenderer</code>. The design is saved as JSON on the note.</td></tr>
+      <tr><td>Share</td><td>Slack, Messages, Mail, AirDrop</td><td><code>NSSharingServicePicker</code>. Whether Slack appears there is <span class="tag warn">unverified</span>; the fallback is to copy the image and open Slack.</td></tr>
+      <tr><td>Type menu</td><td>To-do list, task, reminder, event, idea, bookmark, bug</td><td>A <code>kind</code> enum on <code>note</code>. Changing the type keeps the body and clears fields that no longer apply.</td></tr>
+      <tr><td>Linked notes</td><td>Type <kbd>[[</kbd> to link notes; backlinks on every note</td><td>An autocomplete popover in the editor. A <code>note_link</code> table is rebuilt from the body on every save.</td></tr>
+      <tr><td>Projects and attachments</td><td>Group notes; attach files</td><td>A <code>project</code> table, and an <code>attachment</code> table that points to plain files.</td></tr>
+      <tr><td>Search <kbd>⌃⌥F</kbd></td><td>Notes, meeting transcripts and files, from any app</td><td>FTS5 over note bodies, transcript segments, attachment names, and text read from Snaps with Vision OCR. See <a href="#questions">Q3</a> on "files".</td></tr>
+      <tr><td>Slack-style formatting</td><td><code>*bold*</code>, <code>_italic_</code>, <code>-</code> lists, <code>[]</code> checkboxes</td><td>An <code>NSTextView</code> wrapped for SwiftUI, restyled after each edit by <code>SlackMarkdown.attributes(for:)</code>.</td></tr>
+      <tr><td>Style</td><td>50+ colours plus custom; 6 fonts from handwritten to mono</td><td>Built-in palette plus <code>ColorPicker</code>. Fonts: system, New York, SF Mono, and three bundled OFL faces, including one handwritten.</td></tr>
+      <tr><td>Custom shortcuts</td><td>Every shortcut can be changed in Settings</td><td><code>KeyboardShortcuts.Recorder</code> for each name.</td></tr>
+      <tr><td>Export and delete</td><td>Any note as Markdown; delete everything with one button</td><td><code>MarkdownExporter</code> writes front matter and copies attachments. "Delete everything" closes the database, removes the app-support folder and clears pending notifications.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Permissions, each requested only at first use</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Permission</th><th>Asked when</th><th>Info.plist key</th></tr></thead>
+    <tbody>
+      <tr><td>Microphone</td><td>First hold-to-talk or meeting</td><td><code>NSMicrophoneUsageDescription</code></td></tr>
+      <tr><td>Speech recognition</td><td>First transcription</td><td><code>NSSpeechRecognitionUsageDescription</code></td></tr>
+      <tr><td>System audio</td><td>First meeting</td><td><code>NSAudioCaptureUsageDescription</code> (must be added by hand; Xcode doesn't list it)</td></tr>
+      <tr><td>Screen Recording</td><td>First Snap</td><td>System prompt from ScreenCaptureKit</td></tr>
+      <tr><td>Accessibility</td><td>First app or site note</td><td><code>AXIsProcessTrustedWithOptions</code> prompt</td></tr>
+      <tr><td>Calendar</td><td>First confirmed event, or turning on the Daily Brief</td><td><code>NSCalendarsFullAccessUsageDescription</code></td></tr>
+      <tr><td>Notifications</td><td>First reminder</td><td>Requested through <code>UNUserNotificationCenter</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="screens">
+  <h2>Screens</h2>
+  <p>These are proposed renderings of every Quicknote screen and state, drawn in HTML to show layout, content and controls in light and dark mode. Native pieces (menus, popovers, sheets, notification banners) are approximations; the final look comes from SwiftUI and AppKit. Each caption names the file that builds the screen and how you get to it.</p>
+  <ul class="screen-index">
+    <li><span>S01</span><a href="#s-menu">Menu bar menu</a></li>
+    <li><span>S02</span><a href="#s-welcome">Welcome</a></li>
+    <li><span>S03</span><a href="#s-perm">Permission explainer</a></li>
+    <li><span>S04</span><a href="#s-capture">Capture panel</a></li>
+    <li><span>S05</span><a href="#s-talk">Hold to talk</a></li>
+    <li><span>S06</span><a href="#s-calconfirm">Add to Calendar</a></li>
+    <li><span>S07</span><a href="#s-edge">Edge tabs and app notes</a></li>
+    <li><span>S08</span><a href="#s-remind">Reminder returns</a></li>
+    <li><span>S09</span><a href="#s-context">Save where you stopped</a></li>
+    <li><span>S10</span><a href="#s-library">Library and editor</a></li>
+    <li><span>S11</span><a href="#s-tasks">Tasks view</a></li>
+    <li><span>S12</span><a href="#s-type">Type menu and style</a></li>
+    <li><span>S13</span><a href="#s-repeat">Repeat picker</a></li>
+    <li><span>S14</span><a href="#s-brief">Daily Brief</a></li>
+    <li><span>S15</span><a href="#s-search">Search</a></li>
+    <li><span>S16</span><a href="#s-sites">Sites and apps</a></li>
+    <li><span>S17</span><a href="#s-rec">Meeting recorder</a></li>
+    <li><span>S18</span><a href="#s-meeting">Meeting detail</a></li>
+    <li><span>S19</span><a href="#s-snapsel">Snap selection</a></li>
+    <li><span>S20</span><a href="#s-snapedit">Snap editor</a></li>
+    <li><span>S21</span><a href="#s-card">Card editor</a></li>
+    <li><span>S22</span><a href="#s-cardout">Card styles and sizes</a></li>
+    <li><span>S23</span><a href="#s-share">Share menu</a></li>
+    <li><span>S24</span><a href="#s-gallery">Snaps and cards gallery</a></li>
+    <li><span>S25</span><a href="#s-settings">Settings: General, Shortcuts</a></li>
+    <li><span>S26</span><a href="#s-settings2">Settings: Permissions, Data</a></li>
+  </ul>
+
+  <div class="screens">
+
+  <!-- S01 -->
+  <figure class="shot" id="s-menu">
+    <h3><span class="no">S01</span>Menu bar menu</h3>
+    <div class="stage"><div class="m full"><div class="desk" style="height:440px">
+      <div class="menubar"><b>Xcode</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span class="sp"></span><span class="on"><span class="qn"></span></span><span>Sun 25 Oct 09:41</span></div>
+      <div class="hud menu" style="position:absolute; right:96px; top:30px">
+        <div class="it on">New note <span class="k">⌃⌥N</span></div>
+        <div class="it">Hold to talk <span class="k">⌃⌥K</span></div>
+        <div class="it">Snap <span class="k">⌃⌥4</span></div>
+        <div class="it">New card <span class="k">⌃⌥C</span></div>
+        <div class="it">Search <span class="k">⌃⌥F</span></div>
+        <div class="it">Save where I stopped <span class="k">⌃⌥S</span></div>
+        <div class="sep"></div>
+        <div class="it">Start meeting recording</div>
+        <div class="it">Daily Brief</div>
+        <div class="it">Open Library</div>
+        <div class="sep"></div>
+        <div class="it">Hide edge tabs for 1 hour</div>
+        <div class="it">Settings… <span class="k">⌘,</span></div>
+        <div class="it">Check for updates…</div>
+        <div class="it">Quit Quicknote <span class="k">⌘Q</span></div>
+      </div>
+    </div></div></div>
+    <figcaption>The app lives in the menu bar (<code>LSUIElement</code>, no Dock icon). Its icon is a single-colour line drawing set as a template image (<code>NSImage.isTemplate = true</code>), so macOS tints it to match the other menu bar icons in light and dark mode. Every action is also a global shortcut. <b>Builds in</b> <code>App/QuicknoteApp.swift</code> (<code>MenuBarExtra</code>).</figcaption>
+  </figure>
+
+  <!-- S02 -->
+  <figure class="shot" id="s-welcome">
+    <h3><span class="no">S02</span>Welcome (first launch)</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:560px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span></div>
+        <div class="pad stack" style="gap:16px; padding:24px 28px">
+          <div class="row" style="gap:12px"><span class="qn" style="width:32px; height:32px"></span><div><div style="font-size:20px; font-weight:700">Welcome to Quicknote</div><div class="dim">Catch a thought in a second. See it again when it matters.</div></div></div>
+          <div style="display:grid; grid-template-columns:auto 1fr auto 1fr; gap:8px 12px; align-items:center">
+            <span class="k">⌃⌥N</span><span>Type a note</span><span class="k">⌃⌥K</span><span>Hold and talk</span>
+            <span class="k">⌃⌥4</span><span>Snap the screen</span><span class="k">⌃⌥C</span><span>Make a card</span>
+            <span class="k">⌃⌥F</span><span>Search everything</span><span class="k">⌃⌥S</span><span>Save where you stopped</span>
+            <span class="k">⌃⌥B</span><span>Bookmark a meeting moment</span><span></span><span></span>
+          </div>
+          <div class="stack small dim" style="gap:4px">
+            <div class="row"><span class="dot" style="background:var(--m-green)"></span>Notes, voice and screenshots stay on this Mac. No account.</div>
+            <div class="row"><span class="dot" style="background:var(--m-green)"></span>Each permission is asked the first time a feature needs it.</div>
+            <div class="row"><span class="dot" style="background:var(--m-green)"></span>You can change every shortcut in Settings.</div>
+          </div>
+          <div class="row"><label class="row small"><span class="toggle on"></span>Open at login</label><span class="sp"></span><span class="mb">Change shortcuts</span><span class="mb pri">Start</span></div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>Shown once. No sign-up, no permission prompts here. <b>Builds in</b> <code>App/WelcomeView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S03 -->
+  <figure class="shot" id="s-perm">
+    <h3><span class="no">S03</span>Permission explainer</h3>
+    <div class="stage"><div class="m">
+      <div class="hud pad stack" style="width:400px; gap:12px; padding:20px">
+        <div style="font-weight:700; font-size:15px">Snap needs Screen Recording</div>
+        <p class="dim">macOS asks before any app can read the screen. Quicknote only reads it while you drag to take a Snap, and the image stays on this Mac.</p>
+        <div class="stack small" style="gap:6px">
+          <div class="row"><span class="chip">1</span>Click Open System Settings</div>
+          <div class="row"><span class="chip">2</span>Turn on Quicknote under Screen &amp; System Audio Recording</div>
+          <div class="row"><span class="chip">3</span>Press <span class="k">⌃⌥4</span> again</div>
+        </div>
+        <div class="row"><span class="sp"></span><span class="mb">Not now</span><span class="mb pri">Open System Settings</span></div>
+      </div>
+      <div class="hud pad stack" style="width:300px; gap:8px; padding:16px">
+        <div class="small dim" style="font-weight:600">Same pattern for</div>
+        <div class="row small"><span class="ico"></span>Microphone, first hold to talk</div>
+        <div class="row small"><span class="ico"></span>Speech recognition, first transcript</div>
+        <div class="row small"><span class="ico"></span>System audio, first meeting</div>
+        <div class="row small"><span class="ico"></span>Accessibility, first app or site note</div>
+        <div class="row small"><span class="ico"></span>Calendar, first event or Daily Brief</div>
+        <div class="row small"><span class="ico"></span>Notifications, first reminder</div>
+      </div>
+    </div></div>
+    <figcaption>Shown just before the system prompt so the reason comes from us first. If the permission was denied, the same card opens the right System Settings pane. <b>Builds in</b> <code>App/Permissions.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S04 -->
+  <figure class="shot" id="s-capture">
+    <h3><span class="no">S04</span>Capture panel</h3>
+    <div class="stage"><div class="m" style="flex-direction:column; align-items:center">
+      <div class="hud" style="width:560px">
+        <div class="row pad" style="padding-bottom:4px"><span class="chip"><span class="app" style="background:#4a154b">S</span>Slack · #product-launch</span><span class="sp"></span><span class="k">⌃⌥N</span></div>
+        <div style="padding:8px 16px 14px; font-size:16px">Call Jonah tomorrow at 10 about the pricing page<span class="caret"></span></div>
+        <div class="row" style="border-top:1px solid var(--m-line); padding:9px 12px">
+          <span class="chip acc">Event · Mon 26 Oct, 10:00</span><span class="dim small"><span class="k">⇥</span> change type</span>
+          <span class="sp"></span><span class="dot" style="background:var(--n-y); width:14px; height:14px; border:1px solid var(--m-line)"></span><span class="mb">Attach</span><span class="mb">Esc</span><span class="mb pri">Save ↵</span>
+        </div>
+      </div>
+      <div class="hud" style="width:560px">
+        <div class="row pad" style="padding-bottom:4px"><span class="chip"><span class="app" style="background:#1a73e8">C</span>Chrome · figma.com</span><span class="sp"></span><span class="k">⌃⌥N</span></div>
+        <div style="padding:8px 16px 10px; font-size:14px; color:var(--m-acc-ink)">https://www.figma.com/design/pricing-v3</div>
+        <div class="row" style="padding:0 16px 12px"><span class="chip">pricing-notes.pdf · 240 KB</span><span class="chip">Pricing v3 · Figma</span></div>
+        <div class="row" style="border-top:1px solid var(--m-line); padding:9px 12px">
+          <span class="chip acc">Bookmark</span><span class="chip">Project: Website relaunch</span><span class="sp"></span><span class="mb">Esc</span><span class="mb pri">Save ↵</span>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>Top: typed text sorted as an event, with the app you were in attached. Bottom: a pasted link becomes a bookmark with the page title, and a dropped file becomes an attachment. Floats over any app, including full-screen ones, without taking focus away. <b>Builds in</b> <code>Capture/CapturePanel.swift</code>, <code>Capture/CaptureView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S05 -->
+  <figure class="shot" id="s-talk">
+    <h3><span class="no">S05</span>Hold to talk</h3>
+    <div class="stage"><div class="m">
+      <div class="hud" style="width:460px">
+        <div class="row pad"><span class="rec"></span><b>Listening</b><span class="dim small">release <span class="k">⌃⌥K</span> to save</span><span class="sp"></span><span class="wave"><i style="height:10px"></i><i style="height:22px"></i><i style="height:14px"></i><i style="height:28px"></i><i style="height:18px"></i><i style="height:24px"></i><i style="height:9px"></i><i style="height:20px"></i><i style="height:13px"></i><i style="height:26px"></i></span></div>
+        <div style="padding:0 16px 14px; font-size:15px">remind me at 6 to pick up the dry cleaning<span class="caret"></span></div>
+        <div class="row" style="border-top:1px solid var(--m-line); padding:9px 12px"><span class="chip acc">Reminder · Today, 18:00</span><span class="sp"></span><span class="dim small">On this Mac</span></div>
+      </div>
+      <div class="hud" style="width:300px">
+        <div class="row pad"><span class="dot" style="background:var(--m-green)"></span><b>Saved</b><span class="sp"></span><span class="mb">Undo</span></div>
+        <div style="padding:0 16px 14px" class="small">Pick up the dry cleaning<br><span class="dim">Reminder · Today, 18:00</span></div>
+      </div>
+    </div></div>
+    <figcaption>Hold the shortcut, speak, let go. Text appears live while you talk; on release it is sorted and saved, with a toast you can undo. <b>Builds in</b> <code>Voice/HoldToTalk.swift</code>, <code>Voice/Transcriber.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S06 -->
+  <figure class="shot" id="s-calconfirm">
+    <h3><span class="no">S06</span>Add to Calendar</h3>
+    <div class="stage"><div class="m">
+      <div class="hud pad stack" style="width:380px; gap:12px; padding:18px">
+        <div style="font-weight:700; font-size:15px">Add to Calendar?</div>
+        <div class="stack" style="gap:6px">
+          <div class="field">Call Jonah about the pricing page</div>
+          <div class="row"><div class="field" style="flex:1">Mon 26 Oct</div><div class="field">10:00</div><div class="field">30 min</div></div>
+          <div class="row"><span class="dim small" style="width:60px">Calendar</span><div class="field row" style="flex:1"><span class="dot" style="background:#e5484d"></span>Work (Google)<span class="sp"></span>▾</div></div>
+        </div>
+        <div class="row"><span class="sp"></span><span class="mb">Keep as note only</span><span class="mb pri">Add event</span></div>
+      </div>
+    </div></div>
+    <figcaption>Every event asks before it is written. Calendars synced into Apple Calendar (Google, Outlook) appear in the list. <b>Builds in</b> <code>Calendar/CalendarBridge.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S07 -->
+  <figure class="shot" id="s-edge">
+    <h3><span class="no">S07</span>Edge tabs and app notes</h3>
+    <div class="stage"><div class="m full"><div class="desk">
+      <div class="menubar"><b>Slack</b><span>File</span><span>Edit</span><span>View</span><span class="sp"></span><span class="qn"></span><span>Sun 25 Oct 09:52</span></div>
+      <div class="win" style="position:absolute; left:28px; top:50px; width:500px; height:340px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Slack · #product-launch</span></div>
+        <div style="display:grid; grid-template-columns:130px 1fr; height:100%">
+          <div class="side"><div class="it"># general</div><div class="it on"># product-launch</div><div class="it"># design</div><div class="it"># random</div></div>
+          <div class="pad stack" style="gap:14px">
+            <div class="row" style="align-items:flex-start"><span class="app" style="background:#2e8b57; width:26px; height:26px">P</span><div class="stack" style="gap:5px; flex:1"><b class="small">Priya</b><span class="bar" style="width:90%"></span><span class="bar" style="width:60%"></span></div></div>
+            <div class="row" style="align-items:flex-start"><span class="app" style="background:#7a4fd0; width:26px; height:26px">D</span><div class="stack" style="gap:5px; flex:1"><b class="small">Dana</b><span class="bar" style="width:75%"></span></div></div>
+            <div class="row" style="align-items:flex-start"><span class="app" style="background:#c0632b; width:26px; height:26px">J</span><div class="stack" style="gap:5px; flex:1"><b class="small">Jonah</b><span class="bar" style="width:85%"></span><span class="bar" style="width:40%"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="paper pad stack" style="position:absolute; right:40px; top:66px; width:240px; background:var(--n-b); gap:8px">
+        <div class="row small" style="font-weight:700; letter-spacing:.04em; text-transform:uppercase; font-size:10.5px">For Slack<span class="sp"></span><span style="opacity:.6">pinned</span></div>
+        <div class="row"><span class="cb" style="border-color:var(--n-ink)"></span>Answer Priya about icon sizes</div>
+        <div class="row"><span class="cb" style="border-color:var(--n-ink)"></span>Post the release notes draft</div>
+        <div class="small" style="opacity:.65">Shows only in Slack · 2 of 2 open</div>
+      </div>
+      <div class="edge" style="top:66px">
+        <div class="tab out" style="background:var(--n-b)"><b>2</b></div>
+        <div class="tab" style="background:var(--n-y)"></div>
+        <div class="tab" style="background:var(--n-p)"></div>
+        <div class="tab" style="background:var(--n-g)"></div>
+      </div>
+    </div></div></div>
+    <figcaption>Notes wait as small tabs on the right edge of every display. Switching to Slack slides out the notes pinned to Slack; they hide again in other apps. Hover a tab to peek, click to open, drag off the edge to dismiss. <b>Builds in</b> <code>Edge/EdgeWindow.swift</code>, <code>Edge/EdgeTabsView.swift</code>, <code>Edge/EdgeFilter.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S08 -->
+  <figure class="shot" id="s-remind">
+    <h3><span class="no">S08</span>Reminder returns, snooze</h3>
+    <div class="stage"><div class="m full"><div class="desk" style="height:380px">
+      <div class="menubar"><b>Finder</b><span class="sp"></span><span class="qn"></span><span>Sun 25 Oct 18:00</span></div>
+      <div class="hud" style="position:absolute; right:14px; top:36px; width:330px; padding:10px 12px; border-radius:16px">
+        <div class="row small"><span class="qn"></span><b>Quicknote</b><span class="sp"></span><span class="dim">now</span></div>
+        <div style="margin-top:4px"><b>Pick up the dry cleaning</b><br><span class="dim small">Reminder · 18:00</span></div>
+      </div>
+      <div class="paper pad stack" style="position:absolute; right:40px; top:150px; width:250px; background:var(--n-y); gap:8px">
+        <div class="row small" style="font-weight:700; text-transform:uppercase; font-size:10.5px; letter-spacing:.04em">Reminder · now</div>
+        <div style="font-size:14px">Pick up the dry cleaning</div>
+        <div class="row"><span class="mb">Done</span><span class="mb">Snooze ▾</span></div>
+      </div>
+      <div class="hud menu" style="position:absolute; right:300px; top:200px; width:210px">
+        <div class="lbl">Snooze until</div>
+        <div class="it">15 minutes</div>
+        <div class="it on">1 hour <span class="k">19:00</span></div>
+        <div class="it">This evening <span class="k dim">20:00</span></div>
+        <div class="it">Tomorrow morning <span class="k dim">09:00</span></div>
+        <div class="it">Next week <span class="k dim">Mon</span></div>
+        <div class="it">Pick a time…</div>
+      </div>
+      <div class="edge" style="top:150px"><div class="tab out" style="background:var(--n-y)"></div><div class="tab" style="background:var(--n-g)"></div></div>
+    </div></div></div>
+    <figcaption>At the due time a system notification fires and the note slides out from the edge with a gentle bounce. Snooze hides it until the chosen time. <b>Builds in</b> <code>Reminders/ReminderScheduler.swift</code>, <code>Edge/EdgeTabsView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S09 -->
+  <figure class="shot" id="s-context">
+    <h3><span class="no">S09</span>Save where you stopped</h3>
+    <div class="stage"><div class="m">
+      <div class="hud" style="width:420px">
+        <div class="row pad" style="padding-bottom:6px"><b>Save where you stopped</b><span class="sp"></span><span class="chip"><span class="app" style="background:#1d6ff2">X</span>Xcode · Quicknote</span></div>
+        <div class="stack" style="padding:4px 16px 14px; gap:8px">
+          <div><div class="small dim" style="font-weight:600">Done</div><div class="field">Edge tabs follow the active display</div></div>
+          <div><div class="small dim" style="font-weight:600">Blocked</div><div class="field">Chrome hides the URL from Accessibility</div></div>
+          <div><div class="small dim" style="font-weight:600">Next</div><div class="field focus">Try the Apple Events fallback in BrowserURL.swift<span class="caret"></span></div></div>
+        </div>
+        <div class="row" style="border-top:1px solid var(--m-line); padding:9px 12px"><span class="k">⌃⌥S</span><span class="sp"></span><span class="mb">Esc</span><span class="mb pri">Save ↵</span></div>
+      </div>
+      <div class="paper pad stack" style="width:300px; background:var(--n-g); gap:8px">
+        <div style="font-weight:700">Welcome back</div>
+        <div class="small" style="opacity:.75">Friday 17:42, in Xcode</div>
+        <div class="small"><b>Done</b> Edge tabs follow the active display</div>
+        <div class="small"><b>Blocked</b> Chrome hides the URL from Accessibility</div>
+        <div class="small"><b>Next</b> Try the Apple Events fallback in BrowserURL.swift</div>
+        <div class="row"><span class="mb">Dismiss</span><span class="mb">Open note</span></div>
+      </div>
+    </div></div>
+    <figcaption>Left: three fields to write before you step away. Right: the greeting shown on the edge after wake, unlock or next launch (see <a href="#questions">Q4</a>). <b>Builds in</b> <code>Capture/ContextCaptureView.swift</code>, <code>Edge/EdgeTabsView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S10 -->
+  <figure class="shot" id="s-library">
+    <h3><span class="no">S10</span>Library and note editor</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:860px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Quicknote</span><span class="sp"></span><span class="field small" style="width:200px; font-weight:400">Search <span class="k" style="float:right">⌃⌥F</span></span></div>
+        <div style="display:grid; grid-template-columns:180px 230px 1fr; height:520px">
+          <div class="side">
+            <div class="it"><span class="ico"></span>Daily Brief</div>
+            <div class="it"><span class="ico"></span>Inbox<b>12</b></div>
+            <div class="it on"><span class="ico"></span>Tasks<b>7</b></div>
+            <div class="it"><span class="ico"></span>Reminders<b>3</b></div>
+            <div class="it"><span class="ico"></span>Events<b>2</b></div>
+            <div class="it"><span class="ico"></span>Ideas</div>
+            <div class="it"><span class="ico"></span>Bookmarks</div>
+            <div class="it"><span class="ico"></span>Bugs</div>
+            <div class="it"><span class="ico"></span>Meetings</div>
+            <div class="it"><span class="ico"></span>Snaps</div>
+            <div class="it"><span class="ico"></span>Cards</div>
+            <div class="h">Places</div>
+            <div class="it"><span class="ico"></span>Sites and apps</div>
+            <div class="h">Projects</div>
+            <div class="it"><span class="dot" style="background:var(--m-acc)"></span>Website relaunch<b>9</b></div>
+            <div class="it"><span class="dot" style="background:var(--m-green)"></span>Lisbon trip<b>5</b></div>
+            <div class="it"><span class="dot" style="background:var(--m-red)"></span>Home<b>4</b></div>
+            <div class="it dim">+ New project</div>
+          </div>
+          <div style="border-right:1px solid var(--m-line); display:grid; align-content:start">
+            <div class="pad stack" style="gap:3px; background:var(--m-acc-wash); border-left:4px solid var(--n-g)"><b>Lisbon trip: before we go</b><span class="dim small">Task · due Tue 28 Oct</span></div>
+            <div class="pad stack" style="gap:3px; border-left:4px solid var(--n-y); border-bottom:1px solid var(--m-line)"><b>Send revised estimate to Dana</b><span class="dim small">Task · Fri · from Weekly sync</span></div>
+            <div class="pad stack" style="gap:3px; border-left:4px solid var(--n-p); border-bottom:1px solid var(--m-line)"><b>Renew passport</b><span class="small" style="color:var(--m-red)">Task · overdue 2 days</span></div>
+            <div class="pad stack" style="gap:3px; border-left:4px solid var(--n-b); border-bottom:1px solid var(--m-line)"><b>Answer Priya about icon sizes</b><span class="dim small">Task · Slack</span></div>
+            <div class="pad stack" style="gap:3px; border-left:4px solid var(--n-l); border-bottom:1px solid var(--m-line)"><b>Water plants</b><span class="dim small">Task · every tue and thu</span></div>
+          </div>
+          <div style="display:grid; grid-template-rows:auto 1fr auto; min-width:0; position:relative">
+            <div class="row" style="padding:8px 14px; border-bottom:1px solid var(--m-line); flex-wrap:wrap">
+              <span class="mb">Task ▾</span><span class="mb">Due Tue 28 Oct</span><span class="mb">Repeat</span><span class="mb">Priority: High</span><span class="sp"></span><span class="dot" style="background:var(--n-g); width:16px; height:16px; border:1px solid var(--m-line)"></span><span class="mb">Aa</span><span class="mb">Share</span>
+            </div>
+            <div class="pad stack" style="gap:9px; font-size:14px; padding:18px 22px">
+              <div style="font-size:18px; font-weight:700">Lisbon trip: before we go</div>
+              <div>Flights are <b><span class="dim">*</span>booked<span class="dim">*</span></b>, hotel is <i><span class="dim">_</span>pending<span class="dim">_</span></i>.</div>
+              <div class="row"><span class="cb x"></span><span class="done">Check passport dates</span></div>
+              <div class="row"><span class="cb"></span>Order euros</div>
+              <div class="row"><span class="cb"></span>Pack using <span class="chip acc">Lisbon packing list</span></div>
+              <div>- Ask Ana for restaurant ideas</div>
+              <div>- Book the tram tour, see [[Lis<span class="caret"></span></div>
+            </div>
+            <div class="hud menu" style="position:absolute; left:210px; top:262px; width:250px">
+              <div class="lbl">Link to note</div>
+              <div class="it on">Lisbon trip: tram tour options</div>
+              <div class="it">Lisbon packing list</div>
+              <div class="it dim">Create “Lis…”</div>
+            </div>
+            <div style="border-top:1px solid var(--m-line); padding:10px 22px" class="stack small">
+              <div class="row"><b>Attachments</b><span class="chip">boarding-pass.pdf</span><span class="chip">hotel-confirmation.png</span></div>
+              <div class="row"><b>Linked from</b><span class="chip">Weekend plan</span><span class="chip">October budget</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>Sidebar by type, place and project; note list; editor. Slack-style marks stay visible but faint while the text is styled. Typing <kbd>[[</kbd> opens the link picker, and every note shows the notes that link to it. <b>Builds in</b> <code>Library/LibraryWindow.swift</code>, <code>Editor/NoteTextView.swift</code>, <code>Editor/LinkAutocomplete.swift</code>, <code>Editor/Backlinks.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S11 -->
+  <figure class="shot" id="s-tasks">
+    <h3><span class="no">S11</span>Tasks view</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:600px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Tasks</span><span class="sp"></span><span class="seg"><span class="on">By due date</span><span>By project</span><span>By priority</span></span></div>
+        <div class="pad stack" style="gap:6px">
+          <div class="small" style="font-weight:700; color:var(--m-red)">Overdue</div>
+          <div class="row"><span class="cb"></span>Renew passport<span class="sp"></span><span class="chip red">2 days</span><span class="chip">Home</span></div>
+          <div class="small" style="font-weight:700; margin-top:8px">Today</div>
+          <div class="row"><span class="cb"></span>Water plants<span class="sp"></span><span class="dim small">every tue and thu</span></div>
+          <div class="row"><span class="cb x"></span><span class="done">Reply to the landlord</span><span class="sp"></span></div>
+          <div class="small" style="font-weight:700; margin-top:8px">This week</div>
+          <div class="row"><span class="cb"></span>Lisbon trip: before we go<span class="sp"></span><span class="chip">High</span><span class="dim small">Tue</span></div>
+          <div class="row"><span class="cb"></span>Send revised estimate to Dana<span class="sp"></span><span class="ts">18:32</span><span class="dim small">Fri</span></div>
+          <div class="small" style="font-weight:700; margin-top:8px">No date</div>
+          <div class="row"><span class="cb"></span>Answer Priya about icon sizes<span class="sp"></span><span class="chip">Slack</span></div>
+          <div class="row"><span class="cb"></span>Fix the footer link on mobile<span class="sp"></span><span class="chip">Bug</span></div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>Tasks with due dates, priority and repeats. The <span class="ts" style="color:var(--note-ink)">18:32</span> link jumps to that second of the meeting the task came from. Reminders, Events, Ideas, Bookmarks and Bugs use the same list with their own columns. <b>Builds in</b> <code>Library/TaskListView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S12 -->
+  <figure class="shot" id="s-type">
+    <h3><span class="no">S12</span>Type menu and style</h3>
+    <div class="stage"><div class="m">
+      <div class="hud menu" style="width:200px">
+        <div class="lbl">Turn into</div>
+        <div class="it">Note</div>
+        <div class="it">To-do list</div>
+        <div class="it on">✓ Task</div>
+        <div class="it">Reminder</div>
+        <div class="it">Event</div>
+        <div class="it">Idea</div>
+        <div class="it">Bookmark</div>
+        <div class="it">Bug</div>
+      </div>
+      <div class="hud pad stack" style="width:300px; gap:12px">
+        <div class="small" style="font-weight:600">Colour</div>
+        <div class="swatches" data-swatches="50"></div>
+        <div class="row small"><span class="mb">Custom colour…</span><span class="dim">50 presets</span></div>
+        <div class="sep"></div>
+        <div class="small" style="font-weight:600">Font</div>
+        <div class="stack" style="gap:4px">
+          <div class="row"><span class="hand" style="font-size:19px">Handwritten</span></div>
+          <div class="row" style="background:var(--m-acc-wash); border-radius:5px; padding:2px 6px"><span style="font-size:14px">System</span><span class="sp"></span>✓</div>
+          <div class="row"><span style="font-family:ui-rounded, 'SF Pro Rounded', system-ui; font-size:14px">Rounded</span></div>
+          <div class="row"><span style="font-family:'New York', Georgia, serif; font-size:14px">Serif</span></div>
+          <div class="row"><span style="font-family:'Marker Felt', 'Comic Sans MS', cursive; font-size:14px">Marker</span></div>
+          <div class="row"><span style="font-family:var(--mono); font-size:13px">Mono</span></div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>The Type menu changes what a note is without losing its text. Style sets the note's colour (50 presets plus custom) and one of six fonts. <b>Builds in</b> <code>Editor/TypeMenu.swift</code>, <code>Editor/StylePopover.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S13 -->
+  <figure class="shot" id="s-repeat">
+    <h3><span class="no">S13</span>Repeat picker</h3>
+    <div class="stage"><div class="m">
+      <div class="hud pad stack" style="width:320px; gap:6px">
+        <div class="small" style="font-weight:600">Repeat</div>
+        <div class="row">Never</div>
+        <div class="row">Every day</div>
+        <div class="row">Every weekday</div>
+        <div class="row">Every week</div>
+        <div class="row">Every 2 weeks</div>
+        <div class="row">Every month</div>
+        <div class="row">Every year</div>
+        <div class="sep"></div>
+        <div class="small" style="font-weight:600">Or type your own</div>
+        <div class="field focus">every tue and thu<span class="caret"></span></div>
+        <div class="small" style="color:var(--m-green)">Weekly on Tuesday and Thursday</div>
+        <div class="small dim">Next: Tue 27 Oct · Thu 29 Oct · Tue 3 Nov</div>
+        <div class="row"><span class="sp"></span><span class="mb pri">Set repeat</span></div>
+      </div>
+    </div></div>
+    <figcaption>Presets plus a free-text rule, read back in plain words with the next three dates so you can see it understood. <b>Builds in</b> <code>Editor/RepeatPicker.swift</code>, <code>Sorting/RecurrenceParser.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S14 -->
+  <figure class="shot" id="s-brief">
+    <h3><span class="no">S14</span>Daily Brief</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:600px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Daily Brief</span><span class="sp"></span><span class="mb pri">▶ Read aloud</span></div>
+        <div class="pad stack" style="gap:14px; padding:18px 22px">
+          <div><div style="font-size:20px; font-weight:700">Sunday, 25 October</div><div class="dim">2 events, 3 tasks, 1 overdue, 2 notes coming back</div></div>
+          <div class="stack" style="gap:6px"><div class="small dim" style="font-weight:700">Events</div>
+            <div class="row"><span class="ts">10:00</span><span class="dot" style="background:#e5484d"></span>Brunch with Ana<span class="sp"></span><span class="dim small">Home</span></div>
+            <div class="row"><span class="ts">16:30</span><span class="dot" style="background:#2f6fed"></span>Call with Mum<span class="sp"></span><span class="dim small">Family</span></div>
+          </div>
+          <div class="stack" style="gap:6px"><div class="small dim" style="font-weight:700">Due today</div>
+            <div class="row"><span class="cb"></span>Water plants</div>
+            <div class="row"><span class="cb"></span>Pick up the dry cleaning<span class="sp"></span><span class="ts">18:00</span></div>
+            <div class="row"><span class="cb x"></span><span class="done">Reply to the landlord</span></div>
+          </div>
+          <div class="stack" style="gap:6px"><div class="small" style="font-weight:700; color:var(--m-red)">Overdue</div>
+            <div class="row"><span class="cb"></span>Renew passport<span class="sp"></span><span class="chip red">since Fri</span></div>
+          </div>
+          <div class="stack" style="gap:6px"><div class="small dim" style="font-weight:700">Coming back today</div>
+            <div class="row"><span class="dot" style="background:var(--n-l)"></span>Idea: dark mode for the pricing page<span class="sp"></span><span class="ts">14:00</span></div>
+            <div class="row"><span class="dot" style="background:var(--n-b)"></span>Where I stopped: Xcode, Friday<span class="sp"></span><span class="dim small">on next unlock</span></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>One page for the day. Events come from Apple Calendar (needs full calendar access, <a href="#questions">Q5</a>); the rest comes from your notes. Read aloud uses the system voice. Opens from the menu, and optionally at the first unlock of the day. <b>Builds in</b> <code>Reminders/DailyBrief.swift</code>, <code>Reminders/ReadAloud.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S15 -->
+  <figure class="shot" id="s-search">
+    <h3><span class="no">S15</span>Search</h3>
+    <div class="stage"><div class="m">
+      <div class="hud" style="width:620px">
+        <div class="row pad" style="font-size:18px"><span class="ico"></span>pricing<span class="caret"></span><span class="sp"></span><span class="k">⌃⌥F</span></div>
+        <div style="border-top:1px solid var(--m-line); padding:6px" class="stack">
+          <div class="small dim" style="font-weight:700; padding:4px 10px 0">Notes</div>
+          <div class="row" style="background:var(--m-acc-wash); border-radius:7px; padding:6px 10px"><span class="dot" style="background:var(--n-y)"></span><div>Call Jonah about the <span class="hit">pricing</span> page<br><span class="dim small">Event · Mon 26 Oct · Slack</span></div></div>
+          <div class="row" style="padding:6px 10px"><span class="dot" style="background:var(--n-l)"></span><div>Idea: dark mode for the <span class="hit">pricing</span> page<br><span class="dim small">Idea · Website relaunch</span></div></div>
+          <div class="small dim" style="font-weight:700; padding:4px 10px 0">Meeting transcripts</div>
+          <div class="row" style="padding:6px 10px"><span class="ts">18:32</span><div>“…so the <span class="hit">pricing</span> table moves under the fold, Dana will send…”<br><span class="dim small">Weekly sync · Thu 23 Oct</span></div></div>
+          <div class="small dim" style="font-weight:700; padding:4px 10px 0">Files and Snaps</div>
+          <div class="row" style="padding:6px 10px"><span class="ico"></span><div><span class="hit">pricing</span>-notes.pdf<br><span class="dim small">Attached to “Pricing v3” bookmark</span></div></div>
+          <div class="row" style="padding:6px 10px"><span class="ico"></span><div>Snap · text found: “Choose a <span class="hit">pricing</span> plan”<br><span class="dim small">Snap · Fri 24 Oct</span></div></div>
+        </div>
+        <div class="row small dim" style="border-top:1px solid var(--m-line); padding:8px 14px"><span class="k">↵</span> open<span class="k">⌘↵</span> show in Library<span class="sp"></span>Works offline</div>
+      </div>
+    </div></div>
+    <figcaption>Opens over any app. Results are grouped: notes, meeting transcripts (open at the matching second), and files and Snaps (file names and text read from images). <b>Builds in</b> <code>Search/SearchPanel.swift</code>, <code>Store/Search.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S16 -->
+  <figure class="shot" id="s-sites">
+    <h3><span class="no">S16</span>Sites and apps</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:560px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Sites and apps</span><span class="sp"></span><span class="mb">Pin note to current app</span></div>
+        <div class="pad stack" style="gap:14px">
+          <div class="stack" style="gap:5px"><div class="row"><span class="app" style="background:#4a154b">S</span><b>Slack</b><span class="dim small">2 notes · app</span></div>
+            <div class="row small" style="padding-left:26px"><span class="cb"></span>Answer Priya about icon sizes</div>
+            <div class="row small" style="padding-left:26px"><span class="cb"></span>Post the release notes draft</div></div>
+          <div class="stack" style="gap:5px"><div class="row"><span class="app" style="background:#a259ff">F</span><b>Figma</b><span class="dim small">1 note · app</span></div>
+            <div class="row small" style="padding-left:26px">Check spacing tokens before handoff</div></div>
+          <div class="stack" style="gap:5px"><div class="row"><span class="app" style="background:#24292f">G</span><b>github.com</b><span class="dim small">2 notes · site</span></div>
+            <div class="row small" style="padding-left:26px">Why I opened this: review the EdgeWindow PR before Monday</div>
+            <div class="row small" style="padding-left:26px">Release checklist lives in the wiki</div></div>
+          <div class="stack" style="gap:5px"><div class="row"><span class="app" style="background:#1a73e8">D</span><b>docs.google.com</b><span class="dim small">1 note · site</span></div>
+            <div class="row small" style="padding-left:26px">Budget sheet: column F is last year's</div></div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>All app and site notes in one place, grouped by where they show up. <b>Builds in</b> <code>Library/SitesAndAppsView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S17 -->
+  <figure class="shot" id="s-rec">
+    <h3><span class="no">S17</span>Meeting recorder</h3>
+    <div class="stage"><div class="m" style="flex-direction:column; align-items:center">
+      <div class="hud row" style="padding:8px 12px; border-radius:99px; gap:12px">
+        <span class="rec"></span><b>Weekly sync</b><span class="ts" style="color:var(--m-fg)">12:04</span>
+        <span class="small dim">Mic</span><span class="wave" style="height:16px"><i style="height:8px"></i><i style="height:14px"></i><i style="height:6px"></i><i style="height:12px"></i></span>
+        <span class="small dim">Mac audio</span><span class="wave" style="height:16px"><i style="height:12px"></i><i style="height:5px"></i><i style="height:15px"></i><i style="height:9px"></i></span>
+        <span class="mb">Bookmark <span class="k">⌃⌥B</span></span><span class="mb">Pause</span><span class="mb danger">Stop</span>
+      </div>
+      <div class="hud row" style="padding:8px 14px; border-radius:99px"><span class="dot" style="background:var(--m-green)"></span>Bookmarked at <span class="ts">12:04</span><span class="mb">Add label</span></div>
+      <div class="hud pad stack" style="width:360px; gap:10px">
+        <b>Start meeting recording</b>
+        <div class="field">Weekly sync</div>
+        <label class="row small"><span class="toggle on"></span>Record my microphone</label>
+        <label class="row small"><span class="toggle on"></span>Record Mac audio (other people on the call)</label>
+        <div class="row"><span class="sp"></span><span class="mb">Cancel</span><span class="mb pri">Record</span></div>
+      </div>
+    </div></div>
+    <figcaption>Start from the menu, then a small pill floats at the top of the screen with both input levels. <kbd>⌃⌥B</kbd> bookmarks the current second from any app. Transcription happens on the Mac while recording. <b>Builds in</b> <code>Meetings/MeetingRecorder.swift</code>, <code>Meetings/RecorderPill.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S18 -->
+  <figure class="shot" id="s-meeting">
+    <h3><span class="no">S18</span>Meeting detail</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:860px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Weekly sync</span><span class="dim small" style="font-weight:400">Thu 23 Oct, 10:00 · 34:12</span><span class="sp"></span><span class="mb">Export ▾</span></div>
+        <div style="padding:12px 16px; border-bottom:1px solid var(--m-line)" class="stack">
+          <div class="row"><span class="mb">▶</span><span class="ts" style="color:var(--m-fg)">18:32</span>
+            <div style="flex:1; height:6px; border-radius:3px; background:var(--m-chip); position:relative">
+              <div style="position:absolute; left:0; top:0; bottom:0; width:54%; background:var(--m-acc); border-radius:3px"></div>
+              <span style="position:absolute; left:35%; top:-5px; width:3px; height:16px; background:var(--note); border-radius:2px"></span>
+              <span style="position:absolute; left:54%; top:-5px; width:3px; height:16px; background:var(--note); border-radius:2px"></span>
+              <span style="position:absolute; left:64%; top:-5px; width:3px; height:16px; background:var(--note); border-radius:2px"></span>
+            </div><span class="ts" style="color:var(--m-dim)">34:12</span></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 290px; height:380px">
+          <div class="pad stack" style="gap:10px; border-right:1px solid var(--m-line); align-content:start">
+            <div class="seg"><span class="on">Transcript</span><span>Summary</span><span>Bookmarks (3)</span></div>
+            <div class="row" style="align-items:flex-start"><span class="ts">12:04</span><div><b class="small">Me</b><br>Let's lock the launch date before we touch the copy.</div></div>
+            <div class="row" style="align-items:flex-start"><span class="ts">12:20</span><div><b class="small">Others</b><br>Agreed. Marketing needs it by the first.</div></div>
+            <div class="row" style="align-items:flex-start; background:var(--m-acc-wash); border-radius:7px; padding:6px"><span class="ts">18:32</span><div><b class="small">Others</b><br>So the pricing table moves under the fold. <b>Action item:</b> Dana will send the revised estimate by Friday.</div></div>
+            <div class="row" style="align-items:flex-start"><span class="ts">22:05</span><div><b class="small">Me</b><br>I'll book the room for the user test.</div></div>
+          </div>
+          <div class="pad stack" style="gap:8px; align-content:start; background:var(--m-side)">
+            <b>Action items</b><span class="dim small">Saved as tasks</span>
+            <div class="row" style="align-items:flex-start"><span class="cb"></span><div>Send revised estimate to Dana<br><span class="ts">18:32</span> <span class="dim small">· due Fri</span></div></div>
+            <div class="row" style="align-items:flex-start"><span class="cb"></span><div>Book the room for the user test<br><span class="ts">22:05</span></div></div>
+            <div class="row dim small">+ Add action item</div>
+            <div class="sep"></div>
+            <b>Bookmarks</b>
+            <div class="row small"><span class="ts">12:04</span>Launch date</div>
+            <div class="row small"><span class="ts">18:32</span>Pricing decision</div>
+            <div class="row small"><span class="ts">22:05</span>User test</div>
+          </div>
+        </div>
+      </div>
+      <div class="hud menu" style="width:220px">
+        <div class="lbl">Export</div>
+        <div class="it on">Summary (Markdown)</div>
+        <div class="it">Full transcript (.txt)</div>
+        <div class="it">Notes and tasks (Markdown)</div>
+        <div class="it">Audio (.m4a)</div>
+      </div>
+    </div></div>
+    <figcaption>Player with bookmark marks, timestamped transcript, and action items saved as tasks that jump back to their second. "Me" and "Others" come from which input the audio came from (microphone or Mac audio). <b>Builds in</b> <code>Meetings/MeetingView.swift</code>, <code>Meetings/ActionItemExtractor.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S19 -->
+  <figure class="shot" id="s-snapsel">
+    <h3><span class="no">S19</span>Snap selection</h3>
+    <div class="stage"><div class="m full"><div class="desk" style="height:400px">
+      <div class="menubar"><b>Safari</b><span class="sp"></span><span>Sun 25 Oct 11:20</span></div>
+      <div class="win" style="position:absolute; left:40px; top:44px; width:740px; height:330px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span class="field small" style="flex:1; font-weight:400">example-shop.com/pricing</span></div>
+        <div class="pad stack" style="gap:12px"><span class="bar" style="width:40%; height:14px"></span>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px">
+            <div class="stack" style="border:1px solid var(--m-line); border-radius:8px; padding:12px; gap:6px"><span class="bar" style="width:50%"></span><span class="bar"></span><span class="bar" style="width:70%"></span></div>
+            <div class="stack" style="border:1px solid var(--m-line); border-radius:8px; padding:12px; gap:6px"><span class="bar" style="width:50%"></span><span class="bar"></span><span class="bar" style="width:70%"></span></div>
+            <div class="stack" style="border:1px solid var(--m-line); border-radius:8px; padding:12px; gap:6px"><span class="bar" style="width:50%"></span><span class="bar"></span><span class="bar" style="width:70%"></span></div>
+          </div></div>
+      </div>
+      <div style="position:absolute; inset:0; background:var(--dim-screen); clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 0,250px 120px,250px 330px,600px 330px,600px 120px,250px 120px)"></div>
+      <div style="position:absolute; left:250px; top:120px; width:350px; height:210px; border:1.5px dashed #fff"></div>
+      <div class="chip" style="position:absolute; left:250px; top:336px; background:#111; color:#fff">350 × 210</div>
+      <div class="chip" style="position:absolute; left:50%; transform:translateX(-50%); bottom:12px; background:#111; color:#fff">Drag to capture · Esc to cancel</div>
+    </div></div></div>
+    <figcaption><kbd>⌃⌥4</kbd> dims every display; drag a box to capture it. On release the editor opens with the image, or a quick press saves it straight to the edge. <b>Builds in</b> <code>Snap/SnapOverlay.swift</code>, <code>Snap/SnapCapture.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S20 -->
+  <figure class="shot" id="s-snapedit">
+    <h3><span class="no">S20</span>Snap editor</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:860px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Snap · 11:20</span><span class="sp"></span><span class="mb">Copy</span><span class="mb">Save PNG</span><span class="mb pri">Share ▾</span></div>
+        <div class="tools" style="overflow-x:auto">
+          <span><i>↖</i>Select</span><span class="on"><i>→</i>Arrow</span><span><i>╱</i>Line</span><span><i>▭</i>Box</span><span><i>◇</i>Diamond</span><span><i>○</i>Circle</span><span><i>△</i>Triangle</span><span><i>T</i>Text</span><span><i>①</i>Step</span><span><i>▬</i>Highlight</span><span><i>▒</i>Blur</span>
+          <span class="sp"></span><span class="dot" style="background:#e5484d; width:14px; height:14px"></span><span class="dot" style="background:#f2c14e; width:14px; height:14px"></span><span class="dot" style="background:#2f6fed; width:14px; height:14px"></span><span>3 pt</span><span>↶</span><span>↷</span>
+        </div>
+        <div style="padding:22px; background:var(--m-side)">
+          <div class="mshot" style="width:520px; height:300px; margin:0 auto; border-radius:6px">
+            <div class="pad stack" style="gap:10px"><span class="bar" style="width:45%; height:14px"></span>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+                <div class="stack" style="border:1px solid var(--m-line); border-radius:8px; padding:12px; gap:6px"><b class="small">Starter</b><span class="bar"></span><span class="mb" style="justify-self:start">Choose</span></div>
+                <div class="stack" style="border:1px solid var(--m-line); border-radius:8px; padding:12px; gap:6px"><b class="small">Team</b><span class="bar"></span><span class="mb" style="justify-self:start">Choose</span></div>
+              </div>
+              <div class="small" style="filter:blur(4px)">billing contact: jordan.lee@example.com · card ending 4242</div>
+              <span class="bar" style="width:80%"></span>
+            </div>
+            <div style="position:absolute; left:14px; top:150px; width:110px; height:34px; border:3px solid #e5484d; border-radius:4px"></div>
+            <div style="position:absolute; left:24px; top:58px; width:160px; height:14px; background:rgba(242,193,78,.55)"></div>
+            <span style="position:absolute; left:4px; top:136px; width:22px; height:22px; border-radius:50%; background:#e5484d; color:#fff; font-size:12px; font-weight:700; display:grid; place-items:center">1</span>
+            <span style="position:absolute; left:262px; top:136px; width:22px; height:22px; border-radius:50%; background:#e5484d; color:#fff; font-size:12px; font-weight:700; display:grid; place-items:center">2</span>
+            <svg style="position:absolute; left:130px; top:150px" width="200" height="90" viewBox="0 0 200 90" aria-hidden="true"><path d="M190 80 C 120 80, 60 60, 8 22" fill="none" stroke="#e5484d" stroke-width="3"/><path d="M8 22 L 22 22 M8 22 L 13 35" fill="none" stroke="#e5484d" stroke-width="3"/></svg>
+            <span class="hand" style="position:absolute; left:340px; top:236px; font-size:24px; color:#e5484d; transform:rotate(-4deg)">too cramped!</span>
+            <div style="position:absolute; left:400px; top:40px; width:44px; height:44px; border:3px solid #2f6fed; transform:rotate(45deg)"></div>
+          </div>
+        </div>
+        <div class="row" style="padding:10px 14px; border-top:1px solid var(--m-line)"><span class="rec" style="box-shadow:none; background:var(--m-dim)"></span><span class="dim small">Hold <span class="k">⌃⌥K</span> to add a caption by voice</span><span class="field" style="flex:1">Button padding collapses on small screens</span><span class="mb">Save to edge</span></div>
+      </div>
+    </div></div>
+    <figcaption>All the markup tools from Kippy's changelog: arrows, lines, boxes, diamonds, circles, triangles, text, numbered steps, highlights and blur. Every element can be moved, resized and rotated. The caption can be typed or spoken. <b>Builds in</b> <code>Snap/SnapEditor.swift</code>, <code>Canvas/CanvasView.swift</code>, <code>Canvas/ElementHandles.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S21 -->
+  <figure class="shot" id="s-card">
+    <h3><span class="no">S21</span>Card editor</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:860px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>New card</span><span class="sp"></span><span class="seg"><span class="on">Square</span><span>Story</span><span>Wallpaper</span></span><span class="mb">Save PNG</span><span class="mb pri">Share ▾</span></div>
+        <div style="display:grid; grid-template-columns:130px 1fr 220px; height:470px">
+          <div class="side" style="grid-template-columns:1fr 1fr; gap:4px 8px; justify-items:center; padding:14px 8px">
+            <div class="thumb" style="width:44px; height:44px; background:var(--n-y)"></div>
+            <div class="thumb" style="width:44px; height:44px; background:var(--card-paper)"><span style="position:absolute; right:3px; top:3px; width:10px; height:12px; border:1.5px dotted var(--m-red)"></span></div>
+            <span class="small">Sticky</span><span class="small">Postcard</span>
+            <div class="thumb" style="width:44px; height:44px; background:var(--card-paper); outline:2px solid var(--m-acc); outline-offset:2px"><div style="position:absolute; inset:4px 4px 12px; background:linear-gradient(160deg,#8fc3e8,#f3c27a)"></div></div>
+            <div class="thumb lined" style="width:44px; height:44px"></div>
+            <span class="small" style="font-weight:600">Polaroid</span><span class="small">Lined</span>
+            <div class="thumb" style="width:44px; height:44px; background:var(--card-paper)"></div>
+            <div class="thumb" style="width:44px; height:44px; background:var(--kraft)"></div>
+            <span class="small">Minimal</span><span class="small">Kraft</span>
+          </div>
+          <div style="display:grid; place-items:center; background:var(--m-side)">
+            <div style="position:relative; width:330px; height:330px; background:var(--card-paper); box-shadow:0 12px 30px var(--m-shadow); transform:rotate(-1.5deg); color:var(--n-ink)">
+              <div style="position:absolute; left:20px; right:20px; top:20px; height:220px; background:linear-gradient(160deg,#8fc3e8 0%,#bfe0d0 55%,#f3c27a 100%)"></div>
+              <div style="position:absolute; left:110px; top:-10px; width:110px; height:26px; background:var(--washi); opacity:.85; transform:rotate(-4deg); background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.5) 0 6px, transparent 6px 12px)"></div>
+              <div class="hand" style="position:absolute; left:28px; top:248px; font-size:30px">Lake day, September</div>
+              <div class="hand" style="position:absolute; right:26px; bottom:12px; font-size:20px">love, Sam</div>
+              <span style="position:absolute; right:26px; top:200px; font-size:30px">🌻</span>
+              <span style="position:absolute; left:30px; top:30px; font-size:22px">★</span>
+              <div style="position:absolute; right:22px; top:32px; width:92px; height:92px; border:1.5px dashed var(--m-acc)"><span style="position:absolute; inset:-5px auto auto -5px; width:9px; height:9px; background:var(--m-acc); border-radius:2px"></span><span style="position:absolute; inset:auto -5px -5px auto; width:9px; height:9px; background:var(--m-acc); border-radius:2px"></span><span style="position:absolute; left:50%; top:-20px; width:9px; height:9px; border-radius:50%; background:var(--m-acc)"></span><div class="paper small" style="position:absolute; inset:8px; background:var(--n-p); padding:6px; transform:rotate(4deg)">swim at 7, cake after</div></div>
+            </div>
+          </div>
+          <div class="pad stack" style="gap:10px; border-left:1px solid var(--m-line); align-content:start">
+            <b>Decorate</b>
+            <div class="row" style="flex-wrap:wrap; gap:6px"><span class="mb">Emoji</span><span class="mb">Stickers</span><span class="mb">Photo…</span><span class="mb">Text</span><span class="mb">Extra note</span><span class="mb">Sign</span></div>
+            <div class="small dim" style="font-weight:600">Washi tape</div>
+            <div class="row" style="gap:6px"><span style="width:34px; height:12px; background:var(--washi)"></span><span style="width:34px; height:12px; background:var(--n-g)"></span><span style="width:34px; height:12px; background:var(--n-b); background-image:repeating-linear-gradient(90deg, rgba(255,255,255,.6) 0 4px, transparent 4px 8px)"></span><span style="width:34px; height:12px; background:var(--kraft)"></span></div>
+            <div class="small dim" style="font-weight:600">Stickers</div>
+            <div class="row" style="gap:8px; font-size:20px; flex-wrap:wrap"><span>🎂</span><span>✨</span><span>🌻</span><span>★</span><span>♥</span><span>✈️</span></div>
+            <div class="sep"></div>
+            <div class="small dim">Selected: extra note · rotate 4°</div>
+            <label class="row small"><span class="toggle"></span>Add “made with Quicknote”</label>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>Pick a style, then add emoji, stickers, your photos, washi tape, extra notes and text; drag, resize and rotate anything, and sign it. The design is saved with the note so you can edit it later. <kbd>⌃⌥C</kbd> turns the current note into a card. <b>Builds in</b> <code>Cards/CardEditor.swift</code>, <code>Canvas/CanvasView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S22 -->
+  <figure class="shot" id="s-cardout">
+    <h3><span class="no">S22</span>Card styles and sizes</h3>
+    <div class="stage"><div class="m" style="align-items:flex-end">
+      <div class="stack" style="justify-items:center; gap:6px"><div class="thumb" style="width:120px; height:120px; background:var(--n-y); padding:10px"><span class="hand" style="font-size:20px; line-height:1.1">Happy birthday, Dad!</span><span style="position:absolute; right:8px; bottom:6px; font-size:20px">🎂</span></div><span class="small">Sticky</span></div>
+      <div class="stack" style="justify-items:center; gap:6px"><div class="thumb" style="width:170px; height:120px; background:var(--card-paper); padding:10px; display:grid; grid-template-columns:1fr 1fr; gap:8px"><span class="hand" style="font-size:16px">Greetings from Lisbon</span><div style="border-left:1px solid var(--m-line); padding-left:6px; position:relative"><span style="position:absolute; right:0; top:0; width:26px; height:30px; border:2px dotted var(--m-red)"></span><span class="bar" style="margin-top:40px; background:var(--rule-blue)"></span><span class="bar" style="margin-top:8px; background:var(--rule-blue)"></span></div></div><span class="small">Postcard</span></div>
+      <div class="stack" style="justify-items:center; gap:6px"><div class="thumb" style="width:110px; height:130px; background:var(--card-paper)"><div style="position:absolute; inset:8px 8px 30px; background:linear-gradient(160deg,#8fc3e8,#f3c27a)"></div><span class="hand" style="position:absolute; left:10px; bottom:6px; font-size:15px">lake day</span></div><span class="small">Polaroid</span></div>
+      <div class="stack" style="justify-items:center; gap:6px"><div class="thumb lined" style="width:110px; height:130px; padding:6px 10px; font-size:11px; line-height:16px"><b>Packing list</b><br>☑ swimsuits<br>☐ sunscreen<br>☐ snacks</div><span class="small">Lined</span></div>
+      <div class="stack" style="justify-items:center; gap:6px"><div class="thumb" style="width:120px; height:120px; background:var(--card-paper); padding:14px; font-size:12px">Gran's lemon cake<br><span style="opacity:.6">200 g flour · 3 eggs · 1 lemon</span></div><span class="small">Minimal</span></div>
+      <div class="stack" style="justify-items:center; gap:6px"><div class="thumb" style="width:120px; height:120px; background:var(--kraft); padding:12px"><span class="hand" style="font-size:20px">Thank you for everything</span></div><span class="small">Kraft</span></div>
+      <div class="hud pad stack" style="gap:8px; width:250px">
+        <b>Export sizes</b>
+        <div class="row small"><span style="width:20px; height:20px; border:1.5px solid var(--m-fg)"></span>Square · 1080 × 1080</div>
+        <div class="row small"><span style="width:12px; height:20px; border:1.5px solid var(--m-fg)"></span>Story · 1080 × 1920</div>
+        <div class="row small"><span style="width:26px; height:17px; border:1.5px solid var(--m-fg)"></span>Wallpaper · this display's size</div>
+      </div>
+    </div></div>
+    <figcaption>The six styles from Kippy's changelog and the three export sizes. Cards export as plain PNG images that anyone can open or print. <b>Builds in</b> <code>Cards/CardStyle.swift</code>, <code>Cards/CardRenderer.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S23 -->
+  <figure class="shot" id="s-share">
+    <h3><span class="no">S23</span>Share menu</h3>
+    <div class="stage"><div class="m">
+      <div class="hud menu" style="width:240px">
+        <div class="it"><span class="app" style="background:#34c759">M</span>Messages</div>
+        <div class="it"><span class="app" style="background:#1e88e5">@</span>Mail</div>
+        <div class="it on"><span class="app" style="background:#0a84ff">A</span>AirDrop</div>
+        <div class="it"><span class="app" style="background:#4a154b">S</span>Slack</div>
+        <div class="sep"></div>
+        <div class="it">Copy image <span class="k">⌘C</span></div>
+        <div class="it">Save as PNG…</div>
+        <div class="it">Export as Markdown…</div>
+      </div>
+    </div></div>
+    <figcaption>The system share menu plus our own copy and export actions. If Slack does not appear as a share target (<a href="#questions">Q6</a>), the Slack item copies the image and opens Slack. <b>Builds in</b> <code>Export/ShareMenu.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S24 -->
+  <figure class="shot" id="s-gallery">
+    <h3><span class="no">S24</span>Snaps and cards gallery</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:640px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span>Snaps</span><span class="sp"></span><span class="seg"><span class="on">Snaps</span><span>Cards</span></span></div>
+        <div class="pad" style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px">
+          <div class="stack" style="gap:4px"><div class="mshot" style="height:80px; border-radius:6px"><span style="position:absolute; left:10px; top:24px; width:50px; height:20px; border:2px solid #e5484d"></span></div><span class="small">Pricing page</span><span class="dim small">Fri 11:20</span></div>
+          <div class="stack" style="gap:4px"><div class="mshot" style="height:80px; border-radius:6px"><span style="position:absolute; left:20px; top:30px; width:70px; height:10px; background:rgba(242,193,78,.6)"></span></div><span class="small">Error dialog</span><span class="dim small">Thu 16:02</span></div>
+          <div class="stack" style="gap:4px"><div class="mshot" style="height:80px; border-radius:6px"><span style="position:absolute; left:40px; top:20px; width:26px; height:26px; border:2px solid #2f6fed; transform:rotate(45deg)"></span></div><span class="small">Flow diagram</span><span class="dim small">Wed 10:41</span></div>
+          <div class="stack" style="gap:4px"><div class="mshot" style="height:80px; border-radius:6px"><span style="position:absolute; left:8px; top:8px; width:18px; height:18px; border-radius:50%; background:#e5484d"></span></div><span class="small">Onboarding step</span><span class="dim small">Mon 09:15</span></div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>Library views for Snaps and Cards. Each opens back into its editor because the canvas is saved as data, not only as a flat image. <b>Builds in</b> <code>Library/GalleryView.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S25 -->
+  <figure class="shot" id="s-settings">
+    <h3><span class="no">S25</span>Settings: General and Shortcuts</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:400px">
+        <div class="tb" style="justify-content:center"><span class="lights" style="position:absolute"><i></i><i></i><i></i></span><span class="seg" style="margin-left:auto; margin-right:auto"><span class="on">General</span><span>Shortcuts</span><span>Permissions</span><span>Data</span></span></div>
+        <div class="pad stack" style="gap:12px">
+          <label class="row"><span class="toggle on"></span>Open at login</label>
+          <label class="row"><span class="toggle on"></span>Show edge tabs on all displays</label>
+          <label class="row"><span class="toggle on"></span>Pop up app and site notes</label>
+          <label class="row"><span class="toggle"></span>Open Daily Brief at first unlock</label>
+          <div class="row"><span style="width:130px">Default note colour</span><span class="dot" style="background:var(--n-y); width:16px; height:16px; border:1px solid var(--m-line)"></span></div>
+          <div class="row"><span style="width:130px">Default font</span><span class="field small" style="flex:1">System ▾</span></div>
+          <div class="row"><span style="width:130px">Voice</span><span class="field small" style="flex:1">English (on this Mac) ▾</span></div>
+          <div class="row"><span style="width:130px">Updates</span><label class="row small"><span class="toggle on"></span>Check automatically</label></div>
+        </div>
+      </div>
+      <div class="win" style="width:400px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span class="sp"></span><span>Shortcuts</span><span class="sp"></span></div>
+        <div class="pad" style="display:grid; grid-template-columns:1fr auto; gap:8px 12px; align-items:center">
+          <span>New note</span><span class="field small" style="width:110px; text-align:center">⌃⌥N</span>
+          <span>Hold to talk</span><span class="field small" style="width:110px; text-align:center">⌃⌥K</span>
+          <span>Snap</span><span class="field small focus" style="width:110px; text-align:center; color:var(--m-dim)">Press keys…</span>
+          <span>New card</span><span class="field small" style="width:110px; text-align:center">⌃⌥C</span>
+          <span>Search</span><span class="field small" style="width:110px; text-align:center">⌃⌥F</span>
+          <span>Save where I stopped</span><span class="field small" style="width:110px; text-align:center">⌃⌥S</span>
+          <span>Bookmark meeting moment</span><span class="field small" style="width:110px; text-align:center">⌃⌥B</span>
+          <span class="small" style="color:var(--m-red); grid-column:1 / -1">⌘⇧4 is used by macOS for screenshots. Pick another.</span>
+          <span></span><span class="mb" style="justify-self:end">Restore defaults</span>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>General options and the shortcut recorder, which warns when a key is already taken. <b>Builds in</b> <code>Settings/SettingsView.swift</code>, <code>App/Shortcuts.swift</code>.</figcaption>
+  </figure>
+
+  <!-- S26 -->
+  <figure class="shot" id="s-settings2">
+    <h3><span class="no">S26</span>Settings: Permissions and Data</h3>
+    <div class="stage"><div class="m">
+      <div class="win" style="width:400px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span class="sp"></span><span>Permissions</span><span class="sp"></span></div>
+        <div class="pad stack" style="gap:9px">
+          <div class="row"><span class="dot" style="background:var(--m-green)"></span>Microphone<span class="sp"></span><span class="dim small">Allowed</span></div>
+          <div class="row"><span class="dot" style="background:var(--m-green)"></span>Speech recognition<span class="sp"></span><span class="dim small">Allowed</span></div>
+          <div class="row"><span class="dot" style="background:var(--m-green)"></span>Screen Recording<span class="sp"></span><span class="dim small">Allowed</span></div>
+          <div class="row"><span class="dot" style="background:var(--m-dim)"></span>Mac audio for meetings<span class="sp"></span><span class="dim small">Checked on first meeting</span></div>
+          <div class="row"><span class="dot" style="background:var(--m-red)"></span>Accessibility<span class="sp"></span><span class="mb">Open Settings</span></div>
+          <div class="row"><span class="dot" style="background:var(--m-dim)"></span>Calendar<span class="sp"></span><span class="mb">Allow</span></div>
+          <div class="row"><span class="dot" style="background:var(--m-green)"></span>Notifications<span class="sp"></span><span class="dim small">Allowed</span></div>
+          <p class="small dim">Accessibility is off, so app and site notes are paused. Everything else works.</p>
+        </div>
+      </div>
+      <div class="win" style="width:400px">
+        <div class="tb"><span class="lights"><i></i><i></i><i></i></span><span class="sp"></span><span>Data</span><span class="sp"></span></div>
+        <div class="pad stack" style="gap:12px">
+          <div class="row"><div>Stored on this Mac<br><span class="dim small">412 notes · 9 meetings · 1.3 GB</span></div><span class="sp"></span><span class="mb">Show in Finder</span></div>
+          <div class="row"><div>Export everything<br><span class="dim small">Markdown files plus attachments</span></div><span class="sp"></span><span class="mb">Export…</span></div>
+          <div class="sep"></div>
+          <div class="stack" style="gap:8px; border:1px solid var(--m-red); border-radius:8px; padding:12px">
+            <b style="color:var(--m-red)">Delete everything</b>
+            <p class="small">Removes all notes, recordings, Snaps, cards and attachments from this Mac. Events already in Calendar stay. This can't be undone.</p>
+            <div class="field small">Type DELETE to confirm</div>
+            <div class="row"><span class="sp"></span><span class="mb">Cancel</span><span class="mb danger">Delete everything</span></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <figcaption>Live status for each permission, with a direct fix. Data shows what is stored, exports it all, and deletes it all after a typed confirmation. <b>Builds in</b> <code>Settings/PermissionsPane.swift</code>, <code>Settings/DataPane.swift</code>, <code>Export/DeleteEverything.swift</code>.</figcaption>
+  </figure>
+
+  </div>
+</section>
+<script>
+document.querySelectorAll('[data-swatches]').forEach(function (el) {
+  var light = [90, 82, 72, 62, 50];
+  for (var i = 0; i < 50; i++) {
+    var s = document.createElement('i');
+    s.style.background = 'hsl(' + ((i % 10) * 36 + 48) % 360 + ' 75% ' + light[Math.floor(i / 10)] + '%)';
+    if (i === 0) s.className = 'on';
+    el.appendChild(s);
+  }
+});
+</script>
+
+
+<section id="architecture">
+  <h2>Architecture</h2>
+  <p>The app is a menu-bar agent (<code>LSUIElement</code>) with a library window. Feature modules talk to one <code>Store</code> and never to each other. The shared <code>Canvas</code> is the only component used by two features, Snap and Cards.</p>
+<pre class="mermaid">
+flowchart LR
+  subgraph Triggers
+    HK[Shortcuts · KeyboardShortcuts]
+    WS[App and URL watcher · NSWorkspace + AX]
+    TM[Timers and · notifications]
+  end
+  subgraph UI
+    CP[Capture panel]
+    ED[Edge tabs]
+    LIB[Library window · search, brief, settings]
+    CV[Canvas · Snap and Cards]
+  end
+  subgraph Services
+    CL[EntryClassifier · RecurrenceParser]
+    TR[Transcriber · Apple Speech]
+    MR[MeetingRecorder · mic + Core Audio tap]
+    SC[SnapCapture · ScreenCaptureKit]
+    CAL[CalendarBridge · EventKit]
+    RS[ReminderScheduler]
+  end
+  DB[(Store · GRDB SQLite + FTS5 · Attachments folder)]
+  HK --> CP & CV & MR & LIB
+  CP --> CL --> DB
+  TR --> CL
+  MR --> TR
+  SC --> CV --> DB
+  WS --> ED
+  DB --> ED & LIB
+  RS --> TM --> ED
+  CL --> CAL
+  DB --> RS
+</pre>
+  <h3>Core interfaces</h3>
+<pre class="code">// Sorting/EntryClassifier.swift: pure, unit-tested
+struct Classification: Equatable {
+    var kind: NoteKind            // .note .task .reminder .event .todoList .idea .bookmark .bug .context
+    var due: Date?
+    var hasTime: Bool
+    var recurrence: RecurrenceRule?
+}
+enum EntryClassifier {
+    static func classify(_ text: String, now: Date, calendar: Calendar) -> Classification
+}
+
+// Voice/Transcriber.swift: one type, picks the engine by OS version
+final class Transcriber {
+    func start() throws -> AsyncStream&lt;TranscriptSegment&gt;   // live partials for the panel
+    func finish() async throws -> [TranscriptSegment]         // segments with start and end in ms
+}
+
+// Canvas/CanvasDocument.swift: shared by Snap and Cards, saved as JSON
+struct CanvasDocument: Codable {
+    var background: CanvasBackground   // .image(attachmentID) for Snap, .card(CardStyle, CardSize) for Cards
+    var elements: [CanvasElement]      // shape, arrow, text, step, highlight, blur, sticker, photo, washi, ink
+}
+struct CanvasElement: Codable, Identifiable {
+    var id: UUID; var kind: Kind; var frame: CGRect; var rotation: Double; var style: ElementStyle
+}</pre>
+</section>
+
+<section id="data">
+  <h2>Data</h2>
+  <p>Everything lives in <code>~/Library/Application Support/Quicknote/</code>: <code>quicknote.sqlite</code> plus <code>Attachments/</code> (images, audio, files). Markdown export writes the same folder layout.</p>
+<pre class="mermaid">
+erDiagram
+  project ||--o{ note : groups
+  note ||--o{ attachment : has
+  note ||--o{ note_link : "links to"
+  note ||--o| meeting : "is a"
+  meeting ||--o{ transcript_segment : has
+  meeting ||--o{ meeting_bookmark : has
+  note }o--o| meeting : "action item from"
+  note {
+    int id PK
+    text body
+    text kind
+    text color
+    text font
+    int project_id FK
+    datetime due_at
+    bool due_has_time
+    int priority
+    text recurrence_json
+    datetime snoozed_until
+    text app_bundle_id
+    text site_host
+    text url
+    text calendar_event_id
+    text canvas_json
+    int source_meeting_id FK
+    int source_ms
+    datetime completed_at
+    datetime created_at
+  }
+  transcript_segment {
+    int meeting_id FK
+    int start_ms
+    int end_ms
+    text text
+  }
+</pre>
+  <p>FTS5 tables <code>note_ft(body)</code> and <code>transcript_ft(text)</code> are external-content tables synchronized with their source tables. Each schema change ships as a numbered <code>DatabaseMigrator</code> migration in <code>Store/Database.swift</code>.</p>
+</section>
+
+<section id="flows">
+  <h2>Key flows</h2>
+  <h3>Hold to talk</h3>
+<pre class="mermaid">
+sequenceDiagram
+  participant U as User
+  participant K as KeyboardShortcuts
+  participant P as Capture panel
+  participant T as Transcriber
+  participant C as EntryClassifier
+  participant S as Store
+  participant E as CalendarBridge
+  U->>K: hold Ctrl-Opt-K
+  K->>P: onKeyDown, show panel in listening state
+  P->>T: start(), live partial text
+  U->>K: release
+  K->>T: onKeyUp, finish()
+  T-->>C: "call Mira tomorrow at 10"
+  C-->>P: event, tomorrow 10:00
+  P->>S: insert note with app and URL context
+  P->>U: Add to Calendar? (confirm)
+  U->>E: confirm, then EKEvent saved
+</pre>
+  <h3>Meeting action item to task</h3>
+  <p><code>MeetingRecorder</code> mixes microphone and tap audio into one <code>.m4a</code>. Segments stream into <code>transcript_segment</code>. <kbd>⌃⌥B</kbd> stores a <code>meeting_bookmark</code> at the current offset. When recording stops, <code>ActionItemExtractor</code> scans the segments for phrases ("action item", "I'll", "we need to", "by Friday") and turns each hit into a task with <code>source_meeting_id</code> and <code>source_ms</code>. Opening the task seeks the player to that second.</p>
+</section>
+
+<section id="layout">
+  <h2>Repo layout</h2>
+<pre class="code">project.yml                         # XcodeGen spec; the .xcodeproj is generated, not committed
+Quicknote/
+  App/        QuicknoteApp.swift  AppDelegate.swift  Shortcuts.swift  Permissions.swift  WelcomeView.swift
+  Store/      Database.swift  Note.swift  Attachment.swift  Meeting.swift  Search.swift
+  Capture/    CapturePanel.swift  CaptureView.swift  ContextCaptureView.swift
+  Library/    LibraryWindow.swift  TaskListView.swift  SitesAndAppsView.swift  GalleryView.swift
+  Search/     SearchPanel.swift
+  Edge/       EdgeWindow.swift  EdgeTabsView.swift  EdgeFilter.swift
+  Context/    FrontmostContext.swift  BrowserURL.swift
+  Sorting/    EntryClassifier.swift  RecurrenceParser.swift  RecurrenceRule.swift
+  Reminders/  ReminderScheduler.swift  DailyBrief.swift  ReadAloud.swift
+  Calendar/   CalendarBridge.swift
+  Voice/      Transcriber.swift  HoldToTalk.swift
+  Meetings/   MeetingRecorder.swift  SystemAudioTap.swift  ActionItemExtractor.swift  MeetingView.swift  RecorderPill.swift
+  Canvas/     CanvasDocument.swift  CanvasView.swift  ElementHandles.swift
+  Snap/       SnapOverlay.swift  SnapCapture.swift  SnapEditor.swift
+  Cards/      CardStyle.swift  CardEditor.swift  CardRenderer.swift
+  Editor/     NoteTextView.swift  SlackMarkdown.swift  LinkAutocomplete.swift  Backlinks.swift
+              TypeMenu.swift  StylePopover.swift  RepeatPicker.swift
+  Export/     MarkdownExporter.swift  DeleteEverything.swift  ShareMenu.swift
+  Settings/   SettingsView.swift  PermissionsPane.swift  DataPane.swift
+  Resources/  Info.plist  Quicknote.entitlements  Fonts/  Stickers/
+QuicknoteTests/
+  EntryClassifierTests.swift  RecurrenceParserTests.swift  SlackMarkdownTests.swift
+  BacklinksTests.swift  SearchTests.swift  MarkdownExporterTests.swift
+  ReminderSchedulerTests.swift  ActionItemExtractorTests.swift  CanvasDocumentTests.swift</pre>
+</section>
+
+<section id="sequence">
+  <h2>Build order</h2>
+  <p>One pull request per milestone. Each milestone ships something usable and runs <code>xcodebuild test</code> green before merging.</p>
+  <div class="tbl"><table class="wide">
+    <thead><tr><th>Milestone</th><th>Delivers</th><th>Main files</th></tr></thead>
+    <tbody>
+      <tr><td>M0 Skeleton</td><td>XcodeGen project, menu-bar agent, Settings with shortcut recorders, database and migrations, CI</td><td><code>project.yml</code>, <code>App/*</code>, <code>Store/Database.swift</code>, <code>.github/workflows/test.yml</code></td></tr>
+      <tr><td>M1 Capture and edge</td><td>Welcome, <kbd>⌃⌥N</kbd> panel, edge tabs, Library window, editor with Slack formatting, colours and fonts, Type menu (S02, S04, S07, S10–S12)</td><td><code>Capture/*</code>, <code>Edge/*</code>, <code>Library/*</code>, <code>Editor/NoteTextView.swift</code>, <code>Editor/SlackMarkdown.swift</code></td></tr>
+      <tr><td>M2 Time</td><td>Auto-sort, repeats, reminders and snooze, Calendar, Daily Brief and read-aloud</td><td><code>Sorting/*</code>, <code>Reminders/*</code>, <code>Calendar/*</code></td></tr>
+      <tr><td>M3 Context</td><td>App and site notes, browser URL (spike AX first), save where you stopped</td><td><code>Context/*</code>, <code>Edge/EdgeFilter.swift</code></td></tr>
+      <tr><td>M4 Voice</td><td>Hold to talk</td><td><code>Voice/*</code></td></tr>
+      <tr><td>M5 Find and keep</td><td>Search, links and backlinks, projects, attachments, Markdown export, delete everything</td><td><code>Store/Search.swift</code>, <code>Editor/Backlinks.swift</code>, <code>Export/*</code></td></tr>
+      <tr><td>M6 Meetings</td><td>Record, transcribe, bookmark, action items, export</td><td><code>Meetings/*</code></td></tr>
+      <tr><td>M7 Snap</td><td>Capture, shared canvas, annotation tools, voice caption, share</td><td><code>Canvas/*</code>, <code>Snap/*</code></td></tr>
+      <tr><td>M8 Cards</td><td>6 styles, decorations, sizes, signature, PNG export</td><td><code>Cards/*</code>, <code>Resources/Stickers/</code></td></tr>
+      <tr><td>M9 Ship</td><td>Developer ID signing, notarization, DMG, Sparkle appcast</td><td><code>scripts/release.sh</code>, <code>appcast.xml</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="testing">
+  <h2>Testing and verification</h2>
+  <p>Logic that decides something (dates, repeats, formatting, links, search, export, action items) lives in pure functions or works against an in-memory GRDB queue. Those get unit tests written first. Features behind a permission prompt are checked by hand against a fixed checklist in each PR.</p>
+  <div class="cmd">
+    <div><code>xcodegen generate &amp;&amp; xcodebuild test -project Quicknote.xcodeproj -scheme Quicknote -destination 'platform=macOS'</code><span>The project's check. Must exit 0 on every PR, locally and in CI.</span></div>
+    <div><code>EntryClassifierTests</code><span>With now fixed at Sun 25 Oct 2026 09:00: "Call Mira tomorrow at 10" gives an event on 26 Oct at 10:00; "Buy milk" gives a task with no date; "remind me at 6" gives a reminder at 18:00 today; "remind me at 6" said at 19:00 gives 18:00 tomorrow.</span></div>
+    <div><code>RecurrenceParserTests</code><span>"every tue and thu" gives weekly on weekdays [3, 5]; "every 2 weeks" gives interval 2; next occurrence across the 1 Nov 2026 US DST change keeps the wall-clock time.</span></div>
+    <div><code>SearchTests</code><span>A word that appears only in a transcript segment returns its meeting; deleting a note removes it from <code>note_ft</code>.</span></div>
+    <div><code>MarkdownExporterTests</code><span>Exporting a note with an attachment and a <code>[[link]]</code>, then reading it back, gives the same body and file names.</span></div>
+    <div><code>xcrun notarytool submit Quicknote.dmg --keychain-profile quicknote --wait &amp;&amp; xcrun stapler validate Quicknote.dmg &amp;&amp; spctl -a -vv Quicknote.app</code><span>Release gate for M9.</span></div>
+  </div>
+  <p>Manual checklist for each permission-bound feature: grant, deny, and revoke while running. Run it with Wi-Fi off (offline claim), on two displays, over a fullscreen app, and on one Intel Mac.</p>
+</section>
+
+<section id="risks">
+  <h2>Risks and mitigations</h2>
+  <div class="tbl"><table class="wide">
+    <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td>Browser URL through Accessibility is unreliable. Chrome may not expose AXWebArea until its accessibility is enabled (<a href="https://developer.apple.com/forums/thread/742057">forum</a>).</td><td>Spike first in M3. Fall back to Apple Events per browser. Site notes degrade to app-level notes if both fail.</td></tr>
+      <tr><td>System audio taps record silence when <code>NSAudioCaptureUsageDescription</code> is missing, and there is no public API to check the permission (<a href="https://www.recall.ai/blog/core-audio-taps">recall.ai</a>).</td><td>Check the plist key in a unit test. Detect a silent tap in the first 3 seconds and show a fix-it banner.</td></tr>
+      <tr><td>On-device <code>SFSpeechRecognizer</code> is less accurate and can fail with "No asset installed" until language assets download.</td><td>Use <code>SpeechAnalyzer</code> on macOS 26. Check <code>supportsOnDeviceRecognition</code> at first launch and prompt for the asset download.</td></tr>
+      <tr><td>Rule-based sorting picks the wrong type.</td><td>Show the type chip before saving, allow a one-key change, and always confirm before writing to Calendar.</td></tr>
+      <tr><td>Default <kbd>⌃⌥</kbd> shortcuts clash with other apps.</td><td>The KeyboardShortcuts recorder warns about conflicts. All shortcuts can be changed.</td></tr>
+      <tr><td>The edge window misbehaves with Spaces, fullscreen apps, or displays being plugged and unplugged.</td><td>Rebuild the edge windows on <code>NSApplication.didChangeScreenParametersNotification</code>. Fullscreen is on the manual checklist.</td></tr>
+      <tr><td>Notarization needs a paid Apple Developer Program membership, even for freeware.</td><td>Budget for it before M9.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="questions">
+  <h2>Open questions</h2>
+  <ol>
+    <li><strong>Minimum macOS 14 or 26?</strong> Raising it to 26 drops the <code>SFSpeechRecognizer</code> path and makes Foundation Models available for sorting and meeting summaries, but excludes Macs still on 14 or 15. Kippy targets 14, so this doc does too.</li>
+    <li><strong>Meetings: microphone only, or system audio too?</strong> Kippy lists only Microphone among its permissions, which suggests it may record only the mic. That loses remote participants when you wear headphones. This doc plans for both.</li>
+    <li><strong>What does "search files" cover?</strong> Attachments and Snaps only (planned), or files anywhere on disk through Spotlight (<code>NSMetadataQuery</code>)?</li>
+    <li><strong>"Greets you when you return": return from what?</strong> This doc assumes wake, unlock and launch. It could mean switching back to the app where you saved the context.</li>
+    <li><strong>Calendar access level.</strong> Kippy describes Calendar as add-only, yet its Daily Brief shows today's events, which needs full access. Should we ask for full access up front or only when the Brief is turned on?</li>
+    <li><strong>Slack in the share sheet.</strong> Unverified whether Slack's Mac app registers as an <code>NSSharingService</code>.</li>
+    <li><strong>Name and visual identity.</strong> "Quicknote" is a placeholder.</li>
+  </ol>
+</section>
+
+<section id="rejected">
+  <h2>Alternatives rejected</h2>
+  <ul>
+    <li><strong>Tauri 2:</strong> every OS feature still needs a native plugin, so it adds a bridge without adding reach.</li>
+    <li><strong>Electron:</strong> a background Chromium all day in an app that should feel tiny.</li>
+    <li><strong>SwiftData:</strong> no full-text search API was found to match GRDB's FTS5 support. <span class="tag warn">unverified</span></li>
+    <li><strong>WhisperKit:</strong> large model download and unknown speed on Intel. It remains the upgrade if Apple Speech accuracy is not good enough for meetings.</li>
+    <li><strong>Cloud LLM for sorting and summaries:</strong> breaks the no-cloud promise.</li>
+    <li><strong>Mac App Store:</strong> the sandbox blocks Accessibility, which app notes need.</li>
+    <li><strong>Separate canvases for Snap and Cards:</strong> both need move, resize, rotate and voice text, so one canvas serves both.</li>
+  </ul>
+  <p class="src">Sources: <a href="https://heykippy.app/">heykippy.app</a>, <a href="https://heykippy.app/changelog">changelog</a>, <a href="https://github.com/groue/grdb.swift">GRDB</a>, <a href="https://github.com/sindresorhus/keyboardshortcuts">KeyboardShortcuts</a>, <a href="https://sparkle-project.org/documentation/">Sparkle</a>, <a href="https://github.com/argmaxinc/argmax-oss-swift">WhisperKit</a>, <a href="https://developer.apple.com/documentation/screencapturekit/scscreenshotmanager">SCScreenshotManager</a>, <a href="https://developer.apple.com/documentation/technotes/tn3152-migrating-to-the-latest-calendar-access-levels">TN3152</a>, <a href="https://github.com/insidegui/AudioCap">AudioCap</a>, <a href="https://blog.addpipe.com/apple-speechanalyzer-api/">SpeechAnalyzer overview</a>, <a href="https://developer.apple.com/documentation/speech/sfspeechrecognitionrequest/requiresondevicerecognition">requiresOnDeviceRecognition</a>.</p>
+</section>
+</main>
+</div>

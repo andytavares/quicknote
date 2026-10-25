@@ -1,0 +1,118 @@
+import QuicknoteKit
+import SwiftUI
+
+/// The tabs on the edge, with the card that peeks, expands or slides out beside them.
+struct EdgeTabsView: View {
+    let model: EdgeModel
+    let actions: EdgeActions
+    let visibleFrame: CGRect
+    let onCardVisibilityChange: (Bool) -> Void
+
+    @State private var peekedNoteId: Int64?
+    @State private var hidePeekTask: Task<Void, Never>?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var layout: EdgeLayout {
+        EdgeLayout(tabCount: model.tabCount, visibleFrame: visibleFrame, showsCard: false)
+    }
+
+    private var card: EdgeCard? {
+        if let id = model.expandedNoteId, let note = model.note(id: id) { return .expanded(note) }
+        if let id = peekedNoteId, let note = model.note(id: id) { return .peek(note) }
+        return model.isContextCardShown ? .context : nil
+    }
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 0) {
+            cardView
+            VStack(spacing: EdgeLayout.tabSpacing) {
+                ForEach(model.slots(for: layout)) { slot in tab(for: slot) }
+            }
+            .frame(width: EdgeLayout.tabWidth)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+        .animation(reduceMotion ? nil : .spring(duration: 0.45, bounce: 0.4), value: card?.id)
+        .onChange(of: card?.id) { onCardVisibilityChange(card != nil) }
+        .onExitCommand { model.expandedNoteId = nil }
+    }
+
+    @ViewBuilder private var cardView: some View {
+        if let card {
+            EdgeCardView(card: card, model: model, actions: actions, onHover: setPeek)
+                .padding(.trailing, EdgeLayout.cardGap)
+                .contentShape(Rectangle())
+                .onHover { setPeek(card.noteId, hovering: $0) }
+                .transition(reduceMotion ? .opacity : .move(edge: .trailing).combined(with: .opacity))
+        }
+    }
+
+    @ViewBuilder private func tab(for slot: EdgeModel.Slot) -> some View {
+        switch slot {
+        case .context:
+            EdgeTab(
+                color: .accentColor, badge: "\(model.contextNotes.count)",
+                label: "Notes pinned to \(model.contextLabel)"
+            ) {
+                model.isContextCardShown.toggle()
+            }
+        case .note(let note):
+            noteTab(note)
+        case .overflow(let count):
+            EdgeTab(color: .gray, badge: "+\(count)", label: "\(count) more notes, open the Library") {
+                LibraryFeature.show()
+            }
+        }
+    }
+
+    private func noteTab(_ note: Note) -> some View {
+        EdgeTab(color: note.edgeColor, badge: nil, label: "Note: \(note.title)") {
+            model.expandedNoteId = model.expandedNoteId == note.id ? nil : note.id
+        }
+        .onHover { setPeek(note.id, hovering: $0) }
+        .onDragAwayFromEdge { actions.removeFromEdge(note) }
+        .accessibilityAction(named: "Remove from edge") { actions.removeFromEdge(note) }
+    }
+
+    /// The pointer crosses a gap between a tab and its card, so hiding waits a moment.
+    private func setPeek(_ noteId: Int64?, hovering: Bool) {
+        hidePeekTask?.cancel()
+        if hovering { peekedNoteId = noteId; return }
+        hidePeekTask = Task {
+            try? await Task.sleep(for: .milliseconds(150))
+            if !Task.isCancelled { peekedNoteId = nil }
+        }
+    }
+}
+
+private struct EdgeTab: View {
+    let color: Color
+    let badge: String?
+    let label: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(color)
+                .frame(width: EdgeLayout.tabWidth, height: EdgeLayout.tabHeight)
+                .overlay {
+                    if let badge {
+                        Text(badge).font(.caption2.bold()).foregroundStyle(.white).minimumScaleFactor(0.5)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+        .accessibilityHint("Click to open. Drag away from the edge to remove it from the edge.")
+    }
+}
+
+extension View {
+    /// Dragging a tab this far away from the right edge removes it from the edge.
+    fileprivate func onDragAwayFromEdge(perform remove: @escaping () -> Void) -> some View {
+        simultaneousGesture(
+            DragGesture(minimumDistance: 12).onEnded { drag in
+                if drag.translation.width < -80 { remove() }
+            })
+    }
+}
