@@ -1,0 +1,23 @@
+Quicknote/Meetings/RecordingSource.swift
+  s_ad65a60407dcd0::t_18117b029cceee 16-17,60-63,66-67
+QuicknoteTests/MeetingRecorderTests.swift
+  s_ad65a60407dcd0::t_4228991ae28417 170-192
+docs/features/meetings.md
+  s_ad65a60407dcd0::t_b66987ae920027 161
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bf359fabc86aa85fdbfa54773a0cb4f77d9da77b",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
