@@ -31,7 +31,7 @@ Quicknote has no analytics, crash reporting or telemetry code. A search of the s
 | What | When | Who sees it |
 |---|---|---|
 | Speech model download | The first time you use voice or a meeting. macOS downloads the English model (`AssetInventory`, `Quicknote/Voice/LiveTranscriber.swift:135`) | Apple |
-| Update check | Automatically, or from the menu "Check for updates…". Sparkle reads `https://quicknote.app/appcast.xml` (`SUFeedURL`) and downloads a new DMG if one exists | The host of that feed |
+| Update check | Automatically, or from the menu "Check for updates…". Sparkle reads `https://github.com/andytavares/quicknote/releases/latest/download/appcast.xml` (`SUFeedURL`) and downloads a new DMG if one exists | GitHub |
 | Share to Messages, Mail, AirDrop | Only when you pick one in Share | The service you chose |
 | Slack | "Slack" copies the image to the clipboard and opens `slack://open`. Quicknote sends nothing to Slack ([decision 7](decisions/0007-slack-copy-and-open.md)) | Nobody until you paste |
 
