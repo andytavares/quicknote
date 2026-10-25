@@ -1,0 +1,41 @@
+Quicknote/App/Permissions.swift
+  s_ad65a60407dcd0::t_73e674d020c0cd 1-8,10,18-100,102-131,134-231
+Quicknote/Settings/AppSettings.swift
+  s_ad65a60407dcd0::t_b0439e9efe3b55 2,24,29-49
+Quicknote/Settings/DataPane.swift
+  s_ad65a60407dcd0::t_b2eb5b82fa0ef5 1-101
+Quicknote/Settings/DataSummary.swift
+  s_ad65a60407dcd0::t_a7235b1f30d34f 1-41
+Quicknote/Settings/PermissionExplainerPanel.swift
+  s_ad65a60407dcd0::t_5e0fc67dca4e40 1-64
+Quicknote/Settings/PermissionsPane.swift
+  s_ad65a60407dcd0::t_f6187ca2ab96c4 1-65
+Quicknote/Settings/SettingsView.swift
+  s_ad65a60407dcd0::t_e972a60b6b49bc 1-2,5-20,23-24,26-31,33-129
+Quicknote/Welcome/WelcomeFeature.swift
+  s_ad65a60407dcd0::t_d85de860d17c7e 1-3,6-23
+Quicknote/Welcome/WelcomeView.swift
+  s_ad65a60407dcd0::t_a5c9610bcf1129 1-53
+QuicknoteTests/SettingsAndPermissionsTests.swift
+  s_ad65a60407dcd0::t_1714086fd167ee 1-76
+docs/features/settings-and-permissions.md
+  s_ad65a60407dcd0::t_fa9e5019a0cf7a 1-62
+docs/permissions.md
+  s_ad65a60407dcd0::t_251efb3c044aa0 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2b089a787875a9519c140c46a0b253575b9d9e86",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
