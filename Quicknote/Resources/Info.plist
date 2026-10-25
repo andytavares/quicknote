@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Quicknote</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.productivity</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Free software. Made for Mac.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Quicknote listens only while you hold the talk shortcut or record a meeting. Audio stays on this Mac.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Quicknote turns your speech into text on this Mac. Nothing is sent anywhere.</string>
+	<key>NSAudioCaptureUsageDescription</key>
+	<string>Quicknote records your Mac's audio during a meeting recording so the other people on the call are in the transcript.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Quicknote adds the events you confirm to Calendar, keeps them in sync with your notes, and shows today's events in the Daily Brief.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Quicknote reads the address of the page you're on so notes you pin to a website show up there.</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>Quicknote reads the screen only while you drag to take a Snap.</string>
+	<key>SUFeedURL</key>
+	<string>https://quicknote.app/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>REPLACE_WITH_SPARKLE_PUBLIC_KEY</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+</dict>
+</plist>

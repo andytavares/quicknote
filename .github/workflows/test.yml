@@ -1,0 +1,11 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    # Needs a runner with macOS 27 and Xcode 27.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install xcodegen
+      - run: scripts/lint.sh
+      - run: scripts/test.sh

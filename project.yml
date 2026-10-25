@@ -1,0 +1,67 @@
+name: Quicknote
+options:
+  bundleIdPrefix: app.quicknote
+  deploymentTarget:
+    macOS: "27.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "27.0"
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+packages:
+  QuicknoteKit:
+    path: QuicknoteKit
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    exactVersion: 3.1.0
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    exactVersion: 2.10.0
+targets:
+  Quicknote:
+    type: application
+    platform: macOS
+    sources:
+      - path: Quicknote
+    dependencies:
+      - package: QuicknoteKit
+      - package: KeyboardShortcuts
+      - package: Sparkle
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.quicknote.Quicknote
+        PRODUCT_NAME: Quicknote
+        INFOPLIST_FILE: Quicknote/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Quicknote/Resources/Quicknote.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  QuicknoteTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: QuicknoteTests
+    dependencies:
+      - target: Quicknote
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+schemes:
+  Quicknote:
+    build:
+      targets:
+        Quicknote: all
+        QuicknoteTests: [test]
+    test:
+      gatherCoverageData: true
+      coverageTargets:
+        - Quicknote
+      targets:
+        - QuicknoteTests
