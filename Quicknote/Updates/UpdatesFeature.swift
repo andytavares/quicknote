@@ -1,13 +1,16 @@
 import AppKit
 import Sparkle
 
-/// Sparkle updates. Dev builds ship a placeholder public key and never update.
+/// Sparkle updates. Only Release builds with a real public key update; Debug builds never do.
 enum UpdatesFeature {
     private static var controller: SPUStandardUpdaterController?
 
     static func start() {
-        guard !AppEnvironment.isRunningTests, updatesAreEnabled(publicKey: configuredPublicKey) else { return }
-        controller = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+        #if !DEBUG
+            guard !AppEnvironment.isRunningTests, updatesAreEnabled(publicKey: configuredPublicKey) else { return }
+            controller = SPUStandardUpdaterController(
+                startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+        #endif
     }
 
     static func checkForUpdates() {

@@ -41,9 +41,9 @@
 	<key>NSScreenCaptureUsageDescription</key>
 	<string>Quicknote reads the screen only while you drag to take a Snap.</string>
 	<key>SUFeedURL</key>
-	<string>https://quicknote.app/appcast.xml</string>
+	<string>https://github.com/andytavares/quicknote/releases/latest/download/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>REPLACE_WITH_SPARKLE_PUBLIC_KEY</string>
+	<string>giQW624tQLWarxWA0wXhiDnMXLWT889LZ+T6IURfzis=</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 </dict>
