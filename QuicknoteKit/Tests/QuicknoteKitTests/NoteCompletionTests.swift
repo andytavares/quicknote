@@ -19,6 +19,21 @@ struct NoteCompletionTests {
         #expect(done.dueAt == newYorkDate(2026, 10, 29, 9))
     }
 
+    @Test func completingARepeatingNoteHidesItUntilItIsNextDue() {
+        var note = Note(body: "Water plants", kind: .task)
+        note.recurrence = RecurrenceRule(frequency: .weekly, weekdays: [3, 5])
+        note.dueAt = newYorkDate(2026, 10, 27, 9)
+        note.snoozedUntil = newYorkDate(2026, 10, 27, 7)
+        let done = note.completing(now: newYorkDate(2026, 10, 27, 8), calendar: newYorkCalendar)
+        #expect(done.snoozedUntil == newYorkDate(2026, 10, 29, 9))
+    }
+
+    @Test func completingAPlainNoteClearsItsSnooze() {
+        var note = Note(body: "Buy milk", kind: .task)
+        note.snoozedUntil = newYorkDate(2026, 10, 25, 12)
+        #expect(note.completing(now: newYorkDate(2026, 10, 25, 9), calendar: newYorkCalendar).snoozedUntil == nil)
+    }
+
     @Test func overdueRepeatSkipsToAnOccurrenceAfterNowKeepingTheTime() {
         var note = Note(body: "Water plants", kind: .task)
         note.recurrence = RecurrenceRule(frequency: .daily)

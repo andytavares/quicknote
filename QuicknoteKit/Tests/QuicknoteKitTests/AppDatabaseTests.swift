@@ -35,6 +35,19 @@ struct AppDatabaseTests {
         #expect(count == 0)
     }
 
+    @Test func libraryCountsCountNotesAndMeetings() throws {
+        let database = try AppDatabase.inMemory()
+        try database.writer.write { db in
+            var first = Note(body: "Weekly sync")
+            try first.insert(db)
+            var second = Note(body: "Buy milk")
+            try second.insert(db)
+            var meeting = Meeting(noteId: first.id!, title: "Weekly sync")
+            try meeting.insert(db)
+        }
+        #expect(try database.libraryCounts() == LibraryCounts(notes: 2, meetings: 1))
+    }
+
     @Test func titleIsTheFirstNonEmptyLine() {
         #expect(Note(body: "\nLisbon trip\nflights booked").title == "Lisbon trip")
     }

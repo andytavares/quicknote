@@ -12,7 +12,7 @@ Notes wait as small coloured tabs on the right edge of your screen. Nothing else
 - **Reminders coming back.** A note with a due time, or a snoozed note, sends a notification at that time with **Done** and **Snooze 1 hour**. At the same moment the note slides out on the edge with a small bounce (a plain fade with Reduce Motion). Clicking the notification opens the note on the edge.
 - **Hide for an hour.** `EdgeFeature.hideForOneHour()` hides every edge panel; they return by themselves. Notifications still arrive.
 
-Done on a repeating note moves it to its next occurrence instead of completing it ([sorting-and-repeats.md](sorting-and-repeats.md)); it stays on the edge.
+Done on a repeating note moves it to its next occurrence instead of completing it ([sorting-and-repeats.md](sorting-and-repeats.md)); it leaves the edge and comes back when it is next due.
 
 ## Permissions, and exactly when
 

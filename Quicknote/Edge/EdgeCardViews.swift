@@ -21,13 +21,7 @@ enum EdgeCard {
 }
 
 extension Note {
-    var edgeColor: Color {
-        var value: UInt64 = 0
-        Scanner(string: color.trimmingCharacters(in: ["#"])).scanHexInt64(&value)
-        return Color(
-            red: Double((value >> 16) & 0xFF) / 255, green: Double((value >> 8) & 0xFF) / 255,
-            blue: Double(value & 0xFF) / 255)
-    }
+    var edgeColor: Color { Color(hex: color) }
 }
 
 struct EdgeCardView: View {

@@ -83,6 +83,13 @@ final class CalendarBridge {
     }
 
     /// Listens for Calendar changes and applies them to notes. Safe to call more than once.
+    /// At launch: catch up on Calendar edits made while Quicknote was closed. Never asks for access.
+    func resumeSyncingIfAllowed() {
+        guard EKEventStore.authorizationStatus(for: .event) == .fullAccess else { return }
+        syncNotesFromCalendar()
+        startSyncingFromCalendar()
+    }
+
     func startSyncingFromCalendar() {
         guard observer == nil else { return }
         observer = NotificationCenter.default.addObserver(

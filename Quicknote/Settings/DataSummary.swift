@@ -1,5 +1,4 @@
 import Foundation
-import GRDB
 import QuicknoteKit
 
 /// What Quicknote stores on this Mac, shown in Settings › Data.
@@ -17,11 +16,9 @@ struct DataSummary: Equatable {
     }
 
     static func load(from environment: AppEnvironment) throws -> DataSummary {
-        let counts = try environment.database.writer.read { db in
-            (try Note.fetchCount(db), try Meeting.fetchCount(db))
-        }
+        let counts = try environment.database.libraryCounts()
         return DataSummary(
-            noteCount: counts.0, meetingCount: counts.1, byteCount: folderSize(environment.paths.root))
+            noteCount: counts.notes, meetingCount: counts.meetings, byteCount: folderSize(environment.paths.root))
     }
 
     static func folderSize(_ folder: URL) -> Int64 {

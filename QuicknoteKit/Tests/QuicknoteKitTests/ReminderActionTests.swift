@@ -7,14 +7,14 @@ struct ReminderActionTests {
     private let calendar = ReminderFixtures.calendar
     private let now = ReminderFixtures.date(10, 25, 18)
 
-    @Test func doneOnARepeatingTaskAdvancesItAndClearsTheSnooze() {
+    @Test func doneOnARepeatingTaskAdvancesItAndHidesItUntilThen() {
         var note = ReminderFixtures.note("Water plants", id: 1, due: ReminderFixtures.date(10, 25, 18))
         note.recurrence = RecurrenceRule(frequency: .daily)
         note.snoozedUntil = ReminderFixtures.date(10, 25, 19)
         let result = ReminderAction.done.apply(to: note, now: now, calendar: calendar)
         #expect(result.completedAt == nil)
         #expect(result.dueAt == ReminderFixtures.date(10, 26, 18))
-        #expect(result.snoozedUntil == nil)
+        #expect(result.snoozedUntil == ReminderFixtures.date(10, 26, 18))
     }
 
     @Test func doneOnAPlainReminderCompletesIt() {

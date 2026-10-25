@@ -61,6 +61,7 @@ extension Note {
     public func completing(now: Date, calendar: Calendar) -> Note {
         var result = self
         result.updatedAt = now
+        result.snoozedUntil = nil
         guard let rule = recurrence, let dueAt else {
             result.completedAt = now
             return result
@@ -68,6 +69,8 @@ extension Note {
         var next = rule.nextOccurrence(after: dueAt, calendar: calendar)
         while next <= now { next = rule.nextOccurrence(after: next, calendar: calendar) }
         result.dueAt = next
+        // Off the edge until it is due again, then it comes back like a snoozed note.
+        result.snoozedUntil = next
         return result
     }
 }

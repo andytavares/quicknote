@@ -50,16 +50,16 @@ Full calendar access (`NSCalendarsFullAccessUsageDescription`), asked at first u
 ## Code
 
 - Entry points: `Quicknote/Calendar/CalendarConfirmation.swift:11` (`present(forNoteId:)`), `Quicknote/Brief/BriefFeature.swift:8` (`show()`)
-- Calendar access: `Quicknote/Calendar/CalendarBridge.swift:20` (`ensureAccess`), `:43` (`saveEvent`), `:57` (`updateEvent`), `:67` (`deleteEvent`), `:77` (`eventsToday`), `:86` (`startSyncingFromCalendar`)
+- Calendar access: `Quicknote/Calendar/CalendarBridge.swift:20` (`ensureAccess`), `:43` (`saveEvent`), `:57` (`updateEvent`), `:67` (`deleteEvent`), `:77` (`eventsToday`), `startSyncingFromCalendar`, `resumeSyncingIfAllowed`
 - Pure mapping: `Quicknote/Calendar/EventDraft.swift` (`EventDraft`, `RecurrenceRule.eventKitRule`, `BriefEvent.init(event:)`, `EventSyncRule`)
 - Brief: `Quicknote/Brief/BriefModel.swift:28` (`toggle`), `:39` (`toggleReadAloud`), `Quicknote/Brief/BriefView.swift`
 - Tests: `QuicknoteTests/CalendarMappingTests.swift`
 
 ## Limits
 
-- Syncing back starts after the first calendar access in a session (first confirmation or Brief). Changes made in Calendar while Quicknote was closed are applied the next time that happens and an `EKEventStoreChanged` arrives.
+- Syncing back starts at launch when calendar access was already granted (`CalendarBridge.resumeSyncingIfAllowed`, called from `AppDelegate`), which also applies edits made in Calendar while Quicknote was closed. It never asks for access at launch; before the first grant, syncing starts with the first confirmation or Brief.
 - For repeating events only the first occurrence's start is compared.
-- Completed notes are not synced; a note moved by an event edit does not re-run reminders until the planner next runs.
+- Completed notes are not synced. A note moved by an event edit is saved to the database, and the reminder scheduler follows database changes, so its reminder moves too.
 - Updating a note's event does not ask again; the confirmation is only for creating it.
 
 ## Manual test checklist

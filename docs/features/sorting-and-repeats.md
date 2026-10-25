@@ -48,7 +48,7 @@ Then, separately: a repeat phrase anywhere sets the repeat, and a note that woul
 
 ### Finishing a repeating note
 
-Completing a repeating note with a due date does not complete it: the due date moves to the next occurrence after now, and `completedAt` stays empty. Occurrences are found with calendar math, so a 09:00 note stays at 09:00 across the 1 Nov 2026 US clock change. An overdue note skips occurrences that are already past.
+Completing a repeating note with a due date does not complete it: the due date moves to the next occurrence after now, and `completedAt` stays empty. The note is snoozed until that next occurrence, so it leaves the edge and comes back when it is due. Occurrences are found with calendar math, so a 09:00 note stays at 09:00 across the 1 Nov 2026 US clock change. An overdue note skips occurrences that are already past.
 
 ## Edge cases and known limits
 

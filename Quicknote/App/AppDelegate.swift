@@ -13,6 +13,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         Shortcuts.register()
         EdgeFeature.start()
+        CalendarBridge.shared.resumeSyncingIfAllowed()
         UpdatesFeature.start()
         WelcomeFeature.showIfFirstLaunch()
     }

@@ -8,9 +8,7 @@ public enum ReminderAction: String, Sendable {
     public func apply(to note: Note, now: Date, calendar: Calendar) -> Note {
         switch self {
         case .done:
-            var result = note.completing(now: now, calendar: calendar)
-            result.snoozedUntil = nil
-            return result
+            return note.completing(now: now, calendar: calendar)
         case .snoozeOneHour:
             return note.snoozed(until: now.addingTimeInterval(60 * 60))
         }
