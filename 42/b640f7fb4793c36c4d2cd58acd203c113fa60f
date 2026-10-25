@@ -1,0 +1,33 @@
+Quicknote/Search/SearchFeature.swift
+  s_ad65a60407dcd0::t_68bab40ed9d969 1-5,7-55
+Quicknote/Search/SearchModel.swift
+  s_ad65a60407dcd0::t_251ade854ebd7d 1-68
+Quicknote/Search/SearchPanel.swift
+  s_ad65a60407dcd0::t_8391cbb85c7e07 1-32
+Quicknote/Search/SearchRow.swift
+  s_ad65a60407dcd0::t_9d70ec790bb52a 1-79
+Quicknote/Search/SearchSnippet.swift
+  s_ad65a60407dcd0::t_8d64408a2cbe87 1-31
+Quicknote/Search/SearchView.swift
+  s_ad65a60407dcd0::t_198080b79dbe9d 1-131
+QuicknoteTests/SearchTests.swift
+  s_ad65a60407dcd0::t_10ef5a96367ba8 1-128
+docs/features/search-and-export.md
+  s_ad65a60407dcd0::t_4e765ef3c617d5 71-120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "42b640f7fb4793c36c4d2cd58acd203c113fa60f",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
