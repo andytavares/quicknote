@@ -1,0 +1,21 @@
+Quicknote/Editor/EditorToolbar.swift
+  s_ad65a60407dcd0::t_34c47f13c92314 47
+Quicknote/Editor/NoteShareMenu.swift
+  s_ad65a60407dcd0::t_34c47f13c92314 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "908a33190cba8d089f8962c554f513aff8682fb6",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
