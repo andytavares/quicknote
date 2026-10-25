@@ -1,0 +1,29 @@
+Quicknote/Capture/CaptureFeature.swift
+  s_ad65a60407dcd0::t_b3ef3cf778a29e 8-9,15,26
+Quicknote/App/KeyPanel.swift
+  s_ad65a60407dcd0::t_b3ef3cf778a29e 1-43
+docs/features/capture.md
+  s_ad65a60407dcd0::t_f12ab55345674f 44
+docs/features/search-and-export.md
+  s_ad65a60407dcd0::t_f12ab55345674f 107
+Quicknote/Meetings/MeetingsFeature.swift
+  s_ad65a60407dcd0::t_b3ef3cf778a29e 7,39
+Quicknote/Search/SearchFeature.swift
+  s_ad65a60407dcd0::t_b3ef3cf778a29e 7,17,37,51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "da2100df88a2269df61d6c1257a36af2644e49c2",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
