@@ -24,11 +24,14 @@ enum MeetingWindow {
         window.isReleasedWhenClosed = false
         window.center()
         windows[meetingId] = (window, model)
-        NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) {
-            _ in
-            MainActor.assumeIsolated {
+        // A task rather than a block observer: it ends at close, so the model and its player are released.
+        Task {
+            for await _ in NotificationCenter.default.notifications(
+                named: NSWindow.willCloseNotification, object: window)
+            {
                 model.close()
                 windows[meetingId] = nil
+                return
             }
         }
         NSApp.activate()
