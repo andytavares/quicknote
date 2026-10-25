@@ -1,0 +1,21 @@
+docs/features/meetings.md
+  s_ad65a60407dcd0::t_43343d0bf9716c 90,169
+docs/features/settings-and-permissions.md
+  s_ad65a60407dcd0::t_43343d0bf9716c 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f956878593d353b72cd865656a34d0aa6ae26694",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
