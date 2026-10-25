@@ -1,0 +1,39 @@
+QuicknoteKit/Tests/QuicknoteKitTests/NoteLinkParserTests.swift
+  s_ad65a60407dcd0::t_229201c2f4e465 1-22
+QuicknoteKit/Sources/QuicknoteKit/Notes/NoteLinkParser.swift
+  s_ad65a60407dcd0::t_b670f438b901c8 1-13
+QuicknoteKit/Sources/QuicknoteKit/Notes/NoteRepository.swift
+  s_ad65a60407dcd0::t_e1402f2fe6937b 1-117
+QuicknoteKit/Sources/QuicknoteKit/Notes/ProjectRepository.swift
+  s_ad65a60407dcd0::t_311b6330dc2f9b 1-46
+QuicknoteKit/Tests/QuicknoteKitTests/ProjectRepositoryTests.swift
+  s_ad65a60407dcd0::t_067077927ddf32 1-47
+docs/features/notes-links-formatting.md
+  s_ad65a60407dcd0::t_5573be94f974d9 1-44
+QuicknoteKit/Tests/QuicknoteKitTests/EdgeFilterTests.swift
+  s_ad65a60407dcd0::t_b98a1f851bb292 1-93
+QuicknoteKit/Tests/QuicknoteKitTests/NoteRepositoryTests.swift
+  s_ad65a60407dcd0::t_a986ebbb76ad5a 1-135
+QuicknoteKit/Sources/QuicknoteKit/Notes/EdgeFilter.swift
+  s_ad65a60407dcd0::t_617fdcf85c8221 1-60
+QuicknoteKit/Tests/QuicknoteKitTests/SlackMarkdownTests.swift
+  s_ad65a60407dcd0::t_9da52d78ca56d9 1-74
+QuicknoteKit/Sources/QuicknoteKit/Editor/SlackMarkdown.swift
+  s_ad65a60407dcd0::t_1ea9b1976bf89c 1-109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8b395b1a1670e46f668bb16133236f562c9636fc",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
