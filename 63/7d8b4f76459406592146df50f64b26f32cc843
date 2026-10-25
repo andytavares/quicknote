@@ -1,0 +1,47 @@
+Quicknote/Library/GalleryKind.swift
+  s_ad65a60407dcd0::t_c4309c010a77a0 1-17
+Quicknote/Library/GalleryView.swift
+  s_ad65a60407dcd0::t_1dac8faca298b3 1-67
+Quicknote/Library/LibraryFeature.swift
+  s_ad65a60407dcd0::t_f0178b3c6e4e3c 1-4,6-16,18-32
+Quicknote/Library/LibraryModel+Actions.swift
+  s_ad65a60407dcd0::t_b732e6b5e9a63c 1-71
+Quicknote/Library/LibraryModel.swift
+  s_ad65a60407dcd0::t_86fca7a3ece76a 1-79
+Quicknote/Library/LibrarySection.swift
+  s_ad65a60407dcd0::t_bc82e19d4cb071 1-90
+Quicknote/Library/LibrarySidebar.swift
+  s_ad65a60407dcd0::t_35f3eaf14bc0ec 1-96
+Quicknote/Library/LibraryView.swift
+  s_ad65a60407dcd0::t_4d3f4b5c584fde 1-69
+Quicknote/Library/MeetingListView.swift
+  s_ad65a60407dcd0::t_17e986f6a9aebe 1-29
+Quicknote/Library/SitesAndAppsView.swift
+  s_ad65a60407dcd0::t_54ce9560bcd0f7 1-43
+Quicknote/Library/TaskGrouper.swift
+  s_ad65a60407dcd0::t_79ec45349a620b 1-73
+Quicknote/Library/TaskListView.swift
+  s_ad65a60407dcd0::t_465ad6c67804ae 1-105
+Quicknote/Library/TaskRowText.swift
+  s_ad65a60407dcd0::t_db71ea406d93de 1-26
+QuicknoteTests/LibraryTests.swift
+  s_ad65a60407dcd0::t_22f8b6465e2d21 1-130
+docs/features/library.md
+  s_ad65a60407dcd0::t_8b00bde813a496 1-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "637d8b4f76459406592146df50f64b26f32cc843",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
