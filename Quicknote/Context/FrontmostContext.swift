@@ -10,8 +10,9 @@ struct CapturedContext: Equatable {
     var key: ContextKey { ContextKey(appBundleId: appBundleId, siteHost: siteHost) }
 }
 
-/// Owned by the Edge unit, which implements app and browser detection.
 enum FrontmostContext {
-    /// The context in front right now, ignoring Quicknote's own windows.
-    static func current() async -> CapturedContext? { nil }
+    /// The context in front right now, ignoring Quicknote's own windows. May ask for Automation once per browser.
+    static func current() async -> CapturedContext? {
+        FrontmostTracker.shared.refresh(mayPrompt: true)
+    }
 }
