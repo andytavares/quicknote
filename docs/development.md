@@ -19,7 +19,7 @@ open Quicknote.xcodeproj      # run the Quicknote scheme
 | What | Command | Notes |
 |---|---|---|
 | Lint | `scripts/lint.sh` | `swift format` with `.swift-format`. Auto-fix: `swift format format --in-place --recursive Quicknote QuicknoteKit/Sources QuicknoteKit/Tests QuicknoteTests` |
-| Tests | `scripts/test.sh` | QuicknoteKit with `swift test`, then the app with `xcodebuild test` |
+| Tests | `scripts/test.sh` | QuicknoteKit with `swift test`, then the app with `xcodebuild test` (below macOS 27, as on CI, the app tests are only built) |
 | Coverage | `scripts/coverage.sh` | Line coverage for both |
 | One package test | `swift test --package-path QuicknoteKit --filter EntryClassifierTests` | Fastest loop for logic |
 

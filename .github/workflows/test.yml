@@ -2,7 +2,7 @@ name: test
 on: [push, pull_request]
 jobs:
   test:
-    # Needs a runner with macOS 27 and Xcode 27.
+    # Hosted runners are macOS 26: scripts/test.sh builds the app tests here and runs them only on macOS 27.
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
