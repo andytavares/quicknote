@@ -1,0 +1,37 @@
+QuicknoteKit/Sources/QuicknoteKit/Attachments/AttachmentStore.swift
+  s_ad65a60407dcd0::t_3eb7701391b07b 1-55
+QuicknoteKit/Sources/QuicknoteKit/Export/DataEraser.swift
+  s_ad65a60407dcd0::t_bf3e7cd005ae84 1-37
+QuicknoteKit/Sources/QuicknoteKit/Export/MarkdownExporter.swift
+  s_ad65a60407dcd0::t_947629b0b91b99 1-89
+QuicknoteKit/Sources/QuicknoteKit/Search/SearchIndex.swift
+  s_ad65a60407dcd0::t_a8347ea907e16c 1-97
+QuicknoteKit/Tests/QuicknoteKitTests/AttachmentStoreTests.swift
+  s_ad65a60407dcd0::t_0417c2cb1af74f 1-75
+QuicknoteKit/Tests/QuicknoteKitTests/DataEraserTests.swift
+  s_ad65a60407dcd0::t_f53f60322028d3 1-61
+QuicknoteKit/Tests/QuicknoteKitTests/MarkdownExporterTests.swift
+  s_ad65a60407dcd0::t_e87b41654fba6a 1-92
+QuicknoteKit/Tests/QuicknoteKitTests/SearchIndexTests.swift
+  s_ad65a60407dcd0::t_a46e0d128df0e1 1-111
+QuicknoteKit/Tests/QuicknoteKitTests/TemporaryPaths.swift
+  s_ad65a60407dcd0::t_98b272479360bd 1-27
+docs/features/search-and-export.md
+  s_ad65a60407dcd0::t_14de8d5055fb6d 1-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b12524b452ac3c1dceef5987578bfacf75d83032",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
