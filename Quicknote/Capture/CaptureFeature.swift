@@ -5,14 +5,14 @@ import SwiftUI
 enum CaptureFeature {
     private static let captureModel = CaptureModel()
     private static let stopModel = StopModel()
-    private static var capturePanel: CapturePanel?
-    private static var stopPanel: CapturePanel?
+    private static var capturePanel: KeyPanel?
+    private static var stopPanel: KeyPanel?
 
     /// ⌃⌥N. The context is read first, so it is the app you were in and not Quicknote.
     static func showPanel() {
         Task {
             captureModel.prepare(context: await FrontmostContext.current())
-            let panel = capturePanel ?? CapturePanel(rootView: CaptureView(model: captureModel))
+            let panel = capturePanel ?? KeyPanel(rootView: CaptureView(model: captureModel))
             captureModel.onClose = { panel.close() }
             capturePanel = panel
             panel.showCentered()
@@ -23,7 +23,7 @@ enum CaptureFeature {
     static func showSaveContext() {
         Task {
             stopModel.prepare(context: await FrontmostContext.current())
-            let panel = stopPanel ?? CapturePanel(rootView: StopView(model: stopModel))
+            let panel = stopPanel ?? KeyPanel(rootView: StopView(model: stopModel))
             stopModel.onClose = { panel.close() }
             stopPanel = panel
             panel.showCentered()

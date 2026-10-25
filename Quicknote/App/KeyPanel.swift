@@ -1,9 +1,9 @@
 import AppKit
-import QuicknoteKit
 import SwiftUI
 
-/// Floating panel that can take keys without activating the app over the one the user is in.
-final class SearchPanel: NSPanel {
+/// Floating panel that takes keys without activating Quicknote, over any app including full-screen ones.
+/// Used by search, capture, Save where you stopped and the meeting start sheet.
+final class KeyPanel: NSPanel {
     override var canBecomeKey: Bool { true }
 
     init(contentView: NSView) {
@@ -20,7 +20,18 @@ final class SearchPanel: NSPanel {
         self.contentView = contentView
     }
 
+    convenience init<Content: View>(rootView: Content) {
+        self.init(contentView: NSHostingView(rootView: rootView))
+    }
+
     override func cancelOperation(_ sender: Any?) { close() }
+
+    /// Sizes to the content, centres on the mouse's screen and takes keys.
+    func showCentered() {
+        if let size = contentView?.fittingSize { setContentSize(size) }
+        centerOnMouseScreen()
+        makeKeyAndOrderFront(nil)
+    }
 
     /// Centres horizontally and in the upper third of the screen the mouse is on.
     func centerOnMouseScreen() {

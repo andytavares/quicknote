@@ -4,7 +4,7 @@ import SwiftUI
 /// Meeting recorder and detail (S17, S18). Owned by the Meetings unit.
 enum MeetingsFeature {
     private static let recorder = MeetingRecorder()
-    private static var startSheet: SearchPanel?
+    private static var startSheet: KeyPanel?
 
     static var isRecording: Bool { recorder.isRecording }
 
@@ -36,7 +36,7 @@ enum MeetingsFeature {
             Task { await recorder.start(title: title, microphone: microphone, macAudio: macAudio) }
         }
         let host = NSHostingView(rootView: view)
-        let panel = SearchPanel(contentView: host)
+        let panel = KeyPanel(contentView: host)
         panel.setContentSize(host.fittingSize)
         panel.centerOnMouseScreen()
         panel.makeKeyAndOrderFront(nil)

@@ -41,7 +41,7 @@ Save where you stopped also shows, collapsed, the last stop saved for the same a
 - `Quicknote/Capture/CaptureFeature.swift:12` `showPanel`, `:23` `showSaveContext`: read context, then show the panel.
 - `Quicknote/Capture/CaptureDraft.swift:32` `makeNote` (draft to note), `:26` `cycleKind`.
 - `Quicknote/Capture/CaptureModel.swift:28` `save`.
-- `Quicknote/Capture/CapturePanel.swift:6` non-activating key panel; `CaptureView.swift` the layout.
+- `Quicknote/App/KeyPanel.swift` the shared non-activating key panel; `Quicknote/Capture/CaptureView.swift` the layout.
 - `Quicknote/Capture/StopNote.swift:19` `body` format; `StopModel.swift:12` last stop lookup; `StopView.swift`.
 - `Quicknote/Attachments/AttachmentImporter.swift:7` `importFiles(_:toNoteId:)`; `ImageTextReader.swift:7` `text(inImageAt:)`.
 - Tests: `QuicknoteTests/CaptureTests.swift`.

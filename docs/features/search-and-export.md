@@ -104,7 +104,7 @@ With no query the panel says "Type to search notes, meetings and files"; with no
 ### Entry points
 
 - Open the panel: `Quicknote/Search/SearchFeature.swift:11` (`showPanel`), called from `Shortcuts.swift`
-- Panel window: `Quicknote/Search/SearchPanel.swift:6`
+- Panel window: `Quicknote/App/KeyPanel.swift` (shared with capture and the meeting start sheet)
 - Query, debounce, selection: `Quicknote/Search/SearchModel.swift:7`
 - Rows, groups, open actions: `Quicknote/Search/SearchRow.swift:16`
 - Highlight rendering: `Quicknote/Search/SearchSnippet.swift:7`

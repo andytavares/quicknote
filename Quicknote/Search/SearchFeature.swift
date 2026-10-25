@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Search panel (S15): ⌃⌥F opens it over any app.
 enum SearchFeature {
-    private static var panel: SearchPanel?
+    private static var panel: KeyPanel?
     private static var focusLossObserver: NSObjectProtocol?
     private static let model = makeModel()
 
@@ -14,7 +14,7 @@ enum SearchFeature {
             panel.makeKeyAndOrderFront(nil)
             return
         }
-        let panel = SearchPanel(contentView: NSView())
+        let panel = KeyPanel(contentView: NSView())
         installContent(in: panel)
         panel.centerOnMouseScreen()
         panel.makeKeyAndOrderFront(nil)
@@ -34,7 +34,7 @@ enum SearchFeature {
         return SearchModel { query in (try? index.search(query, limitPerGroup: 8).rows) ?? [] }
     }
 
-    private static func installContent(in panel: SearchPanel) {
+    private static func installContent(in panel: KeyPanel) {
         let view = SearchView(
             model: model,
             open: { row in
@@ -48,7 +48,7 @@ enum SearchFeature {
         panel.setContentSize(host.fittingSize)
     }
 
-    private static func closeWhenFocusIsLost(_ panel: SearchPanel) {
+    private static func closeWhenFocusIsLost(_ panel: KeyPanel) {
         focusLossObserver = NotificationCenter.default.addObserver(
             forName: NSWindow.didResignKeyNotification, object: panel, queue: .main
         ) { _ in MainActor.assumeIsolated { panel.close() } }
