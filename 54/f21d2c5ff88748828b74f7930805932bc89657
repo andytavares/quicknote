@@ -1,0 +1,37 @@
+QuicknoteKit/Package.resolved
+  s_ad65a60407dcd0::t_f1e6d71d0cd43c 2
+QuicknoteKit/Sources/QuicknoteKit/Meetings/ActionItemExtractor.swift
+  s_ad65a60407dcd0::t_becc0df20436a2 1-75
+QuicknoteKit/Sources/QuicknoteKit/Meetings/MeetingRepository.swift
+  s_ad65a60407dcd0::t_e7e78b5ae99db5 1-115
+QuicknoteKit/Sources/QuicknoteKit/Meetings/MeetingTime.swift
+  s_ad65a60407dcd0::t_3abb9a03a85e5a 1-15
+QuicknoteKit/Sources/QuicknoteKit/Meetings/TranscriptExporter.swift
+  s_ad65a60407dcd0::t_158cd0d2aa32eb 1-42
+QuicknoteKit/Tests/QuicknoteKitTests/ActionItemExtractorTests.swift
+  s_ad65a60407dcd0::t_b093e4f0c9efaf 1-63
+QuicknoteKit/Tests/QuicknoteKitTests/MeetingRepositoryTests.swift
+  s_ad65a60407dcd0::t_a7f99621c7c32b 1-100
+QuicknoteKit/Tests/QuicknoteKitTests/MeetingTimeTests.swift
+  s_ad65a60407dcd0::t_af16bb22d8a03b 1-19
+QuicknoteKit/Tests/QuicknoteKitTests/TranscriptExporterTests.swift
+  s_ad65a60407dcd0::t_1a335e60fb61ac 1-62
+docs/features/meetings.md
+  s_ad65a60407dcd0::t_45fa37f09bdcb5 1-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "54f21d2c5ff88748828b74f7930805932bc89657",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
