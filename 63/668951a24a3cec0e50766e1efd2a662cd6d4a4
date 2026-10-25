@@ -1,0 +1,31 @@
+docs/user-guide.md
+  s_ad65a60407dcd0::t_a110f7f784e1c6 1-112
+README.md
+  s_ad65a60407dcd0::t_8474fe97acd13d 1-103
+docs/README.md
+  s_ad65a60407dcd0::t_2ef6a2c7b08251 3-50
+docs/architecture.md
+  s_ad65a60407dcd0::t_a92422d1f2675d 3,38-70
+docs/faq.md
+  s_ad65a60407dcd0::t_194b7dd3d09e96 1-57
+docs/privacy.md
+  s_ad65a60407dcd0::t_c267700e9434d3 1-56
+docs/shortcuts.md
+  s_ad65a60407dcd0::t_927876afac60aa 1-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "63668951a24a3cec0e50766e1efd2a662cd6d4a4",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
