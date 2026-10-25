@@ -30,7 +30,7 @@ enum LiveTranscriberError: LocalizedError {
 }
 
 /// On-device English speech to text for one audio source. `append` may be called from any thread,
-/// such as an audio tap; buffers that arrive before `start()` returns are dropped.
+/// such as an audio tap; audio that arrives while `start()` is still preparing is held and sent first.
 nonisolated final class LiveTranscriber: Sendable {
     let updates: AsyncStream<TranscriptUpdate>
     private let updateContinuation: AsyncStream<TranscriptUpdate>.Continuation
@@ -44,6 +44,7 @@ nonisolated final class LiveTranscriber: Sendable {
         var converter: AudioBufferConverter?
         var resultsTask: Task<Void, any Error>?
         var lines: [SpokenLine] = []
+        var backlog = AudioBacklog()
     }
 
     init(speaker: Speaker) {
@@ -63,15 +64,26 @@ nonisolated final class LiveTranscriber: Sendable {
         let resultsTask = Task { for try await result in transcriber.results { self.receive(result) } }
         session.withLock {
             $0.analyzer = analyzer
-            $0.converter = AudioBufferConverter(outputFormat: format)
             $0.resultsTask = resultsTask
+            let converter = AudioBufferConverter(outputFormat: format)
+            // Sent under the lock so audio appended meanwhile cannot overtake the held audio.
+            for buffer in $0.backlog.drain() { yield(buffer, through: converter) }
+            $0.converter = converter
         }
         try await analyzer.start(inputSequence: inputs)
     }
 
     func append(_ buffer: AVAudioPCMBuffer) {
-        let converted = session.withLock { $0.converter }?.convert(buffer)
-        if let converted { inputContinuation.yield(AnalyzerInput(buffer: converted)) }
+        let held = HeldAudioBuffer(buffer: buffer)
+        let converter = session.withLock { state -> AudioBufferConverter? in
+            if state.converter == nil { state.backlog.add(held) }
+            return state.converter
+        }
+        if let converter { yield(buffer, through: converter) }
+    }
+
+    private func yield(_ buffer: AVAudioPCMBuffer, through converter: AudioBufferConverter) {
+        if let converted = converter.convert(buffer) { inputContinuation.yield(AnalyzerInput(buffer: converted)) }
     }
 
     /// Ends the input, waits for the last words and returns every finished line.

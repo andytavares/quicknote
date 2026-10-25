@@ -38,7 +38,7 @@ The transcript goes through `EntryClassifier`, the same as typed notes, so "remi
 ```swift
 let transcriber = LiveTranscriber(speaker: .me)
 try await transcriber.start()              // installs the English model if missing; throws LiveTranscriberError
-transcriber.append(buffer)                 // any thread; converted to the analyzer's format; ignored before start() returns
+transcriber.append(buffer)                 // any thread; converted to the analyzer's format; audio sent before start() finishes is held and sent first
 for await update in transcriber.updates {  // .partial(String) or .line(SpokenLine)
 }
 let lines = try await transcriber.finish() // [SpokenLine], spans in ms from start
