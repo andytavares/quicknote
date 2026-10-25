@@ -5,3 +5,6 @@ DerivedData/
 *.xcodeproj/
 .build/
 *.profraw
+
+# Release DMGs and appcast, published as GitHub release assets
+releases/
