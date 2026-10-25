@@ -2,4 +2,6 @@
 enum CardsFeature {
     /// Opens the card editor for a note, or a blank card when `fromNoteId` is nil.
     static func newCard(fromNoteId: Int64?) {}
+    /// Reopens a saved card in the editor.
+    static func edit(noteId: Int64) {}
 }
