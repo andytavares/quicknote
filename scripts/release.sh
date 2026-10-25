@@ -40,8 +40,19 @@ archive_and_export() {
     MARKETING_VERSION="$version" CURRENT_PROJECT_VERSION="$(date +%Y%m%d%H%M)" \
     CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="$DEVELOPER_ID_APPLICATION" \
     DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" ENABLE_HARDENED_RUNTIME=YES OTHER_CODE_SIGN_FLAGS="--timestamp"
-  # The archive already holds the signed app; copying it is the export for Developer ID.
-  cp -R "$WORK_DIR/Quicknote.xcarchive/Products/Applications/Quicknote.app" "$WORK_DIR/Quicknote.app"
+  # Export, not copy: only the Developer ID export re-signs Sparkle's helpers (sparkle-project.org/documentation/sandboxing).
+  cat > "$WORK_DIR/ExportOptions.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>method</key><string>developer-id</string>
+  <key>signingStyle</key><string>manual</string>
+  <key>signingCertificate</key><string>$DEVELOPER_ID_APPLICATION</string>
+  <key>teamID</key><string>$DEVELOPMENT_TEAM</string>
+</dict></plist>
+PLIST
+  xcodebuild -exportArchive -quiet -archivePath "$WORK_DIR/Quicknote.xcarchive" \
+    -exportOptionsPlist "$WORK_DIR/ExportOptions.plist" -exportPath "$WORK_DIR"
   codesign --verify --deep --strict "$WORK_DIR/Quicknote.app"
 }
 
