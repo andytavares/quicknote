@@ -63,7 +63,7 @@ Files live under `~/Library/Application Support/Quicknote/Attachments/<noteId>/`
 - `Snap/SnapOverlay.swift:9` overlay windows and action bar; `Snap/SnapCapture.swift:42` capture.
 - `Snap/SnapEditor.swift:11` window; `Snap/SnapEditorModel.swift:7` tools, selection, undo; `Snap/SnapTool.swift:49` what each tool makes.
 - `Snap/SnapSaver.swift:30` save; `:49` preview replacement.
-- Shared canvas: `Canvas/CanvasView.swift`, `Canvas/CanvasRenderer.swift`, `Canvas/ElementHandles.swift` ([canvas](canvas.md)).
+- Shared canvas: `Canvas/CanvasView.swift`, `Canvas/CanvasRenderer.swift`, `Canvas/ElementHandles.swift`, `Canvas/ElementDrag.swift` (select, move, resize and rotate; also used by Cards) ([canvas](canvas.md)).
 - Tests: `QuicknoteTests/SnapTests.swift`, `SnapSaverTests.swift`, `CanvasRendererTests.swift`.
 
 ## Limits
