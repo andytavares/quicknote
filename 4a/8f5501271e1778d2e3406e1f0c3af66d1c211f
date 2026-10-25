@@ -1,0 +1,27 @@
+Quicknote/Attachments/AttachmentImporter.swift
+  s_ad65a60407dcd0::t_936714d894b65b 1-6
+Quicknote/Attachments/ImageTextReader.swift
+  s_ad65a60407dcd0::t_d7c2b4667c5082 1-6
+Quicknote/Cards/CardsFeature.swift
+  s_ad65a60407dcd0::t_b27680b488166f 5-6
+Quicknote/Editor/NoteEditorView.swift
+  s_ad65a60407dcd0::t_fb8d5ac29e57ec 1-10
+Quicknote/Snap/SnapFeature.swift
+  s_ad65a60407dcd0::t_2ed6f566198714 4-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a8f5501271e1778d2e3406e1f0c3af66d1c211f",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
