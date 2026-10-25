@@ -1,9 +1,11 @@
 import AppKit
+import OSLog
 import QuicknoteKit
 import SwiftUI
 import UniformTypeIdentifiers
 
 struct CardEditorView: View {
+    private static let logger = Logger(subsystem: "app.quicknote.Quicknote", category: "Cards")
     @Bindable var model: CardEditorModel
     @FocusState private var isCanvasFocused: Bool
     @State private var errorMessage: String?
@@ -22,7 +24,7 @@ struct CardEditorView: View {
         }
         .frame(minWidth: 900, minHeight: 560)
         .toolbar { toolbarContent }
-        .onDisappear { if model.isEdited { _ = try? model.save() } }
+        .onDisappear(perform: saveOnClose)
         .alert(
             "Couldn't save the card",
             isPresented: Binding(get: { errorMessage != nil }, set: { _ in errorMessage = nil })
@@ -86,7 +88,7 @@ struct CardEditorView: View {
             Button("Redo", systemImage: "arrow.uturn.forward") { model.redo() }
                 .keyboardShortcut("z", modifiers: [.command, .shift])
                 .accessibilityLabel("Redo")
-            Button("Save PNG") { Task { await payload().map { try? ShareActions.savePNG($0, fileName: "Card.png") } } }
+            Button("Save PNG") { Task { await savePNG() } }
                 .accessibilityLabel("Save the card as a PNG file")
             ShareMenu(payload: { await payload() })
         }
@@ -102,6 +104,19 @@ struct CardEditorView: View {
             errorMessage = error.localizedDescription
             return nil
         }
+    }
+
+    private func savePNG() async {
+        guard let payload = await payload() else { return }
+        do { try ShareActions.savePNG(payload, fileName: "Card.png") } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    /// The window is going away, so a failure can only be logged.
+    private func saveOnClose() {
+        guard model.isEdited else { return }
+        do { _ = try model.save() } catch { Self.logger.error("Card not saved on close: \(error)") }
     }
 
     private func chooseAndAddPhoto() {
@@ -143,9 +158,16 @@ struct CardStylesColumn: View {
         .frame(width: 110)
     }
 
+    /// Rendered once: they depend on nothing the user edits, and the column re-renders on every canvas change.
+    private static let thumbnails: [CardStyle: CGImage] = Dictionary(
+        uniqueKeysWithValues: CardStyle.allCases.compactMap { style in
+            let document = CanvasDocument(background: .card(style: style, size: .square))
+            let resources = CanvasResources(image: { _ in nil }, paintBackground: CardBackgroundPainter.paint)
+            return CanvasRenderer.render(document, scale: 0.08, resources: resources).map { (style, $0) }
+        })
+
     @ViewBuilder private func thumbnail(of style: CardStyle) -> some View {
-        let document = CanvasDocument(background: .card(style: style, size: .square))
-        if let image = CanvasRenderer.render(document, scale: 0.08, resources: model.resources) {
+        if let image = Self.thumbnails[style] {
             Image(decorative: image, scale: 1).resizable().scaledToFit().frame(width: 80, height: 80)
         }
     }

@@ -50,6 +50,7 @@ final class CardEditorModel {
     private var drag: Drag?
     private var recorded: CanvasDocument
     private let initial: CanvasDocument
+    private let initialNoteId: Int64?
 
     init(document: CanvasDocument, noteId: Int64?, saver: CardSaver) {
         self.document = document
@@ -57,6 +58,7 @@ final class CardEditorModel {
         self.saver = saver
         self.recorded = document
         self.initial = document
+        self.initialNoteId = noteId
         history.record(document)
         loadPhotos()
     }
@@ -93,7 +95,8 @@ final class CardEditorModel {
         }
     }
 
-    var isEdited: Bool { document != initial }
+    /// A note created for a photo counts as an edit, so closing saves it as a card instead of leaving a bare note.
+    var isEdited: Bool { document != initial || noteId != initialNoteId }
 
     var selectedElement: CanvasElement? { document.elements.first { $0.id == selectedID } }
 

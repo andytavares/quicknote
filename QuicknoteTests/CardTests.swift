@@ -155,4 +155,26 @@ struct CardTests {
         #expect(attachments.map(\.fileName) == ["preview.png"])
         #expect(attachments.map(\.kind) == [.snap])
     }
+
+    @Test func savingACardWhoseNoteWasDeletedReturnsTheNewNote() throws {
+        let saver = try makeSaver()
+        let model = CardEditorModel(document: CardEditorModel.startingDocument(text: "Hi"), noteId: nil, saver: saver)
+        let first = try model.save()
+        try saver.repository.delete(noteId: first)
+        let second = try model.save()
+        #expect(second != first)
+        #expect(try saver.repository.note(id: second)?.canvas == model.document)
+    }
+
+    @Test func aCardWhoseNoteWasCreatedForAPhotoStillSavesAfterUndo() throws {
+        let model = try makeModel()
+        let folder = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let file = folder.appending(path: "lake.png")
+        try #require(SnapTestSupport.image(width: 40, height: 20).pngData).write(to: file)
+        try model.addPhoto(fileAt: file)
+        model.undo()
+        #expect(model.document.elements.isEmpty)
+        #expect(model.isEdited)
+    }
 }

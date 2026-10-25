@@ -55,9 +55,9 @@ struct CardSaver {
         note.body = Self.body(of: document, at: note.createdAt)
         note.canvas = document
         try repository.save(&note, now: now)
-        if let preview = CanvasRenderer.render(document, resources: resources(noteId: id)) {
-            try SnapSaver(repository: repository, attachments: attachments).replacePreview(preview, noteId: id)
+        if let preview = CanvasRenderer.render(document, resources: resources(noteId: note.id!)) {
+            try SnapSaver(repository: repository, attachments: attachments).replacePreview(preview, noteId: note.id!)
         }
-        return id
+        return note.id!
     }
 }
