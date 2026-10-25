@@ -103,15 +103,23 @@ public struct NoteRepository: Sendable {
         }
     }
 
+    /// Rebuilds links from this note and links to it, so renames and late-created targets stay linked.
     private func rebuildLinks(for note: Note, _ db: Database) throws {
         guard let noteId = note.id else { return }
-        try NoteLink.filter(Column("fromNoteId") == noteId).deleteAll(db)
+        try NoteLink.filter(Column("fromNoteId") == noteId || Column("toNoteId") == noteId).deleteAll(db)
         let wanted = Set(NoteLinkParser.linkedTitles(in: note.body).map { $0.lowercased() })
+        let ownTitle = note.title.lowercased()
         // shortcut: loads every note body to match titles, fine for a personal library.
         let rows = try Row.fetchAll(db, sql: "SELECT id, body FROM note WHERE id != ?", arguments: [noteId])
         for row in rows {
-            let title = Note(body: row["body"]).title.lowercased()
-            if wanted.contains(title) { try NoteLink(fromNoteId: noteId, toNoteId: row["id"]).insert(db) }
+            let other: Int64 = row["id"]
+            let body: String = row["body"]
+            if wanted.contains(Note(body: body).title.lowercased()) {
+                try NoteLink(fromNoteId: noteId, toNoteId: other).insert(db)
+            }
+            if NoteLinkParser.linkedTitles(in: body).contains(where: { $0.lowercased() == ownTitle }) {
+                try NoteLink(fromNoteId: other, toNoteId: noteId).insert(db)
+            }
         }
     }
 }

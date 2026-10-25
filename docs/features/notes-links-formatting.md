@@ -35,7 +35,7 @@ Edge filter: a note shows when `onEdge`, not completed, and not snoozed past `no
 ## Edge cases and limits
 
 - Link titles match a note's first non-empty line, case-insensitively. Unknown titles create no link. A note never links to itself. If two notes share a title, both are linked.
-- Links are rebuilt only when the linking note is saved. Renaming a note does not update links from other notes, and a note created later is not linked from earlier notes until they are saved again.
+- Saving a note rebuilds its links in both directions: the links it makes, and the links other notes make to its title. Renaming a note moves its backlinks to whichever notes link to the new title, and a note created after a `[[link]]` to it picks up that backlink. Link text in other notes is not rewritten on rename.
 - `[[ ]]`, `[[]]`, an unclosed `[[`, and a link split across lines are ignored.
 - `*bold*` and `_italic_` need a non-space character after the opening and before the closing mark, and stay on one line. Like Slack, a mark touching a letter or digit outside it is plain text, so `snake_case_name` and `2*3*4` are not styled. Formatting inside a `[[link]]` is not applied.
 - Checkboxes count only at line start (optionally after `- `). `togglingCheckbox` leaves text unchanged for a line without a checkbox or a line number out of range.

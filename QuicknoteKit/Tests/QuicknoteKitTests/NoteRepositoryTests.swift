@@ -54,6 +54,23 @@ struct NoteRepositoryTests {
         #expect(try repository.backlinks(to: target.id!).isEmpty)
     }
 
+    @Test func noteCreatedAfterALinkToItGetsTheBacklink() throws {
+        let source = try save("Plan: see [[Lisbon packing list]]")
+        let target = try save("Lisbon packing list")
+        #expect(try repository.backlinks(to: target.id!).map(\.id) == [source.id])
+    }
+
+    @Test func renamingANoteMovesItsBacklinks() throws {
+        let oldLinker = try save("[[Pricing]]")
+        let newLinker = try save("[[Pricing v3]]")
+        var target = try save("Pricing")
+        target.body = "Pricing v3"
+        try repository.save(&target, now: now)
+        let linkers = try repository.backlinks(to: target.id!).map(\.id)
+        #expect(linkers == [newLinker.id])
+        #expect(!linkers.contains(oldLinker.id))
+    }
+
     @Test func noteDoesNotLinkToItself() throws {
         let note = try save("Loop [[Loop]]")
         #expect(try repository.backlinks(to: note.id!).isEmpty)
