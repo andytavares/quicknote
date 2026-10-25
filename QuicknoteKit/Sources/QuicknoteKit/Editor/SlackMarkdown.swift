@@ -56,8 +56,8 @@ public enum SlackMarkdown {
         let linkSpans = linkSpans(line, offset: offset)
         let linkRanges = linkSpans.filter { $0.style != .marker }.map(\.range)
         let inline =
-            markSpans(line, .bold, boldPattern, offset: offset)
-            + markSpans(line, .italic, italicPattern, offset: offset)
+            markSpans(line, .bold, offset: offset)
+            + markSpans(line, .italic, offset: offset)
         let outsideLinks = inline.filter { span in
             !linkRanges.contains { NSIntersectionRange($0, span.range).length > 0 }
         }
@@ -89,11 +89,10 @@ public enum SlackMarkdown {
         }
     }
 
-    private static func markSpans(
-        _ line: String, _ style: StyleSpan.Style, _ pattern: some RegexComponent<(Substring, Substring)>,
-        offset: Int
-    ) -> [StyleSpan] {
-        line.matches(of: pattern).filter { standsAlone($0.range, in: line) }.flatMap { match -> [StyleSpan] in
+    /// `*bold*` or `_italic_` runs in one line.
+    private static func markSpans(_ line: String, _ style: StyleSpan.Style, offset: Int) -> [StyleSpan] {
+        let pattern = style == .bold ? boldPattern : italicPattern
+        return line.matches(of: pattern).filter { standsAlone($0.range, in: line) }.flatMap { match -> [StyleSpan] in
             let range = shifted(NSRange(match.range, in: line), offset)
             return [
                 StyleSpan(range: range, style: style),

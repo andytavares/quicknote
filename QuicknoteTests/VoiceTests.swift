@@ -205,7 +205,7 @@ struct HoldToTalkTests {
 
 struct VoiceNoteTests {
     @Test func trimsTextAndLeavesNoContextWhenThereIsNone() {
-        let note = VoiceNote.make(text: "  buy milk \n", context: nil, now: Date(), calendar: .current)
+        let note = VoiceNote.make(text: "  buy milk \n", now: Date(), calendar: .current)
         #expect(note.body == "buy milk")
         #expect(note.kind == .task)
         #expect(note.appBundleId == nil)

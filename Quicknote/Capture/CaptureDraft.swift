@@ -33,17 +33,12 @@ struct CaptureDraft {
         let classification = classification(now: now, calendar: calendar)
         let link = pastedLink(now: now, calendar: calendar)
         var note = Note(body: link?.body ?? text.trimmingCharacters(in: .whitespacesAndNewlines), now: now)
-        note.kind = classification.kind
-        note.dueAt = classification.due
-        note.dueHasTime = classification.hasTime
-        note.recurrence = classification.recurrence
+        note.apply(classification)
         note.color = colorHex
         note.font = AppSettings.defaultFont
         note.projectId = projectId
-        note.appBundleId = context?.appBundleId
-        note.appName = context?.appName
-        note.siteHost = context?.siteHost
-        note.url = link?.url ?? context?.url
+        note.remember(context)
+        if let link { note.url = link.url }
         note.pinnedToContext = pinsToContext && context != nil
         return note
     }

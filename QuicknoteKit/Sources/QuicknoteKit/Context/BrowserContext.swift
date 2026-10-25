@@ -38,15 +38,27 @@ public enum AutomationAccess: Equatable, Sendable {
     case granted, undetermined, denied
 }
 
+/// What the user has already allowed Quicknote to read in a browser.
+public struct BrowserAccess: Equatable, Sendable {
+    public var accessibilityTrusted: Bool
+    public var automation: AutomationAccess
+
+    public init(accessibilityTrusted: Bool, automation: AutomationAccess) {
+        self.accessibilityTrusted = accessibilityTrusted
+        self.automation = automation
+    }
+}
+
 /// Decides which sources may be read without showing a system prompt the user did not ask for.
 public enum URLReadPolicy {
     /// Accessibility is used only when already trusted; the app never asks for it here.
     /// Apple Events are used when already granted, or when undetermined and `mayPrompt` (a user action).
     public static func sources(
-        for strategy: BrowserURLStrategy, accessibilityTrusted: Bool, automation: AutomationAccess, mayPrompt: Bool
+        for strategy: BrowserURLStrategy, access: BrowserAccess, mayPrompt: Bool
     ) -> [URLSource] {
         var sources: [URLSource] = []
-        if accessibilityTrusted { sources.append(.accessibility) }
+        if access.accessibilityTrusted { sources.append(.accessibility) }
+        let automation = access.automation
         let appleEventsAllowed = automation == .granted || (automation == .undetermined && mayPrompt)
         if strategy.appleEvents != .none, appleEventsAllowed { sources.append(.appleEvents) }
         return sources

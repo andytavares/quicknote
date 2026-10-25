@@ -10,9 +10,9 @@ enum BrowserURLReader {
     static func currentURL(of app: NSRunningApplication, mayPrompt: Bool) -> String? {
         guard let bundleId = app.bundleIdentifier, let strategy = BrowserURLStrategy.strategy(forBundleId: bundleId)
         else { return nil }
-        let sources = URLReadPolicy.sources(
-            for: strategy, accessibilityTrusted: AXIsProcessTrusted(),
-            automation: automationAccess(bundleId: bundleId), mayPrompt: mayPrompt)
+        let access = BrowserAccess(
+            accessibilityTrusted: AXIsProcessTrusted(), automation: automationAccess(bundleId: bundleId))
+        let sources = URLReadPolicy.sources(for: strategy, access: access, mayPrompt: mayPrompt)
         for source in sources {
             let url =
                 switch source {

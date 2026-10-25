@@ -16,6 +16,16 @@ public struct Classification: Equatable, Sendable {
     }
 }
 
+extension Note {
+    /// Takes the type, due date and repeat that sorting found.
+    public mutating func apply(_ classification: Classification) {
+        kind = classification.kind
+        dueAt = classification.due
+        dueHasTime = classification.hasTime
+        recurrence = classification.recurrence
+    }
+}
+
 public enum EntryClassifier {
     public static func classify(_ text: String, now: Date, calendar: Calendar) -> Classification {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -25,9 +35,10 @@ public enum EntryClassifier {
         }
         var withoutRepeat = trimmed
         if let repeatMatch { withoutRepeat.removeSubrange(repeatMatch.range) }
-        let day = DateTimeReader.day(in: withoutRepeat, now: now, calendar: calendar)
-        let time = DateTimeReader.time(in: withoutRepeat)
-        var result = classifyByWhen(trimmed, day: day, time: time, now: now, calendar: calendar)
+        let mentioned = MentionedWhen(
+            day: DateTimeReader.day(in: withoutRepeat, now: now, calendar: calendar),
+            time: DateTimeReader.time(in: withoutRepeat))
+        var result = classifyByWhen(trimmed, mentioned: mentioned, clock: Clock(now: now, calendar: calendar))
         result.recurrence = repeatMatch?.rule
         if result.recurrence != nil && result.kind == .note { result.kind = .task }
         return result
@@ -56,21 +67,30 @@ public enum EntryClassifier {
 
     // MARK: Rules that use the date and time
 
-    private static func classifyByWhen(
-        _ text: String, day: Date?, time: TimeOfDay?, now: Date, calendar: Calendar
-    ) -> Classification {
-        if text.lowercased().hasPrefix("remind me") {
-            return reminder(day: day, time: time, now: now, calendar: calendar)
-        }
-        guard let day else { return Classification(kind: startsWithVerb(text) ? .task : .note) }
-        guard let time else {
+    /// The day and time a capture mentions, either may be missing.
+    private struct MentionedWhen {
+        let day: Date?
+        let time: TimeOfDay?
+    }
+
+    private struct Clock {
+        let now: Date
+        let calendar: Calendar
+    }
+
+    private static func classifyByWhen(_ text: String, mentioned: MentionedWhen, clock: Clock) -> Classification {
+        let calendar = clock.calendar
+        if text.lowercased().hasPrefix("remind me") { return reminder(mentioned, clock: clock) }
+        guard let day = mentioned.day else { return Classification(kind: startsWithVerb(text) ? .task : .note) }
+        guard let time = mentioned.time else {
             return Classification(kind: .task, due: at(TimeOfDay(hour: 9, minute: 0), on: day, calendar: calendar))
         }
         return Classification(kind: .event, due: at(time, on: day, calendar: calendar), hasTime: true)
     }
 
-    private static func reminder(day: Date?, time: TimeOfDay?, now: Date, calendar: Calendar) -> Classification {
-        switch (day, time) {
+    private static func reminder(_ mentioned: MentionedWhen, clock: Clock) -> Classification {
+        let (now, calendar) = (clock.now, clock.calendar)
+        switch (mentioned.day, mentioned.time) {
         case (nil, nil):
             return Classification(kind: .reminder)
         case (let day?, nil):

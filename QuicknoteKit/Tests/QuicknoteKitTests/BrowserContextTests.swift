@@ -40,28 +40,30 @@ struct BrowserContextTests {
 
     @Test func backgroundReadsNeverUseASourceThatWouldPrompt() {
         let sources = URLReadPolicy.sources(
-            for: chromium, accessibilityTrusted: false, automation: .undetermined, mayPrompt: false)
+            for: chromium, access: BrowserAccess(accessibilityTrusted: false, automation: .undetermined),
+            mayPrompt: false)
         #expect(sources.isEmpty)
         let denied = URLReadPolicy.sources(
-            for: chromium, accessibilityTrusted: false, automation: .denied, mayPrompt: true)
+            for: chromium, access: BrowserAccess(accessibilityTrusted: false, automation: .denied), mayPrompt: true)
         #expect(denied.isEmpty)
     }
 
     @Test func trustedAccessibilityComesFirstThenGrantedAppleEvents() {
         let sources = URLReadPolicy.sources(
-            for: chromium, accessibilityTrusted: true, automation: .granted, mayPrompt: false)
+            for: chromium, access: BrowserAccess(accessibilityTrusted: true, automation: .granted), mayPrompt: false)
         #expect(sources == [.accessibility, .appleEvents])
     }
 
     @Test func aUserActionMayAskForAutomationOnce() {
         let sources = URLReadPolicy.sources(
-            for: chromium, accessibilityTrusted: false, automation: .undetermined, mayPrompt: true)
+            for: chromium, access: BrowserAccess(accessibilityTrusted: false, automation: .undetermined),
+            mayPrompt: true)
         #expect(sources == [.appleEvents])
     }
 
     @Test func firefoxNeverUsesAppleEvents() {
         let sources = URLReadPolicy.sources(
-            for: firefox, accessibilityTrusted: true, automation: .granted, mayPrompt: true)
+            for: firefox, access: BrowserAccess(accessibilityTrusted: true, automation: .granted), mayPrompt: true)
         #expect(sources == [.accessibility])
     }
 }

@@ -16,3 +16,13 @@ enum FrontmostContext {
         FrontmostTracker.shared.refresh(mayPrompt: true)
     }
 }
+
+extension Note {
+    /// Records where the note was captured. A pasted link's address, set later, may replace `url`.
+    mutating func remember(_ context: CapturedContext?) {
+        appBundleId = context?.appBundleId
+        appName = context?.appName
+        siteHost = context?.siteHost
+        url = context?.url
+    }
+}

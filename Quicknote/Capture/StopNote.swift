@@ -23,10 +23,7 @@ struct StopNote {
 
     func makeNote(now: Date) -> Note {
         var note = Note(body: body, kind: .context, now: now)
-        note.appBundleId = context?.appBundleId
-        note.appName = context?.appName
-        note.siteHost = context?.siteHost
-        note.url = context?.url
+        note.remember(context)
         return note
     }
 }

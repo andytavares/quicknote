@@ -127,7 +127,7 @@ final class HoldToTalk {
     private func showLive(_ text: String) {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard state == .listening, !trimmed.isEmpty else { return }
-        let note = VoiceNote.make(text: trimmed, context: nil, now: services.now(), calendar: services.calendar)
+        let note = VoiceNote.make(text: trimmed, now: services.now(), calendar: services.calendar)
         presenter.showLive(
             text: trimmed, chip: VoiceNote.chip(for: note, now: services.now(), calendar: services.calendar))
     }
@@ -152,7 +152,8 @@ final class HoldToTalk {
 
     private func save(_ text: String) {
         let now = services.now()
-        var note = VoiceNote.make(text: text, context: context, now: now, calendar: services.calendar)
+        var note = VoiceNote.make(text: text, now: now, calendar: services.calendar)
+        note.remember(context)
         do { try services.repository.save(&note, now: now) } catch { return fail(error) }
         guard let noteId = note.id else { return cancel() }
         state = .saved(noteId: noteId)
