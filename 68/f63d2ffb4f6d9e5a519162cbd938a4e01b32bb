@@ -1,0 +1,31 @@
+Quicknote/App/MenuBarMenu.swift
+  s_ad65a60407dcd0::t_040a57e67feaf8 13
+Quicknote/App/Shortcuts.swift
+  s_ad65a60407dcd0::t_040a57e67feaf8 35
+Quicknote/Library/LibraryModel.swift
+  s_ad65a60407dcd0::t_040a57e67feaf8 33-35
+QuicknoteTests/LibraryTests.swift
+  s_ad65a60407dcd0::t_8f00074a4b410e 130-139
+Quicknote/Library/LibraryFeature.swift
+  s_ad65a60407dcd0::t_040a57e67feaf8 17-21
+docs/features/cards.md
+  s_ad65a60407dcd0::t_a798d04d313310 7,67
+docs/user-guide.md
+  s_ad65a60407dcd0::t_2cb44e8e777f13 81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "68f63d2ffb4f6d9e5a519162cbd938a4e01b32bb",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
