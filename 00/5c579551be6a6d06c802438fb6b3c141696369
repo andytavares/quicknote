@@ -1,0 +1,32 @@
+Quicknote/Cards/CardEditorView.swift
+  s_ad65a60407dcd0::t_21f4979e9c684f 111-113
+  s_ad65a60407dcd0::t_0c4bb281ada7cc 2,8,27,91,109-110,114-121,161-168,170
+QuicknoteTests/CardTests.swift
+  s_ad65a60407dcd0::t_fe65d260d62cfc 158-179
+Quicknote/Cards/CardSaver.swift
+  s_ad65a60407dcd0::t_0c4bb281ada7cc 58-59,61
+Quicknote/Cards/CardEditorWindow.swift
+  s_ad65a60407dcd0::t_e4c95c4b255dfa 7,9,11-14,23,29,31
+  s_ad65a60407dcd0::t_21f4979e9c684f 26-28
+  s_ad65a60407dcd0::t_bb7374800218be 24-25,30
+Quicknote/Cards/CardEditorModel.swift
+  s_ad65a60407dcd0::t_0c4bb281ada7cc 53,61,98-99
+.gitignore
+  s_ad65a60407dcd0::t_bb3b344c869c49 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "005c579551be6a6d06c802438fb6b3c141696369",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
