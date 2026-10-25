@@ -1,0 +1,46 @@
+docs/features/sorting-and-repeats.md
+  s_ad65a60407dcd0::t_0e8070d372ac06 51
+QuicknoteKit/Tests/QuicknoteKitTests/AppDatabaseTests.swift
+  s_ad65a60407dcd0::t_e2b8a7eb0ec532 38-50
+Quicknote/Settings/DataSummary.swift
+  s_ad65a60407dcd0::t_543d4d7fd3c0ba 19,21
+QuicknoteKit/Tests/QuicknoteKitTests/NoteCompletionTests.swift
+  s_ad65a60407dcd0::t_95de2a4018ae34 22-36
+QuicknoteKit/Sources/QuicknoteKit/Sorting/RecurrenceRule.swift
+  s_ad65a60407dcd0::t_8f6e1100c4306a 64,72-73
+Quicknote/Edge/EdgeCardViews.swift
+  s_ad65a60407dcd0::t_b3ba87a1df0d3e 24
+QuicknoteKit/Tests/QuicknoteKitTests/ReminderActionTests.swift
+  s_ad65a60407dcd0::t_95de2a4018ae34 10
+  s_ad65a60407dcd0::t_20b342b89f6735 17
+Quicknote/App/AppDelegate.swift
+  s_ad65a60407dcd0::t_0e8070d372ac06 16
+docs/features/calendar-and-brief.md
+  s_ad65a60407dcd0::t_27af725c51a0bf 53,60,62
+QuicknoteKit/Sources/QuicknoteKit/Store/LibraryCounts.swift
+  s_ad65a60407dcd0::t_543d4d7fd3c0ba 1-20
+docs/features/edge-and-context.md
+  s_ad65a60407dcd0::t_0e8070d372ac06 15
+QuicknoteKit/Sources/QuicknoteKit/Reminders/ReminderAction.swift
+  s_ad65a60407dcd0::t_8f6e1100c4306a 11
+Quicknote/Calendar/CalendarBridge.swift
+  s_ad65a60407dcd0::t_0e8070d372ac06 86-92
+Quicknote/App/Color+Hex.swift
+  s_ad65a60407dcd0::t_9e1409c249d814 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b3804a9b2cd2e353799f9f5f0bba18e1cfba881d",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
