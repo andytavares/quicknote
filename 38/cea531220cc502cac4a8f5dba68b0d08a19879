@@ -1,0 +1,41 @@
+QuicknoteKit/Sources/QuicknoteKit/Canvas/CanvasDocument+Editing.swift
+  s_ad65a60407dcd0::t_0dbf79dff67aa5 1-51
+QuicknoteKit/Sources/QuicknoteKit/Canvas/CanvasDocument.swift
+  s_ad65a60407dcd0::t_c6a3aa5b0ad621 1-84
+QuicknoteKit/Sources/QuicknoteKit/Canvas/CanvasElement+Geometry.swift
+  s_ad65a60407dcd0::t_1803954321f052 1-114
+QuicknoteKit/Sources/QuicknoteKit/Canvas/CanvasHistory.swift
+  s_ad65a60407dcd0::t_f022da6b5f0091 1-28
+QuicknoteKit/Sources/QuicknoteKit/Canvas/Note+Canvas.swift
+  s_ad65a60407dcd0::t_7b191158f4e129 1-13
+QuicknoteKit/Sources/QuicknoteKit/Cards/CardSize.swift
+  s_ad65a60407dcd0::t_54dfa34d721ee5 1-24
+QuicknoteKit/Sources/QuicknoteKit/Cards/CardStyle.swift
+  s_ad65a60407dcd0::t_3d06a2698a9dcb 1-19
+QuicknoteKit/Tests/QuicknoteKitTests/CanvasDocumentTests.swift
+  s_ad65a60407dcd0::t_a99484b365fb07 1-101
+QuicknoteKit/Tests/QuicknoteKitTests/CanvasGeometryTests.swift
+  s_ad65a60407dcd0::t_1eaac8651dd7f1 1-113
+QuicknoteKit/Tests/QuicknoteKitTests/CanvasHistoryTests.swift
+  s_ad65a60407dcd0::t_b4c656e1fb3df5 1-56
+QuicknoteKit/Tests/QuicknoteKitTests/CardStyleTests.swift
+  s_ad65a60407dcd0::t_842352723512d1 1-34
+docs/features/canvas.md
+  s_ad65a60407dcd0::t_cc0e919e0f9bfe 1-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "38cea531220cc502cac4a8f5dba68b0d08a19879",
+  "prompts": {},
+  "sessions": {
+    "s_ad65a60407dcd0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "441b3a62-eca3-4d95-9eb3-5473f09dab21",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
