@@ -68,3 +68,53 @@ Images use `![name](path)`, other files `[name](path)`. Two attachments with the
 - Export one note: `QuicknoteKit/Sources/QuicknoteKit/Export/MarkdownExporter.swift:12`
 - Export all: `QuicknoteKit/Sources/QuicknoteKit/Export/MarkdownExporter.swift:29`
 - Delete everything: `QuicknoteKit/Sources/QuicknoteKit/Export/DataEraser.swift:14`
+
+## Search panel
+
+Screen S15. Searches only Quicknote's own notes, meeting transcripts, and attachment names and image text (the table in "What search covers"). Nothing outside Quicknote is read or indexed, and nothing leaves the Mac.
+
+### Use
+
+1. Press ⌃⌥F in any app. A floating panel opens centred horizontally on the screen the mouse is on, with the field focused. Pressing ⌃⌥F while it is open refocuses the field and selects its text.
+2. Type. Results update about 120 ms after you stop typing; the search runs off the main thread, and a newer query cancels an older one. Matches are bold and tinted in each snippet.
+3. Results are grouped as Notes, Meeting transcripts, and Files and Snaps. Transcript rows show `mm:ss` and the meeting title.
+4. ↑ and ↓ move through all results across groups and stop at the first and last row (no wrap). ↵ or a click opens the row. ⌘↵ shows the Library.
+5. Esc, or clicking away, closes the panel.
+
+| Row | Opens with |
+|---|---|
+| Note | `LibraryFeature.open(noteId:)` |
+| Transcript | `MeetingsFeature.open(meetingId:atMs:)` at the matching line |
+| File or Snap | `LibraryFeature.open(noteId:)` of the note it is attached to |
+| ⌘↵ | `LibraryFeature.show()` |
+
+With no query the panel says "Type to search notes, meetings and files"; with no hits, "No matches". The result count is announced to VoiceOver and every row has an accessibility label (group, snippet, detail, time).
+
+### Limits
+
+- 8 results per group (`limitPerGroup`), so a very common word shows only the best 8 of each.
+- Whole words only as prefixes; no phrase or operator syntax (see Query behavior).
+- Search errors show as no results.
+- The last query stays in the field when the panel is opened again; select-all lets you type over it.
+
+### Entry points
+
+- Open the panel: `Quicknote/Search/SearchFeature.swift:11` (`showPanel`), called from `Shortcuts.swift`
+- Panel window: `Quicknote/Search/SearchPanel.swift:6`
+- Query, debounce, selection: `Quicknote/Search/SearchModel.swift:7`
+- Rows, groups, open actions: `Quicknote/Search/SearchRow.swift:16`
+- Highlight rendering: `Quicknote/Search/SearchSnippet.swift:7`
+- View: `Quicknote/Search/SearchView.swift:5`
+- Tests: `QuicknoteTests/SearchTests.swift`
+
+### Manual test checklist
+
+- [ ] ⌃⌥F over another app opens the panel on the mouse's screen and typing works at once.
+- [ ] Esc closes it; clicking another window closes it.
+- [ ] A word in a note, a transcript and a file name shows all three groups with highlights.
+- [ ] ↑/↓ cross group boundaries; ↵ opens a note, a transcript at the right second, a file's note.
+- [ ] ⌘↵ shows the Library.
+- [ ] ⌃⌥F while open selects the text in the field.
+- [ ] Empty field shows the hint; gibberish shows "No matches".
+- [ ] VoiceOver announces the count and reads each row.
+- [ ] Works with Wi-Fi off.
