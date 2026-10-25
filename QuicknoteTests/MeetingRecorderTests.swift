@@ -167,3 +167,26 @@ struct MeetingExportTests {
         #expect(MeetingExport.audio.fileName(title: "  ", startedAt: date).hasPrefix("Meeting "))
     }
 }
+
+struct RecordingSourceFileTests {
+    private func tone(frames: AVAudioFrameCount) -> AVAudioPCMBuffer {
+        let format = AVAudioFormat(standardFormatWithSampleRate: 16_000, channels: 1)!
+        let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames)!
+        buffer.frameLength = frames
+        for index in 0..<Int(frames) { buffer.floatChannelData![0][index] = 0.25 }
+        return buffer
+    }
+
+    @Test func audioArrivingAfterTheFileClosesNeverErasesTheRecording() throws {
+        let url = FileManager.default.temporaryDirectory.appending(path: "\(UUID().uuidString).caf")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let source = RecordingSource(speaker: .me, fileURL: url)
+        source.stopTranscribing()
+        source.receive(tone(frames: 1_600))
+        source.receive(tone(frames: 1_600))
+        source.closeFile()
+        source.receive(tone(frames: 160))
+        source.closeFile()
+        #expect(try AVAudioFile(forReading: url).length == 3_200)
+    }
+}

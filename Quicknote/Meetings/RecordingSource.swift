@@ -13,6 +13,8 @@ nonisolated final class RecordingSource: Sendable {
 
     private struct State {
         var file: AVAudioFile?
+        /// Set once the file was opened; it is never opened again, so a reopen cannot truncate saved audio.
+        var fileWasOpened = false
         var isPaused = false
         var level: Float = 0
         var transcribes = true
@@ -55,10 +57,14 @@ nonisolated final class RecordingSource: Sendable {
 
     private func write(_ buffer: AVAudioPCMBuffer, to state: inout State) {
         do {
-            if state.file == nil { state.file = try AVAudioFile(forWriting: fileURL, settings: buffer.format.settings) }
+            if !state.fileWasOpened {
+                state.fileWasOpened = true
+                state.file = try AVAudioFile(forWriting: fileURL, settings: buffer.format.settings)
+            }
             try state.file?.write(from: buffer)
         } catch {
-            state.file = nil  // A failed write loses audio but must not stop the transcript.
+            // Keep what was written; later audio is dropped from the file but still transcribed.
+            state.file = nil
         }
     }
 }

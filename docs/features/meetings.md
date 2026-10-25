@@ -158,7 +158,7 @@ Export opens a save panel named from the title and date (`MeetingExport.fileName
 - Your own voice heard through speakers is picked up by both sources, so it can appear as Me and as Others.
 - The two sources start a few tens of milliseconds apart; transcript times are not aligned beyond that.
 - Pausing shifts nothing: both files and the clock leave out paused time together.
-- A failed audio file write loses audio but keeps the transcript.
+- If writing the audio file fails, the audio already saved is kept and later audio is left out of the file; the transcript keeps going. The file is opened once per recording, so it is never overwritten.
 - The summary of a very long meeting combines chunk summaries in one pass; it is not split again.
 - Bookmark labels are edited in the meeting window, not in the pill.
 
