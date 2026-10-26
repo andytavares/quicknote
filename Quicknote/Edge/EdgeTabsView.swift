@@ -52,21 +52,23 @@ struct EdgeTabsView: View {
         case .context:
             EdgeTab(
                 color: .accentColor, badge: "\(model.contextNotes.count)",
-                label: "Notes pinned to \(model.contextLabel)"
+                label: "Notes pinned to \(model.contextLabel)", isCurrent: card?.shows(slot) == true
             ) {
                 model.isContextCardShown.toggle()
             }
         case .note(let note):
-            noteTab(note)
+            noteTab(note, isCurrent: card?.shows(slot) == true)
         case .overflow(let count):
-            EdgeTab(color: .gray, badge: "+\(count)", label: "\(count) more notes, open the Library") {
+            EdgeTab(
+                color: .gray, badge: "+\(count)", label: "\(count) more notes, open the Library", isCurrent: false
+            ) {
                 LibraryFeature.show()
             }
         }
     }
 
-    private func noteTab(_ note: Note) -> some View {
-        EdgeTab(color: note.edgeColor, badge: nil, label: "Note: \(note.title)") {
+    private func noteTab(_ note: Note, isCurrent: Bool) -> some View {
+        EdgeTab(color: note.edgeColor, badge: nil, label: "Note: \(note.title)", isCurrent: isCurrent) {
             model.expandedNoteId = model.expandedNoteId == note.id ? nil : note.id
         }
         .onHover { setPeek(note.id, hovering: $0) }
@@ -89,6 +91,7 @@ private struct EdgeTab: View {
     let color: Color
     let badge: String?
     let label: String
+    let isCurrent: Bool
     let action: () -> Void
 
     var body: some View {
@@ -97,6 +100,9 @@ private struct EdgeTab: View {
                 .fill(color)
                 .frame(width: EdgeLayout.tabWidth, height: EdgeLayout.tabHeight)
                 .overlay {
+                    if isCurrent {
+                        RoundedRectangle(cornerRadius: 5).strokeBorder(Color.primary, lineWidth: 2)
+                    }
                     if let badge {
                         Text(badge).font(.caption2.bold()).foregroundStyle(.white).minimumScaleFactor(0.5)
                     }
@@ -104,6 +110,7 @@ private struct EdgeTab: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
+        .accessibilityAddTraits(isCurrent ? .isSelected : [])
         .accessibilityHint("Click to open. Drag away from the edge to remove it from the edge.")
     }
 }
