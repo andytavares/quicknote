@@ -162,3 +162,22 @@ import Testing
         #expect(saves == 1)
     }
 }
+
+@Suite struct FlowLayoutTests {
+    @Test func keepsOneRowWhenEverythingFits() {
+        #expect(FlowLayout.rows(widths: [50, 50, 50], maxWidth: 200, spacing: 8) == [0..<3])
+    }
+
+    @Test func startsANewRowWhenTheNextItemDoesNotFit() {
+        #expect(FlowLayout.rows(widths: [90, 90, 90, 40], maxWidth: 200, spacing: 8) == [0..<2, 2..<4])
+    }
+
+    @Test func countsSpacingWhenFilling() {
+        #expect(FlowLayout.rows(widths: [100, 100], maxWidth: 200, spacing: 8) == [0..<1, 1..<2])
+    }
+
+    @Test func givesAnItemWiderThanTheRowARowOfItsOwn() {
+        #expect(FlowLayout.rows(widths: [300, 50], maxWidth: 200, spacing: 8) == [0..<1, 1..<2])
+        #expect(FlowLayout.rows(widths: [], maxWidth: 200, spacing: 8).isEmpty)
+    }
+}

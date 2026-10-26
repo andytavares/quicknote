@@ -11,17 +11,18 @@ struct EditorToolbar: View {
 
     var body: some View {
         if let note = model.note {
-            HStack(spacing: 8) {
-                TypeMenu(model: model)
-                Button(dueTitle(note)) { showsDue = true }
-                    .accessibilityLabel("Due date")
-                    .popover(isPresented: $showsDue) { DuePopover(model: model) }
-                Button(repeatTitle(note)) { showsRepeat = true }
-                    .accessibilityLabel("Repeat")
-                    .popover(isPresented: $showsRepeat) { RepeatPopover(model: model) }
-                PriorityMenu(model: model)
-                Spacer()
-                actions(for: note)
+            // One row when it fits; a narrow pane wraps the buttons instead of squeezing them empty.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) {
+                    fields(for: note)
+                    Spacer()
+                    actions(for: note)
+                }
+                FlowLayout {
+                    fields(for: note)
+                    actions(for: note)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .buttonStyle(.bordered)
             .controlSize(.small)
@@ -30,32 +31,41 @@ struct EditorToolbar: View {
         }
     }
 
-    private func actions(for note: Note) -> some View {
-        HStack(spacing: 8) {
-            Button("Aa") { showsStyle = true }
-                .accessibilityLabel("Style")
-                .popover(isPresented: $showsStyle) { StylePopover(model: model) }
-            if let place = note.siteHost ?? note.appName {
-                Toggle(
-                    "Pin to \(place)",
-                    isOn: Binding(
-                        get: { note.pinnedToContext }, set: { value in model.update { $0.pinnedToContext = value } })
-                )
-                .toggleStyle(.button)
-                .accessibilityLabel("Pin to \(place)")
-            }
-            NoteShareMenu(model: model)
-            Button("Make a card", systemImage: "rectangle.on.rectangle") {
-                CardsFeature.newCard(fromNoteId: model.noteId)
-            }
-            .labelStyle(.iconOnly)
-            .accessibilityLabel("Make a card")
-            .help("Make a card")
-            Button("Delete", systemImage: "trash") { model.isConfirmingDelete = true }
-                .labelStyle(.iconOnly)
-                .accessibilityLabel("Delete note")
-                .help("Delete")
+    @ViewBuilder private func fields(for note: Note) -> some View {
+        TypeMenu(model: model)
+        Button(dueTitle(note)) { showsDue = true }
+            .accessibilityLabel("Due date")
+            .popover(isPresented: $showsDue) { DuePopover(model: model) }
+        Button(repeatTitle(note)) { showsRepeat = true }
+            .accessibilityLabel("Repeat")
+            .popover(isPresented: $showsRepeat) { RepeatPopover(model: model) }
+        PriorityMenu(model: model)
+    }
+
+    @ViewBuilder private func actions(for note: Note) -> some View {
+        Button("Aa") { showsStyle = true }
+            .accessibilityLabel("Style")
+            .popover(isPresented: $showsStyle) { StylePopover(model: model) }
+        if let place = note.siteHost ?? note.appName {
+            Toggle(
+                "Pin to \(place)",
+                isOn: Binding(
+                    get: { note.pinnedToContext }, set: { value in model.update { $0.pinnedToContext = value } })
+            )
+            .toggleStyle(.button)
+            .accessibilityLabel("Pin to \(place)")
         }
+        NoteShareMenu(model: model)
+        Button("Make a card", systemImage: "rectangle.on.rectangle") {
+            CardsFeature.newCard(fromNoteId: model.noteId)
+        }
+        .labelStyle(.iconOnly)
+        .accessibilityLabel("Make a card")
+        .help("Make a card")
+        Button("Delete", systemImage: "trash") { model.isConfirmingDelete = true }
+            .labelStyle(.iconOnly)
+            .accessibilityLabel("Delete note")
+            .help("Delete")
     }
 
     private func dueTitle(_ note: Note) -> String {
