@@ -1,0 +1,29 @@
+Quicknote/Editor/EditorTextView.swift
+  s_a3e1d3be1c8f9e::t_f18bdad53c826e 46-48
+  s_a3e1d3be1c8f9e::t_876887c2c024d1 28,31-34,42-45,49,68-81,84
+Quicknote/Editor/NoteTextView.swift
+  s_a3e1d3be1c8f9e::t_876887c2c024d1 2,63-65,75-88
+  s_a3e1d3be1c8f9e::t_46e946c78d755d 89-90
+QuicknoteKit/Sources/QuicknoteKit/Editor/SlackMarkdown.swift
+  s_a3e1d3be1c8f9e::t_41eafe65d3b2c1 70-71
+  s_a3e1d3be1c8f9e::t_6ed38723e020cf 6-7,10,23-30,55-66,68,73-85,88-91,93-104,106,117-125,142-144,147-149
+QuicknoteKit/Tests/QuicknoteKitTests/SlackMarkdownTests.swift
+  s_a3e1d3be1c8f9e::t_16298f255e5021 80-111,115-137
+  s_a3e1d3be1c8f9e::t_f18bdad53c826e 112-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2d8fb96a47296ac0843c0fbd532ab2497e45ab91",
+  "prompts": {},
+  "sessions": {
+    "s_a3e1d3be1c8f9e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c460497-e222-4701-bf9f-4c4486d44e42",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
