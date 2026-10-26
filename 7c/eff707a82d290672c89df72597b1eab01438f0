@@ -1,0 +1,32 @@
+Quicknote/App/AppDelegate.swift
+  s_9dd63643d37130::t_8d0730d5440088 16
+Quicknote/Library/LibraryFeature.swift
+  s_9dd63643d37130::t_8d0730d5440088 13
+Quicknote/App/DockIcon.swift
+  s_9dd63643d37130::t_8d0730d5440088 1-26
+Quicknote/Settings/SettingsView.swift
+  s_9dd63643d37130::t_8d0730d5440088 13-17
+Quicknote/Welcome/WelcomeView.swift
+  s_9dd63643d37130::t_855e983b09cbec 7
+  s_9dd63643d37130::t_8d0730d5440088 31
+QuicknoteTests/DockIconTests.swift
+  s_9dd63643d37130::t_af1af2ecadc346 1-32
+Quicknote/App/MenuBarMenu.swift
+  s_9dd63643d37130::t_8d0730d5440088 7,12,36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7ceff707a82d290672c89df72597b1eab01438f0",
+  "prompts": {},
+  "sessions": {
+    "s_9dd63643d37130": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b718f3a6-1fd4-4eb4-afe9-0a838a14ac5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
