@@ -13,17 +13,34 @@ Quicknote is free. It is shipped as a Developer ID signed, notarized DMG outside
 
 ## Each release
 
+Merging to `main` releases automatically. When the `test` workflow passes on `main`, `.github/workflows/release.yml` bumps the patch number of the latest GitHub release (1.0.0 → 1.0.1), runs `scripts/release.sh` on that version and publishes the DMG and `appcast.xml` as release `vX.Y.Z`. For a minor or major bump, publish that release by hand once (below); automatic patch releases continue from it.
+
+### Repository secrets (one time)
+
+Settings › Secrets and variables › Actions › New repository secret:
+
+| Secret | Value |
+|---|---|
+| `DEVELOPER_ID_P12` | The Developer ID Application certificate and key, exported from Keychain Access as `.p12`, then `base64 -i cert.p12 \| pbcopy` |
+| `DEVELOPER_ID_P12_PASSWORD` | The password you set on that export |
+| `DEVELOPER_ID_APPLICATION` | `Developer ID Application: Your Name (TEAMID)` |
+| `DEVELOPMENT_TEAM` | Your 10-character team ID |
+| `APPLE_ID` | The Apple ID email used for notarization |
+| `APPLE_APP_PASSWORD` | An app-specific password from appleid.apple.com |
+| `SPARKLE_PRIVATE_KEY` | Output of `generate_keys -x key.txt` (then delete `key.txt`) |
+
+### By hand
+
 ```sh
 export DEVELOPER_ID_APPLICATION="Developer ID Application: Your Name (TEAMID)"
 export DEVELOPMENT_TEAM=TEAMID
 export NOTARY_PROFILE=quicknote-notary
 export RELEASE_DOWNLOAD_URL_PREFIX="https://github.com/andytavares/quicknote/releases/download/v1.0.0/"
 scripts/release.sh 1.0.0
+gh release create v1.0.0 releases/Quicknote-1.0.0.dmg releases/appcast.xml
 ```
 
-The script checks every prerequisite first, then: archives Release with hardened runtime and your Developer ID, builds `Quicknote-1.0.0.dmg`, notarizes (`notarytool submit --wait`), staples, validates, signs the update (`sign_update`) and regenerates `releases/appcast.xml` (`generate_appcast`). The version number is passed to `xcodebuild`; no files are edited. The build number is a timestamp.
-
-Then publish: `gh release create v1.0.0 releases/Quicknote-1.0.0.dmg releases/appcast.xml`. `releases/` keeps older DMGs so the appcast keeps its history.
+The script checks every prerequisite first, then: archives Release with hardened runtime and your Developer ID, builds `Quicknote-1.0.0.dmg`, notarizes (`notarytool submit --wait`), staples, validates, signs the update and regenerates `releases/appcast.xml` (`generate_appcast`). The update key comes from `SPARKLE_PRIVATE_KEY` when set, otherwise from your keychain. The version number is passed to `xcodebuild`; no files are edited. The build number is a timestamp.
 
 ## How users get updates
 

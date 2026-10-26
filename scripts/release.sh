@@ -77,8 +77,14 @@ publish_appcast() {
   local dmg="$1"
   mkdir -p releases
   cp "$dmg" releases/
-  "$SPARKLE_BIN/sign_update" "$dmg"
-  "$SPARKLE_BIN/generate_appcast" --download-url-prefix "$RELEASE_DOWNLOAD_URL_PREFIX" releases
+  if [[ -n "${SPARKLE_PRIVATE_KEY:-}" ]]; then
+    # CI has no keychain entry for the update key; Sparkle reads it from stdin.
+    echo "$SPARKLE_PRIVATE_KEY" | "$SPARKLE_BIN/generate_appcast" --ed-key-file - \
+      --download-url-prefix "$RELEASE_DOWNLOAD_URL_PREFIX" releases
+  else
+    "$SPARKLE_BIN/sign_update" "$dmg"
+    "$SPARKLE_BIN/generate_appcast" --download-url-prefix "$RELEASE_DOWNLOAD_URL_PREFIX" releases
+  fi
 }
 
 main() {
