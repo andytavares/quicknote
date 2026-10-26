@@ -24,14 +24,15 @@ struct EdgeTabsView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
+            // Only the card animates: the panel widens at once, so animating the tabs too made them fly in.
             cardView
+                .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: card?.id)
             VStack(spacing: EdgeLayout.tabSpacing) {
                 ForEach(model.slots(for: layout)) { slot in tab(for: slot) }
             }
             .frame(width: EdgeLayout.tabWidth)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-        .animation(reduceMotion ? nil : .spring(duration: 0.45, bounce: 0.4), value: card?.id)
         .onChange(of: card?.id) { onCardVisibilityChange(card != nil) }
         .onExitCommand { model.expandedNoteId = nil }
     }
