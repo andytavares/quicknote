@@ -1,0 +1,24 @@
+Quicknote/Edge/EdgeTabsView.swift
+  s_a3e1d3be1c8f9e::t_4c79e51f0b7fd5 18,67,77,80
+QuicknoteTests/EdgeModelTests.swift
+  s_a3e1d3be1c8f9e::t_76434ad9c4fb1d 78-95
+Quicknote/Edge/EdgeModel.swift
+  s_a3e1d3be1c8f9e::t_4c79e51f0b7fd5 25-26,48-64
+  s_a3e1d3be1c8f9e::t_5681dac19c05f1 65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2404931396f20feb3cf31c08131c4eb2c4e61e14",
+  "prompts": {},
+  "sessions": {
+    "s_a3e1d3be1c8f9e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c460497-e222-4701-bf9f-4c4486d44e42",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
