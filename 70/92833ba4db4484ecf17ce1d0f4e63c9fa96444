@@ -1,0 +1,29 @@
+QuicknoteTests/AudioBufferCopyTests.swift
+  s_7c7c9fd0335d7b::t_481c40b0ad672e 1-11,15-36
+  s_7c7c9fd0335d7b::t_401fdfb9d18cc3 12-14
+docs/decisions/0002-macos-26-and-later.md
+  s_7c7c9fd0335d7b::t_f54d5b3e6ebc85 1-7
+Quicknote/Voice/AVAudioPCMBuffer+Copy.swift
+  s_7c7c9fd0335d7b::t_481c40b0ad672e 1-17
+Quicknote/Meetings/SystemAudioTap.swift
+  s_7c7c9fd0335d7b::t_c5f19098c22f4f 69,72
+  s_7c7c9fd0335d7b::t_481c40b0ad672e 70
+Quicknote/Voice/MicrophoneCapture.swift
+  s_7c7c9fd0335d7b::t_481c40b0ad672e 9-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7092833ba4db4484ecf17ce1d0f4e63c9fa96444",
+  "prompts": {},
+  "sessions": {
+    "s_7c7c9fd0335d7b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bd538b7d-d525-42a0-ab68-e5dbd75bad77",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
