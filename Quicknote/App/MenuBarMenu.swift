@@ -3,7 +3,15 @@ import SwiftUI
 
 /// The menu under the menu bar icon (screen S01).
 struct MenuBarMenu: View {
+    private let permissionCheck = PermissionCheck.shared
+
     var body: some View {
+        if !permissionCheck.missing.isEmpty {
+            Button(PermissionCheck.summary(of: permissionCheck.missing), systemImage: "exclamationmark.triangle") {
+                SettingsTab.show(.permissions)
+            }
+            Divider()
+        }
         Button("New note") { CaptureFeature.showPanel() }
             .globalKeyboardShortcut(.newNote)
         Button("Hold to talk") { VoiceFeature.startHoldToTalk() }

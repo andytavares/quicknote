@@ -28,6 +28,10 @@ One recorder per entry in `Shortcuts.all`; it warns when a key is taken. Restore
 
 Live status per permission, refreshed when the window opens and whenever Quicknote becomes active again (so a change made in System Settings shows without reopening). Button per row: Allow (system prompt) when never asked, Open Settings when refused.
 
+### Missing permissions at launch
+
+At launch Quicknote checks every permission. Any that is not allowed is flagged at the top of the menu bar menu ("2 permissions needed: Microphone, Calendar"), which opens this tab. No window or prompt appears ([decision 5](../decisions/0005-nothing-pops-up-unasked.md)). Mac audio counts as missing only after a meeting recorded no Mac audio, because macOS cannot report it earlier. The flag updates whenever this tab refreshes.
+
 ### Data
 
 - Stored on this Mac: note count, meeting count, size on disk of the Quicknote folder (`DataSummary`).
@@ -43,6 +47,7 @@ Shown once, at first launch (`welcomeShown`). Open at login toggle, Change short
 
 - Permission API: `Quicknote/App/Permissions.swift:105` (`status(of:)`), `:134` (`ensure`)
 - Decision table: `Quicknote/App/Permissions.swift:22` (`PermissionStep.next`)
+- Launch check: `Quicknote/App/PermissionCheck.swift:11` (`refresh`), `:18` (`missing(in:)`)
 - Explainer card: `Quicknote/Settings/PermissionExplainerPanel.swift:6`
 - Settings window and tabs: `Quicknote/Settings/SettingsView.swift:22`; open on a tab: `SettingsTab.show`
 - Preferences: `Quicknote/Settings/AppSettings.swift`
@@ -56,6 +61,7 @@ Shown once, at first launch (`welcomeShown`). Open at login toggle, Change short
 - [ ] Grant: first hold to talk shows the explainer, Continue shows the system prompt, Allow proceeds. Repeat for each permission in permissions.md.
 - [ ] Deny: refuse the prompt; trigger the feature again; the card shows the steps and Open System Settings lands on the right pane (check all seven).
 - [ ] Revoke while running: turn Microphone off in System Settings with Settings › Permissions open; return to Quicknote; the row changes to Open Settings.
+- [ ] Missing at launch: refuse Calendar, relaunch; the menu's first item reads "Permission needed: Calendar" and opens Settings › Permissions; allow it there and the item goes away.
 - [ ] Open at login: toggle on, see Quicknote in System Settings › Login Items; toggle off.
 - [ ] Rebind a shortcut, Restore defaults.
 - [ ] Data: counts match the Library; Export writes files; Delete everything stays disabled until `DELETE` exactly, then empties notes and removes reminders.

@@ -17,6 +17,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         CalendarBridge.shared.resumeSyncingIfAllowed()
         UpdatesFeature.start()
         WelcomeFeature.showIfFirstLaunch()
+        Task { await PermissionCheck.shared.refresh() }
     }
 
     /// Deleting a note removes its rows; its files are cleared here, once per launch, for every delete path.
