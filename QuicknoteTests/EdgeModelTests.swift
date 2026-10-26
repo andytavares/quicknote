@@ -76,3 +76,25 @@ struct EdgeModelTests {
         #expect(model.expandedNoteId == nil)
     }
 }
+
+struct EdgeCardTests {
+    private func note(id: Int64) -> Note {
+        var note = Note(body: "Note \(id)")
+        note.id = id
+        return note
+    }
+
+    @Test func theTabOfTheShownNoteIsTheCurrentOne() {
+        for card in [EdgeCard.peek(note(id: 1)), .expanded(note(id: 1))] {
+            #expect(card.shows(.note(note(id: 1))))
+            #expect(!card.shows(.note(note(id: 2))))
+            #expect(!card.shows(.context))
+        }
+    }
+
+    @Test func theContextTabIsCurrentOnlyWhileTheContextCardShows() {
+        #expect(EdgeCard.context.shows(.context))
+        #expect(!EdgeCard.context.shows(.note(note(id: 1))))
+        #expect(!EdgeCard.context.shows(.overflow(3)))
+    }
+}
