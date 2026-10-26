@@ -51,7 +51,9 @@ struct EdgeCardView: View {
                 .onTapGesture { model.reveal(noteId: note.id ?? 0) }
                 .accessibilityAddTraits(.isButton)
                 .accessibilityHint("Click to show its options.")
-        case .expanded(let note): NoteCard(note: note, actions: actions)
+        case .expanded(let note):
+            NoteCard(note: note, actions: actions)
+                .onTapGesture(count: 2) { actions.openInLibrary(note) }
         case .context: ContextCard(model: model, actions: actions)
         }
     }

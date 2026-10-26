@@ -49,9 +49,6 @@ private struct NoteEditorContent: View {
             Divider()
             EditorFooter(model: model)
         }
-        .background(Color(hex: note.color))
-        // Note colours are light; in dark mode the controls would draw white text on them.
-        .environment(\.colorScheme, .light)
         .confirmationDialog("Also remove from Calendar?", isPresented: removalQuestion) {
             Button("Remove from Calendar") { model.answerRemoveFromCalendar(true) }
             Button("Keep the event") { model.answerRemoveFromCalendar(false) }
