@@ -101,7 +101,7 @@ private struct EdgeTab: View {
                 .frame(width: EdgeLayout.tabWidth, height: EdgeLayout.tabHeight)
                 .overlay {
                     if isCurrent {
-                        RoundedRectangle(cornerRadius: 5).strokeBorder(Color.primary, lineWidth: 2)
+                        RoundedRectangle(cornerRadius: 5).strokeBorder(.black.opacity(0.7), lineWidth: 2)
                     }
                     if let badge {
                         Text(badge).font(.caption2.bold()).foregroundStyle(.white).minimumScaleFactor(0.5)
