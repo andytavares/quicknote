@@ -9,9 +9,11 @@ enum SnapAction { case markUp, saveToEdge, copy }
 final class SnapOverlay {
     private let logger = Logger(subsystem: "app.quicknote.Quicknote", category: "Snap")
     private var windows: [SnapOverlayWindow] = []
+    private let onCapture: (CGImage) -> Void
     private let onAction: (CGImage, SnapAction) -> Void
 
-    init(onAction: @escaping (CGImage, SnapAction) -> Void) {
+    init(onCapture: @escaping (CGImage) -> Void, onAction: @escaping (CGImage, SnapAction) -> Void) {
+        self.onCapture = onCapture
         self.onAction = onAction
     }
 
@@ -46,6 +48,7 @@ final class SnapOverlay {
         Task {
             do {
                 let image = try await SnapCapture.capture(request, excludingWindowIDs: overlayIDs)
+                onCapture(image)
                 view.showActions { [self] action in
                     close()
                     onAction(image, action)
