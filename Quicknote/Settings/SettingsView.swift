@@ -10,11 +10,11 @@ enum SettingsTab: String, CaseIterable {
 
     static let storageKey = "settingsTab"
 
-    /// Opens the Settings window on one tab.
-    static func show(_ tab: SettingsTab) {
-        UserDefaults.standard.set(tab.rawValue, forKey: storageKey)
-        NSApp.activate()
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+    /// Opens the Settings window, on one tab when `tab` is set.
+    static func show(_ tab: SettingsTab? = nil, using openSettings: OpenSettingsAction) {
+        if let tab { UserDefaults.standard.set(tab.rawValue, forKey: storageKey) }
+        DockIcon.show()
+        openSettings()
     }
 }
 

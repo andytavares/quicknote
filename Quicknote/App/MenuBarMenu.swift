@@ -4,11 +4,12 @@ import SwiftUI
 /// The menu under the menu bar icon (screen S01).
 struct MenuBarMenu: View {
     private let permissionCheck = PermissionCheck.shared
+    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         if !permissionCheck.missing.isEmpty {
             Button(PermissionCheck.summary(of: permissionCheck.missing), systemImage: "exclamationmark.triangle") {
-                SettingsTab.show(.permissions)
+                SettingsTab.show(.permissions, using: openSettings)
             }
             Divider()
         }
@@ -32,7 +33,7 @@ struct MenuBarMenu: View {
         Button("Open Library") { LibraryFeature.show() }
         Divider()
         Button("Hide edge tabs for 1 hour") { EdgeFeature.hideForOneHour() }
-        SettingsLink { Text("Settings…") }
+        Button("Settings…") { SettingsTab.show(using: openSettings) }
             .keyboardShortcut(",")
         Button("Check for updates…") { UpdatesFeature.checkForUpdates() }
         Button("Quit Quicknote") { NSApp.terminate(nil) }
