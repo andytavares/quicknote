@@ -1,0 +1,24 @@
+Quicknote/Editor/EditorToolbar.swift
+  s_a3e1d3be1c8f9e::t_3f58da71d64114 14-25,34-45
+  s_a3e1d3be1c8f9e::t_8317c73834b9c8 46-60,62-68
+QuicknoteTests/EditorTests.swift
+  s_a3e1d3be1c8f9e::t_ab4f930669805e 165-183
+Quicknote/Editor/FlowLayout.swift
+  s_a3e1d3be1c8f9e::t_3f58da71d64114 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "31375431f1eda48dd2c6b47d137aca3eeb0af88d",
+  "prompts": {},
+  "sessions": {
+    "s_a3e1d3be1c8f9e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c460497-e222-4701-bf9f-4c4486d44e42",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
