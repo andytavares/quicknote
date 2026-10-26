@@ -77,4 +77,62 @@ struct SlackMarkdownTests {
         #expect(SlackMarkdown.togglingCheckbox(in: "plain", line: 0) == "plain")
         #expect(SlackMarkdown.togglingCheckbox(in: "plain", line: 5) == "plain")
     }
+
+    // MARK: Standard Markdown
+
+    @Test func hashesAtLineStartMakeHeadings() {
+        let text = "# Title\n## Sub\n### Small\n#### four\n#nospace\nmid # no"
+        #expect(styled(text, .heading(level: 1)) == ["# Title"])
+        #expect(styled(text, .heading(level: 2)) == ["## Sub"])
+        #expect(styled(text, .heading(level: 3)) == ["### Small"])
+        #expect(styled("#nospace", .heading(level: 1)).isEmpty)
+        #expect(styled("# Title", .marker) == ["# "])
+    }
+
+    @Test func doubleStarsAreBoldWithBothMarksDimmed() {
+        #expect(styled("a **bold** b", .bold) == ["**bold**"])
+        #expect(styled("a **bold** b", .marker) == ["**", "**"])
+        #expect(styled("2**3**4", .bold).isEmpty)
+    }
+
+    @Test func tildesStrikeAndBackticksMarkCode() {
+        #expect(styled("was ~~old~~ now", .strikethrough) == ["~~old~~"])
+        #expect(styled("run `make test` now", .code) == ["`make test`"])
+        #expect(styled("run `make test` now", .marker) == ["`", "`"])
+    }
+
+    @Test func codeHidesFormattingInside() {
+        #expect(styled("`*not bold*`", .bold).isEmpty)
+        #expect(styled("`snake_case_`", .italic).isEmpty)
+    }
+
+    @Test func starPlusAndNumbersStartListItems() {
+        let text = "* star\n+ plus\n12. twelve\n*bold*\n3.no"
+        let nsText = text as NSString
+        let items = SlackMarkdown.spans(in: text).filter { $0.style == .listItem }.map {
+            nsText.substring(with: $0.range)
+        }
+        #expect(items == ["* ", "+ ", "12. "])
+    }
+
+    @Test func checkboxAfterStarIsACheckbox() {
+        let spans = SlackMarkdown.spans(in: "* [x] done")
+        #expect(spans.contains { $0.style == .checkbox(checked: true) })
+    }
+
+    @Test func enterContinuesListsAndCheckboxes() {
+        #expect(SlackMarkdown.continuation(after: "- milk") == .next("- "))
+        #expect(SlackMarkdown.continuation(after: "* milk") == .next("* "))
+        #expect(SlackMarkdown.continuation(after: "9. milk") == .next("10. "))
+        #expect(SlackMarkdown.continuation(after: "[x] milk") == .next("[ ] "))
+        #expect(SlackMarkdown.continuation(after: "- [x] milk") == .next("- [ ] "))
+        #expect(SlackMarkdown.continuation(after: "  - nested") == .next("  - "))
+        #expect(SlackMarkdown.continuation(after: "plain") == nil)
+    }
+
+    @Test func enterOnAnEmptyItemEndsTheList() {
+        #expect(SlackMarkdown.continuation(after: "- ") == .end)
+        #expect(SlackMarkdown.continuation(after: "[ ] ") == .end)
+        #expect(SlackMarkdown.continuation(after: "3. ") == .end)
+    }
 }

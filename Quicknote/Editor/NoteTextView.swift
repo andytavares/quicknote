@@ -1,4 +1,5 @@
 import AppKit
+import QuicknoteKit
 import SwiftUI
 
 /// SwiftUI wrapper for `EditorTextView`. The model owns the text; this keeps the two in step.
@@ -59,13 +60,31 @@ struct NoteTextView: NSViewRepresentable {
         }
 
         func textView(_ textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-            guard model.suggestionRowCount > 0 else { return false }
+            guard model.suggestionRowCount > 0 else {
+                return selector == #selector(NSResponder.insertNewline(_:)) && continueList(in: textView)
+            }
             switch selector {
             case #selector(NSResponder.moveUp(_:)): model.moveSuggestion(by: -1)
             case #selector(NSResponder.moveDown(_:)): model.moveSuggestion(by: 1)
             case #selector(NSResponder.insertNewline(_:)): model.chooseSuggestion(at: model.selectedSuggestion)
             case #selector(NSResponder.cancelOperation(_:)): model.dismissSuggestions()
             default: return false
+            }
+            return true
+        }
+
+        /// Enter on a list line starts the next item; Enter on an empty item clears it and ends the list.
+        private func continueList(in textView: NSTextView) -> Bool {
+            let text = textView.string as NSString
+            let cursor = textView.selectedRange()
+            var lineRange = text.lineRange(for: NSRange(location: cursor.location, length: 0))
+            if lineRange.upperBound > lineRange.location, text.character(at: lineRange.upperBound - 1) == 10 {
+                lineRange.length -= 1
+            }
+            switch SlackMarkdown.continuation(after: text.substring(with: lineRange)) {
+            case .next(let prefix): textView.insertText("\n" + prefix, replacementRange: cursor)
+            case .end: textView.insertText("", replacementRange: lineRange)
+            case nil: return false
             }
             return true
         }

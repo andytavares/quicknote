@@ -25,12 +25,13 @@ final class EditorTextView: NSTextView {
         needsDisplay = true
     }
 
-    /// Content first, then dimmed markers, then the clear text under a drawn checkbox.
+    /// Heading size first, then other content, then dimmed markers, then the clear text under a drawn checkbox.
     private func rank(_ span: StyleSpan) -> Int {
         switch span.style {
-        case .marker: 1
-        case .checkbox: 2
-        default: 0
+        case .heading: 0
+        case .marker: 2
+        case .checkbox: 3
+        default: 1
         }
     }
 
@@ -38,6 +39,14 @@ final class EditorTextView: NSTextView {
         switch span.style {
         case .bold: addTrait(.boldFontMask, to: span.range, in: storage)
         case .italic: addTrait(.italicFontMask, to: span.range, in: storage)
+        case .heading(let level): setHeading(level: level, on: span.range, in: storage)
+        case .strikethrough:
+            storage.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: span.range)
+        case .code:
+            convertFonts(in: span.range, of: storage) {
+                .monospacedSystemFont(ofSize: $0.pointSize * 0.92, weight: .regular)
+            }
+            storage.addAttribute(.backgroundColor, value: Self.markerColor.withAlphaComponent(0.08), range: span.range)
         case .marker: storage.addAttribute(.foregroundColor, value: Self.markerColor, range: span.range)
         case .checkbox: storage.addAttribute(.foregroundColor, value: NSColor.clear, range: span.range)
         case .link:
@@ -56,9 +65,23 @@ final class EditorTextView: NSTextView {
     }
 
     private func addTrait(_ trait: NSFontTraitMask, to range: NSRange, in storage: NSTextStorage) {
+        convertFonts(in: range, of: storage) { NSFontManager.shared.convert($0, toHaveTrait: trait) }
+    }
+
+    private static let headingScales: [Int: CGFloat] = [1: 1.5, 2: 1.3, 3: 1.15]
+
+    private func setHeading(level: Int, on range: NSRange, in storage: NSTextStorage) {
+        let scale = Self.headingScales[level] ?? 1
+        convertFonts(in: range, of: storage) { font in
+            NSFontManager.shared.convert(
+                NSFontManager.shared.convert(font, toSize: font.pointSize * scale), toHaveTrait: .boldFontMask)
+        }
+    }
+
+    private func convertFonts(in range: NSRange, of storage: NSTextStorage, _ convert: (NSFont) -> NSFont) {
         storage.enumerateAttribute(.font, in: range) { value, subrange, _ in
             guard let font = value as? NSFont else { return }
-            storage.addAttribute(.font, value: NSFontManager.shared.convert(font, toHaveTrait: trait), range: subrange)
+            storage.addAttribute(.font, value: convert(font), range: subrange)
         }
     }
 
