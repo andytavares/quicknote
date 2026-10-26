@@ -22,6 +22,8 @@ final class EdgeModel {
     private(set) var contextLabel = ""
     var isContextCardShown = false
     var expandedNoteId: Int64?
+    /// The note whose tab the pointer is over.
+    var peekedNoteId: Int64?
     var isHidden = false
     var popsUpContextNotes = true
     private var lastContextKey: ContextKey?
@@ -41,6 +43,24 @@ final class EdgeModel {
         isContextCardShown = !contextNotes.isEmpty && (gainedNotes || isContextCardShown)
         lastContextKey = key
         if let expandedNoteId, note(id: expandedNoteId) == nil { self.expandedNoteId = nil }
+    }
+
+    /// The card beside the tabs: an opened note first, then a hover peek, then the pinned-notes card.
+    var card: EdgeCard? {
+        if let id = expandedNoteId, let note = note(id: id) { return .expanded(note) }
+        if let id = peekedNoteId, let note = note(id: id) { return .peek(note) }
+        return isContextCardShown ? .context : nil
+    }
+
+    /// Clicking a tab opens its card. Clicking the open tab closes it, and the hover peek too,
+    /// so the card does not come back while the pointer is still on the tab.
+    func toggleCard(noteId: Int64) {
+        if expandedNoteId == noteId {
+            expandedNoteId = nil
+            peekedNoteId = nil
+        } else {
+            expandedNoteId = noteId
+        }
     }
 
     /// A reminder came back: slide its card out.

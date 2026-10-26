@@ -8,7 +8,6 @@ struct EdgeTabsView: View {
     let visibleFrame: CGRect
     let onCardVisibilityChange: (Bool) -> Void
 
-    @State private var peekedNoteId: Int64?
     @State private var hidePeekTask: Task<Void, Never>?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -16,11 +15,7 @@ struct EdgeTabsView: View {
         EdgeLayout(tabCount: model.tabCount, visibleFrame: visibleFrame, showsCard: false)
     }
 
-    private var card: EdgeCard? {
-        if let id = model.expandedNoteId, let note = model.note(id: id) { return .expanded(note) }
-        if let id = peekedNoteId, let note = model.note(id: id) { return .peek(note) }
-        return model.isContextCardShown ? .context : nil
-    }
+    private var card: EdgeCard? { model.card }
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
@@ -69,7 +64,7 @@ struct EdgeTabsView: View {
 
     private func noteTab(_ note: Note, isCurrent: Bool) -> some View {
         EdgeTab(color: note.edgeColor, badge: nil, label: "Note: \(note.title)", isCurrent: isCurrent) {
-            model.expandedNoteId = model.expandedNoteId == note.id ? nil : note.id
+            model.toggleCard(noteId: note.id ?? 0)
         }
         .onHover { setPeek(note.id, hovering: $0) }
         .onDragAwayFromEdge { actions.removeFromEdge(note) }
@@ -79,10 +74,10 @@ struct EdgeTabsView: View {
     /// The pointer crosses a gap between a tab and its card, so hiding waits a moment.
     private func setPeek(_ noteId: Int64?, hovering: Bool) {
         hidePeekTask?.cancel()
-        if hovering { peekedNoteId = noteId; return }
+        if hovering { model.peekedNoteId = noteId; return }
         hidePeekTask = Task {
             try? await Task.sleep(for: .milliseconds(150))
-            if !Task.isCancelled { peekedNoteId = nil }
+            if !Task.isCancelled { model.peekedNoteId = nil }
         }
     }
 }
