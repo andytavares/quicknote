@@ -26,9 +26,10 @@ struct LibraryView: View {
         case .meetings: MeetingListView(meetings: model.meetings)
         case .snaps, .cards: GalleryView(model: model)
         default:
-            HSplitView {
-                TaskListView(model: model).frame(minWidth: 320, idealWidth: 380)
-                editor.frame(minWidth: 360)
+            HStack(spacing: 0) {
+                TaskListView(model: model).frame(minWidth: 320, idealWidth: 380, maxWidth: 420)
+                Divider()
+                editor.frame(minWidth: 360, maxWidth: .infinity, maxHeight: .infinity)
             }
         }
     }

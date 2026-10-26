@@ -46,7 +46,9 @@ struct TaskListView: View {
         }
         .pickerStyle(.segmented)
         .labelsHidden()
+        .fixedSize()
         .padding(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func row(for note: Note) -> some View {

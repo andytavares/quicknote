@@ -18,7 +18,7 @@ enum BriefFeature {
     private static func makeWindow() -> NSWindow {
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 600, height: 560),
-            styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
+            styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
         window.title = "Daily Brief"
         window.isReleasedWhenClosed = false
         window.contentView = NSHostingView(rootView: BriefView(model: BriefModel()))

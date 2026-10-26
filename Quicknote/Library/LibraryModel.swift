@@ -48,8 +48,8 @@ final class LibraryModel {
         projects = (try? projectRepository.all()) ?? []
         meetings = (try? MeetingRepository(database: database).all()) ?? []
         listNotes = section.filter.flatMap { try? notes.notes(matching: $0) } ?? []
-        selection.formIntersection(Set(listNotes.compactMap(\.id)))
         reloadGallery()
+        selection.formIntersection(Set((listNotes + galleryNotes).compactMap(\.id)))
         reloadCounts()
         if section == .sites { contextGroups = (try? notes.contextGroups()) ?? [] }
     }

@@ -12,7 +12,8 @@ enum SnapEditorWindow {
         let model = SnapEditorModel(original: original, document: document, noteId: noteId)
         let window = NSWindow(
             contentRect: CGRect(x: 0, y: 0, width: 900, height: 640),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView], backing: .buffered,
+            defer: false)
         let delegate = SnapEditorWindowDelegate(model: model) { open.removeAll { $0 === window } }
         window.delegate = delegate
         objc_setAssociatedObject(window, "delegate", delegate, .OBJC_ASSOCIATION_RETAIN)
