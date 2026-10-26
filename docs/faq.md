@@ -10,7 +10,7 @@ Yes. There are no payments, trial or account. The licence is not decided yet.
 
 ## Which Macs and macOS versions?
 
-macOS 27 or later. Quicknote uses one speech engine (`SpeechAnalyzer`) and Apple's on-device language models, and carries no fallback for older systems ([decision 2](decisions/0002-macos-27-only.md)). If your Mac runs macOS 27, Quicknote runs. The project has no separate Intel or Apple silicon rule, so macOS 27 support is what decides. Summaries also need a Mac where Apple Intelligence is available.
+macOS 26 or later. Quicknote uses one speech engine (`SpeechAnalyzer`) and Apple's on-device language models, and carries no fallback for older systems ([decision 2](decisions/0002-macos-26-and-later.md)). If your Mac runs macOS 26 or later, Quicknote runs. The project has no separate Intel or Apple silicon rule, so macOS 26 support is what decides. Summaries also need a Mac where Apple Intelligence is available.
 
 ## Why do meeting summaries sometimes say "not available"?
 

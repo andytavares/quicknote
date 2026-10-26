@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- macOS 27 and Xcode 27 (Swift 6.4)
+- Xcode 27 (Swift 6.4) on macOS 27; the app targets macOS 26
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) 2.46+ (`scripts/bootstrap.sh` installs it with Homebrew)
 
 ## First run

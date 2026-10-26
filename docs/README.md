@@ -41,7 +41,7 @@ One page per feature, with how it works, limits and a manual test checklist.
 ## Decisions
 
 1. [Native Swift app](decisions/0001-native-swift.md)
-2. [macOS 27 and later only](decisions/0002-macos-27-only.md)
+2. [macOS 26 and later](decisions/0002-macos-26-and-later.md)
 3. [SQLite through GRDB, search with FTS5](decisions/0003-grdb-fts5.md)
 4. [Logic lives in the QuicknoteKit package](decisions/0004-logic-package.md)
 5. [Nothing pops up unless you asked for it](decisions/0005-nothing-pops-up-unasked.md)

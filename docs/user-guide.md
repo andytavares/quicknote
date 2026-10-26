@@ -9,7 +9,7 @@ Quicknote lives in the menu bar. Every job below starts with a shortcut or a men
 3. Click the menu bar icon for the menu: New note, Hold to talk, Snap, New card, Search, Save where I stopped, Start meeting recording, Daily Brief, Open Library, Hide edge tabs for 1 hour, Settings, Check for updates, Quit.
 4. Quicknote asks for a permission the first time a feature needs it, with a short explanation first. See [permissions.md](permissions.md).
 
-Quicknote needs macOS 27 or later and no account. Settings: [settings and permissions](features/settings-and-permissions.md).
+Quicknote needs macOS 26 or later and no account. Settings: [settings and permissions](features/settings-and-permissions.md).
 
 ## Catch a thought
 
