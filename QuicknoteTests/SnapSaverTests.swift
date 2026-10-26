@@ -39,6 +39,18 @@ struct SnapSaverTests {
         #expect(note.canvas?.elements.count == 1)
     }
 
+    @Test func aCaptureIsSavedBeforeAnyMarkup() async throws {
+        let saver = try makeSaver()
+        let id = try await saver.saveCapture(original, now: Date())
+        let note = try #require(try saver.repository.note(id: id))
+        let attachments = try saver.attachments.attachments(of: id)
+        #expect(note.onEdge && note.body.hasPrefix("Snap · "))
+        #expect(attachments.map(\.fileName) == ["snap.png", "preview.png"])
+        #expect(
+            note.canvas?.background == .image(attachmentId: attachments[0].id!, size: CGSize(width: 120, height: 80)))
+        #expect(note.canvas?.elements.isEmpty == true)
+    }
+
     @Test func savingAgainReplacesThePreviewAndKeepsTheOriginal() async throws {
         let saver = try makeSaver()
         let id = try await saver.save(SnapContent(original: original, document: document), noteId: nil, now: Date())

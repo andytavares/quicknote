@@ -26,6 +26,16 @@ struct SnapSaver {
         return "Snap · \(time.formatted(date: .omitted, time: .shortened))"
     }
 
+    /// A canvas with no markup over `image`; the attachment id is filled in when saved.
+    static func blankDocument(for image: CGImage) -> CanvasDocument {
+        CanvasDocument(background: .image(attachmentId: 0, size: CGSize(width: image.width, height: image.height)))
+    }
+
+    /// Saves a fresh capture as a new note, before the user picks what to do with it. Returns the note id.
+    func saveCapture(_ image: CGImage, now: Date) async throws -> Int64 {
+        try await save(SnapContent(original: image, document: Self.blankDocument(for: image)), noteId: nil, now: now)
+    }
+
     /// Creates the note when `noteId` is nil, otherwise updates it. Returns the note id.
     func save(_ content: SnapContent, noteId: Int64?, now: Date) async throws -> Int64 {
         let (original, document) = (content.original, content.document)

@@ -6,12 +6,12 @@ Press `⌃⌥4`, drag a box around anything on screen, mark it up, send it. Scre
 
 1. `⌃⌥4` (Settings › Shortcuts). The first time, Screen Recording is asked through `Permissions.ensure(.screenRecording)` ([permissions](../permissions.md)).
 2. Every display dims. Drag a rectangle; a label shows its size in pixels. `Esc` cancels. A drag under 4 points is ignored.
-3. On release the rect is captured with ScreenCaptureKit (`SCScreenshotManager`), at the display's backing scale, without Quicknote's own overlay. An action bar appears by the selection:
+3. On release the rect is captured with ScreenCaptureKit (`SCScreenshotManager`), at the display's backing scale, without Quicknote's own overlay, and saved right away as a note on the edge (`SnapSaver.saveCapture`), so every capture is kept whatever you pick next. An action bar appears by the selection:
 
 | Button | Does |
 |---|---|
-| Mark up | Opens the editor with the image |
-| Save to edge | Saves the Snap at once as a note on the edge |
+| Mark up | Opens the editor on the saved note |
+| Save to edge | Closes the overlay; the Snap is already on the edge |
 | Copy | Puts the PNG on the clipboard |
 
 Selection works across displays and scale factors: `SnapCaptureRequest.make` turns the global AppKit rect into the display-local top-left rect ScreenCaptureKit wants, and the output size in that display's pixels (`Snap/SnapCapture.swift:19`).
