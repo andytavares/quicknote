@@ -61,5 +61,6 @@ struct PermissionsPane: View {
     private func refresh() async {
         await Permissions.refreshNotificationStatus()
         for permission in Permission.allCases { statuses[permission] = Permissions.status(of: permission) }
+        await PermissionCheck.shared.refresh()
     }
 }

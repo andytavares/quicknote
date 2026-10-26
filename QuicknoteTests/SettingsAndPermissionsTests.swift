@@ -74,3 +74,35 @@ struct WelcomeTests {
         #expect(!WelcomeFeature.shouldShow(defaults: defaults))
     }
 }
+
+struct MissingPermissionsTests {
+    private func statuses(_ status: PermissionStatus) -> [Permission: PermissionStatus] {
+        Dictionary(uniqueKeysWithValues: Permission.allCases.map { ($0, status) })
+    }
+
+    @Test func nothingIsMissingWhenEverythingIsAllowed() {
+        #expect(PermissionCheck.missing(in: statuses(.allowed)).isEmpty)
+    }
+
+    @Test func refusedAndNeverAskedPermissionsAreMissingInSettingsOrder() {
+        var statuses = statuses(.allowed)
+        statuses[.calendar] = .denied
+        statuses[.microphone] = .notDetermined
+        #expect(PermissionCheck.missing(in: statuses) == [.microphone, .calendar])
+    }
+
+    @Test func macAudioIsMissingOnlyAfterAMeetingGotNoAudio() {
+        var statuses = statuses(.allowed)
+        statuses[.systemAudio] = .notDetermined
+        #expect(PermissionCheck.missing(in: statuses).isEmpty)
+        statuses[.systemAudio] = .denied
+        #expect(PermissionCheck.missing(in: statuses) == [.systemAudio])
+    }
+
+    @Test func summaryNamesEachMissingPermission() {
+        #expect(PermissionCheck.summary(of: [.microphone]) == "Permission needed: Microphone")
+        #expect(
+            PermissionCheck.summary(of: [.microphone, .calendar])
+                == "2 permissions needed: Microphone, Calendar")
+    }
+}
