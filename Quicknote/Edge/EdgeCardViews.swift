@@ -40,6 +40,11 @@ struct EdgeCardView: View {
     let onHover: (Int64?, Bool) -> Void
 
     var body: some View {
+        // Note colours are light; in dark mode the buttons would draw white text on them.
+        cardContent.environment(\.colorScheme, .light)
+    }
+
+    @ViewBuilder private var cardContent: some View {
         switch card {
         case .peek(let note):
             NoteCard(note: note, actions: nil)
