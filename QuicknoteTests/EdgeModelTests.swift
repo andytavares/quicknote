@@ -75,6 +75,24 @@ struct EdgeModelTests {
         model.update(notes: [loose], context: nil, now: now)
         #expect(model.expandedNoteId == nil)
     }
+
+    @Test func clickingTheOpenTabClosesItsCardWhileThePointerStaysOnTheTab() {
+        let model = EdgeModel()
+        model.update(notes: [note("Loose", id: 1)], context: nil, now: now)
+        model.peekedNoteId = 1
+        model.toggleCard(noteId: 1)
+        #expect(model.card?.id == "expanded-1")
+        model.toggleCard(noteId: 1)
+        #expect(model.card == nil)
+    }
+
+    @Test func clickingAnotherTabSwitchesTheCard() {
+        let model = EdgeModel()
+        model.update(notes: [note("One", id: 1), note("Two", id: 2)], context: nil, now: now)
+        model.toggleCard(noteId: 1)
+        model.toggleCard(noteId: 2)
+        #expect(model.card?.id == "expanded-2")
+    }
 }
 
 struct EdgeCardTests {
