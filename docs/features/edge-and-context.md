@@ -5,7 +5,8 @@ Notes wait as small coloured tabs on the right edge of your screen. Nothing else
 ## What you see and do
 
 - **Tabs.** One tab per note on the edge, in the note's colour, on every display (or only the main one, Settings). The panel is only as big as its tabs, so the rest of the screen stays click-through. Too many tabs for the screen height end in a grey `+N` tab that opens the Library.
-- **Peek.** Hover a tab to see the note card; move away and it hides.
+- **Peek.** Hover a tab to see the note card; move away and it hides. Click the card to open it.
+- **Current tab.** The tab whose card is showing (peeked, open, or the pinned-notes card) has a ring around it (`EdgeCard.shows`).
 - **Open.** Click a tab (or focus it with the keyboard and press Space). The card shows **Done**, **Snooze** (15 minutes, 1 hour, This evening, Tomorrow morning, Next week, each with its time), **Open in Library** and **Remove from edge**. Click the tab again or press Esc to close.
 - **Remove by dragging.** Drag a tab left, away from the edge, to take the note off the edge (`onEdge = false`). The note stays in the Library. VoiceOver users get a "Remove from edge" action on each tab.
 - **Pinned to an app or site.** A note pinned to an app or site shows only while that app (or site, in a supported browser) is in front. When you switch to it, a card "For Slack" slides out listing those notes; tick one to mark it done. A coloured tab with the count stays so you can close or reopen the card. In other apps they hide. Turn this off with "pops up context notes" in Settings; the notes then show as plain tabs while their app is in front.
@@ -73,7 +74,7 @@ Site host is the URL host without a leading `www.`; non-web URLs give none. The 
 - [ ] Full-screen app: tabs stay visible on the right edge; clicking a tab does not switch Spaces or steal focus.
 - [ ] Several Spaces: tabs appear on every Space.
 - [ ] Click anywhere on the screen outside the tabs: it reaches the app underneath (also with a card open, outside the card).
-- [ ] Hover peeks, click opens, Esc closes, drag left removes and the note is still in the Library.
+- [ ] Hover peeks, clicking the peeked card opens it, the shown note's tab has a ring, click opens, Esc closes, drag left removes and the note is still in the Library.
 - [ ] 20 notes on a short display: `+N` tab appears and opens the Library.
 - [ ] Pin a note to Slack: it slides out in Slack, hides in Xcode. Pin to `figma.com`: it slides out on that site in Safari.
 - [ ] Accessibility off, Automation not granted: pinned-to-site notes do not pop; the app is still recorded; no system prompt appears while browsing.

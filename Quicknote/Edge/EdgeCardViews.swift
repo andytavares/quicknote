@@ -18,6 +18,15 @@ enum EdgeCard {
         case .context: nil
         }
     }
+
+    /// Whether `slot` is the tab this card belongs to, so that tab is highlighted.
+    func shows(_ slot: EdgeModel.Slot) -> Bool {
+        switch (self, slot) {
+        case (.context, .context): true
+        case (.peek, .note(let note)), (.expanded, .note(let note)): note.id == noteId
+        default: false
+        }
+    }
 }
 
 extension Note {
@@ -32,7 +41,11 @@ struct EdgeCardView: View {
 
     var body: some View {
         switch card {
-        case .peek(let note): NoteCard(note: note, actions: nil)
+        case .peek(let note):
+            NoteCard(note: note, actions: nil)
+                .onTapGesture { model.reveal(noteId: note.id ?? 0) }
+                .accessibilityAddTraits(.isButton)
+                .accessibilityHint("Click to show its options.")
         case .expanded(let note): NoteCard(note: note, actions: actions)
         case .context: ContextCard(model: model, actions: actions)
         }
