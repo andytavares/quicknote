@@ -6,8 +6,8 @@ nonisolated final class MicrophoneCapture: @unchecked Sendable {
 
     func start(onBuffer: @escaping @Sendable (AVAudioPCMBuffer) -> Void) throws {
         let input = engine.inputNode
-        try input.installAudioTap(onBus: 0, bufferSize: 4096, format: input.outputFormat(forBus: 0)) { buffer, _ in
-            onBuffer(AVAudioPCMBuffer(copying: buffer))
+        input.installTap(onBus: 0, bufferSize: 4096, format: input.outputFormat(forBus: 0)) { buffer, _ in
+            if let copy = buffer.ownedCopy() { onBuffer(copy) }
         }
         try engine.start()
     }

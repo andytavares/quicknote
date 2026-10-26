@@ -46,7 +46,7 @@ Quicknote shows nothing you did not ask for: no greetings, no pop-ups. Only a re
 
 ## Requirements
 
-- macOS 27 or later ([decision 2](docs/decisions/0002-macos-27-only.md)). Whether a Mac can run macOS 27 decides whether it can run Quicknote.
+- macOS 26 or later ([decision 2](docs/decisions/0002-macos-26-and-later.md)). Whether a Mac can run macOS 26 decides whether it can run Quicknote.
 - Meeting summaries need Apple Intelligence on the Mac. Everything else works without it.
 
 ## Install
