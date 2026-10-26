@@ -10,8 +10,8 @@ enum LibraryFeature {
     static func show() {
         let window = window ?? makeWindow()
         Self.window = window
+        DockIcon.show()
         window.makeKeyAndOrderFront(nil)
-        NSApp.activate()
     }
 
     /// The note open in the Library while its window is on screen, so ⌃⌥C can turn it into a card.

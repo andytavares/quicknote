@@ -13,6 +13,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         removeOrphanedAttachments()
         Shortcuts.register()
+        DockIcon.start()
         EdgeFeature.start()
         CalendarBridge.shared.resumeSyncingIfAllowed()
         UpdatesFeature.start()

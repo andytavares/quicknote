@@ -4,6 +4,7 @@ import SwiftUI
 /// S02. No permission prompts here; each is asked when a feature first needs it.
 struct WelcomeView: View {
     let close: () -> Void
+    @Environment(\.openSettings) private var openSettings
     @State private var opensAtLogin = AppSettings.opensAtLogin
 
     var body: some View {
@@ -27,7 +28,7 @@ struct WelcomeView: View {
                     }
                 Spacer()
                 Button("Change shortcuts") {
-                    SettingsTab.show(.shortcuts)
+                    SettingsTab.show(.shortcuts, using: openSettings)
                     close()
                 }
                 Button("Start") { close() }.keyboardShortcut(.defaultAction)
