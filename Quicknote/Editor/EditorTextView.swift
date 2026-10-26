@@ -4,8 +4,8 @@ import QuicknoteKit
 /// The NSTextView behind the editor: styles itself from `SlackMarkdown` spans, draws checkboxes,
 /// and turns clicks on checkboxes and `[[link]]` chips into callbacks.
 final class EditorTextView: NSTextView {
-    static let textColor = NSColor.black.withAlphaComponent(0.85)
-    private static let markerColor = NSColor.black.withAlphaComponent(0.3)
+    static let textColor = NSColor.textColor
+    private static let markerColor = NSColor.tertiaryLabelColor
 
     private var spans: [StyleSpan] = []
     var onToggleCheckbox: (Int) -> Void = { _ in }
