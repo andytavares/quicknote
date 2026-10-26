@@ -66,9 +66,10 @@ nonisolated final class SystemAudioTap: @unchecked Sendable {
     private func startIO(format: AVAudioFormat, onBuffer: @escaping @Sendable (AVAudioPCMBuffer) -> Void) throws {
         try check(
             AudioDeviceCreateIOProcIDWithBlock(&procID, aggregateID, queue) { _, input, _, _, _ in
-                guard let borrowed = AVAudioPCMBuffer(pcmFormat: format, bufferListNoCopy: input, deallocator: nil)
+                guard let borrowed = AVAudioPCMBuffer(pcmFormat: format, bufferListNoCopy: input, deallocator: nil),
+                    let copy = borrowed.ownedCopy()
                 else { return }
-                onBuffer(AVAudioPCMBuffer(copying: borrowed))
+                onBuffer(copy)
             }, "create IO proc")
         try check(AudioDeviceStart(aggregateID, procID), "start device")
     }
