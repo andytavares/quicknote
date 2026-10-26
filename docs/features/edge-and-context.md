@@ -9,7 +9,7 @@ Notes wait as small coloured tabs on the right edge of your screen. Nothing else
 - **Open.** Click a tab (or focus it with the keyboard and press Space). The card shows **Done**, **Snooze** (15 minutes, 1 hour, This evening, Tomorrow morning, Next week, each with its time), **Open in Library** and **Remove from edge**. Click the tab again or press Esc to close.
 - **Remove by dragging.** Drag a tab left, away from the edge, to take the note off the edge (`onEdge = false`). The note stays in the Library. VoiceOver users get a "Remove from edge" action on each tab.
 - **Pinned to an app or site.** A note pinned to an app or site shows only while that app (or site, in a supported browser) is in front. When you switch to it, a card "For Slack" slides out listing those notes; tick one to mark it done. A coloured tab with the count stays so you can close or reopen the card. In other apps they hide. Turn this off with "pops up context notes" in Settings; the notes then show as plain tabs while their app is in front.
-- **Reminders coming back.** A note with a due time, or a snoozed note, sends a notification at that time with **Done** and **Snooze 1 hour**. At the same moment the note slides out on the edge with a small bounce (a plain fade with Reduce Motion). Clicking the notification opens the note on the edge.
+- **Reminders coming back.** A note with a due time, or a snoozed note, sends a notification at that time with **Done** and **Snooze 1 hour**. At the same moment the note slides out on the edge with a short ease-out, no bounce (a plain fade with Reduce Motion). Clicking the notification opens the note on the edge.
 - **Hide for an hour.** `EdgeFeature.hideForOneHour()` hides every edge panel; they return by themselves. Notifications still arrive.
 
 Done on a repeating note moves it to its next occurrence instead of completing it ([sorting-and-repeats.md](sorting-and-repeats.md)); it leaves the edge and comes back when it is next due.
@@ -78,7 +78,7 @@ Site host is the URL host without a leading `www.`; non-web URLs give none. The 
 - [ ] Pin a note to Slack: it slides out in Slack, hides in Xcode. Pin to `figma.com`: it slides out on that site in Safari.
 - [ ] Accessibility off, Automation not granted: pinned-to-site notes do not pop; the app is still recorded; no system prompt appears while browsing.
 - [ ] Capture in Chrome: the Automation prompt appears once; afterwards the site is recorded.
-- [ ] A reminder due in one minute: the notification arrives, the note slides out with a bounce; Done and Snooze 1 hour work from the notification. Repeat with Reduce Motion on.
+- [ ] A reminder due in one minute: the notification arrives, the note slides out (no bounce, the tabs stay put); Done and Snooze 1 hour work from the notification. Repeat with Reduce Motion on.
 - [ ] First timed note ever: the notifications permission is asked then, not at launch.
 - [ ] Hide for an hour hides all panels and they return afterwards.
 - [ ] Keyboard only (Full Keyboard Access): tabs and card buttons can be reached and used; VoiceOver reads each tab's label.

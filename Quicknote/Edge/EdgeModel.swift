@@ -43,7 +43,7 @@ final class EdgeModel {
         if let expandedNoteId, note(id: expandedNoteId) == nil { self.expandedNoteId = nil }
     }
 
-    /// A reminder came back: open its card with the bounce.
+    /// A reminder came back: slide its card out.
     func reveal(noteId: Int64) {
         guard note(id: noteId) != nil else { return }
         expandedNoteId = noteId
