@@ -22,9 +22,20 @@ struct DockIconTests {
         #expect(!DockIcon.isNeeded(among: [hidden, panel]))
     }
 
-    private func makeWindow<Window: NSWindow>(_ type: Window.Type) -> Window {
+    /// The menu bar icon lives in a borderless window that is always visible.
+    @Test func borderlessWindowsDoNotKeepTheDockIcon() {
+        let statusBarLike = makeWindow(NSWindow.self, styleMask: [.borderless])
+        statusBarLike.orderFront(nil)
+        defer { statusBarLike.close() }
+
+        #expect(!DockIcon.isNeeded(among: [statusBarLike]))
+    }
+
+    private func makeWindow<Window: NSWindow>(
+        _ type: Window.Type, styleMask: NSWindow.StyleMask = [.titled]
+    ) -> Window {
         let window = Window(
-            contentRect: CGRect(x: 0, y: 0, width: 100, height: 100), styleMask: [.titled], backing: .buffered,
+            contentRect: CGRect(x: 0, y: 0, width: 100, height: 100), styleMask: styleMask, backing: .buffered,
             defer: false)
         window.isReleasedWhenClosed = false
         return window
