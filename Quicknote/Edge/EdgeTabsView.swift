@@ -39,6 +39,8 @@ struct EdgeTabsView: View {
                 .padding(.trailing, EdgeLayout.cardGap)
                 .contentShape(Rectangle())
                 .onHover { setPeek(card.noteId, hovering: $0) }
+                // The scroll view inside the card is an AppKit view; without this it skips the slide and shows at once.
+                .geometryGroup()
                 .transition(reduceMotion ? .opacity : .move(edge: .trailing).combined(with: .opacity))
         }
     }
