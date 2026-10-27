@@ -1,0 +1,19 @@
+Quicknote/Edge/EdgeTabsView.swift
+  s_ad3f7513fddc7e::t_234cd3afe48286 42-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "830e045237650612f4767f3d72f37427dc0dbd44",
+  "prompts": {},
+  "sessions": {
+    "s_ad3f7513fddc7e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "352871b7-97a3-45e5-8119-b3fb470c5ad5",
+        "model": "unknown"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
