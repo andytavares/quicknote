@@ -91,11 +91,7 @@ private struct NoteCardButtons: View {
                 Button("Done") { actions.done(note) }.accessibilityLabel("Mark done")
                 SnoozeMenu { actions.snooze(note, until: $0) }
             }
-            HStack {
-                Button("Open in Library") { actions.openInLibrary(note) }
-                Button("Remove from edge") { actions.removeFromEdge(note) }
-            }
-            .font(.caption)
+            Button("Remove from edge") { actions.removeFromEdge(note) }.font(.caption)
         }
         .buttonStyle(.bordered)
         .controlSize(.small)
