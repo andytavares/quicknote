@@ -28,9 +28,16 @@ final class EdgePanel: NSPanel {
         let content = EdgeTabsView(
             model: model, actions: actions, visibleFrame: screen.visibleFrame,
             onCardVisibilityChange: { [weak self] in self?.setShowsCard($0) })
+        // The SwiftUI view keeps one size, pinned to the bottom-right, and the panel only clips it.
+        // When the panel grew under it, the new card was laid out twice and slid in from the top.
         let hostingView = NSHostingView(rootView: content)
         hostingView.sizingOptions = []
-        contentView = hostingView
+        let maxWidth = EdgeLayout.tabWidth + EdgeLayout.cardGap + EdgeLayout.cardWidth
+        hostingView.frame = CGRect(x: -maxWidth, y: 0, width: maxWidth, height: screen.visibleFrame.height)
+        hostingView.autoresizingMask = [.minXMargin, .maxYMargin]
+        let container = NSView()
+        container.addSubview(hostingView)
+        contentView = container
     }
 
     func sync() {
