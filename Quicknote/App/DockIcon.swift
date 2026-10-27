@@ -20,7 +20,8 @@ enum DockIcon {
         }
     }
 
+    /// Only titled windows count: the menu bar icon's own window is borderless and always visible.
     static func isNeeded(among windows: [NSWindow]) -> Bool {
-        windows.contains { $0.isVisible && !($0 is NSPanel) }
+        windows.contains { $0.isVisible && !($0 is NSPanel) && $0.styleMask.contains(.titled) }
     }
 }
