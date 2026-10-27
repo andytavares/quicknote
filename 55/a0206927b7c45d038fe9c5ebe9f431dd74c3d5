@@ -1,0 +1,19 @@
+Quicknote/Edge/EdgeWindow.swift
+  s_80c4e859314b22::t_d7c75bf7b000c2 31-32,35-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "55a0206927b7c45d038fe9c5ebe9f431dd74c3d5",
+  "prompts": {},
+  "sessions": {
+    "s_80c4e859314b22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "812d5295-7a95-4443-bf6a-1d957df820f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
