@@ -69,7 +69,7 @@ private struct NoteCard: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(note.kind == .reminder && note.dueAt != nil ? "Reminder" : "Note")
                 .font(.system(size: 10.5, weight: .bold)).textCase(.uppercase).opacity(0.7)
-            Text(note.body).font(.system(size: 14)).lineLimit(actions == nil ? 5 : 8)
+            ScrollsWhenLong { Text(note.body).font(.system(size: 14)) }
             if let actions { NoteCardButtons(note: note, actions: actions) }
         }
         .foregroundStyle(cardInk)
@@ -91,11 +91,7 @@ private struct NoteCardButtons: View {
                 Button("Done") { actions.done(note) }.accessibilityLabel("Mark done")
                 SnoozeMenu { actions.snooze(note, until: $0) }
             }
-            HStack {
-                Button("Open in Library") { actions.openInLibrary(note) }
-                Button("Remove from edge") { actions.removeFromEdge(note) }
-            }
-            .font(.caption)
+            Button("Remove from edge") { actions.removeFromEdge(note) }.font(.caption)
         }
         .buttonStyle(.bordered)
         .controlSize(.small)
@@ -131,14 +127,18 @@ private struct ContextCard: View {
                 Spacer()
                 Text("pinned").font(.system(size: 10.5)).opacity(0.6)
             }
-            ForEach(model.contextNotes) { note in
-                Button {
-                    actions.done(note)
-                } label: {
-                    Label(note.title, systemImage: "circle").labelStyle(.titleAndIcon)
+            ScrollsWhenLong {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(model.contextNotes) { note in
+                        Button {
+                            actions.done(note)
+                        } label: {
+                            Label(note.title, systemImage: "circle").labelStyle(.titleAndIcon)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Mark done: \(note.title)")
+                    }
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Mark done: \(note.title)")
             }
             Text("Shows only in \(model.contextLabel) · \(model.contextNotes.count) open").font(.caption).opacity(0.65)
         }
@@ -147,5 +147,18 @@ private struct ContextCard: View {
         .frame(width: EdgeLayout.cardWidth, alignment: .leading)
         .background(model.contextNotes.first?.edgeColor ?? .yellow, in: RoundedRectangle(cornerRadius: 10))
         .shadow(radius: 6, y: 2)
+    }
+}
+
+/// Short content sizes to fit; long content scrolls so the card stays inside the panel.
+private struct ScrollsWhenLong<Content: View>: View {
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        ViewThatFits(in: .vertical) {
+            content
+            ScrollView { content.frame(maxWidth: .infinity, alignment: .leading) }
+        }
+        .frame(maxHeight: 170)
     }
 }
