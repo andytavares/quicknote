@@ -1,0 +1,20 @@
+Quicknote/Edge/EdgeCardViews.swift
+  s_80c4e859314b22::t_d7c75bf7b000c2 72,134-144,156-161
+  s_80c4e859314b22::t_81aee1ce908b20 162-168
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ff4145d76105ef6e5a005c4f7dad0009174eccd0",
+  "prompts": {},
+  "sessions": {
+    "s_80c4e859314b22": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "812d5295-7a95-4443-bf6a-1d957df820f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
