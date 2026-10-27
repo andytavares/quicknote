@@ -1,0 +1,21 @@
+Quicknote/App/DockIcon.swift
+  s_92557c8fbe8f81::t_400c7a06e44081 23,25
+QuicknoteTests/DockIconTests.swift
+  s_92557c8fbe8f81::t_3f5c2eb6482232 25-36,38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3c6d928464d5ce46ecb1285797e0a30191f72f48",
+  "prompts": {},
+  "sessions": {
+    "s_92557c8fbe8f81": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c1ddc8c0-f186-466b-b599-679ab7071263",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andrew <andrew.tavaes87@gmail.com>"
+    }
+  }
+}
